@@ -1,0 +1,163 @@
+## for (var table : root.tables) {
+## if (table.tableType.value() == 'table' || table.tableType.value() == 'view' || table.tableType.value() == 'base-table') {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/dao/test/Test" + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.dao.test;
+
+import java.util.List;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.viper.database.dao.DatabaseInterface;
+import com.viper.database.dao.DatabaseFactory;
+import com.viper.database.dao.DatabaseUtil;
+import #{database.packageName}.#{classname};
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+
+public class Test#{classname} extends AbstractTestCase {
+
+    private static final int Iterations = 100;
+    private static final int PageNo = 2;
+    private static final int PageSize = 75;
+    private static DatabaseInterface database;
+
+    @BeforeClass
+    public static void initializeClass() throws Exception {
+    
+		String DatabaseInstanceName = com.viper.database.utils.ResourceUtil.getResource("DATABASE_LOCATOR", "test");
+        database = DatabaseFactory.getInstance(DatabaseInstanceName);
+        
+        if (DatabaseUtil.isTableExist(database, "test", "#{table.name}")) {
+            database.deleteAll(#{classname}.class);
+        } else {
+            database.create(#{classname}.class);
+        }
+        for (int iteration = 0; iteration < Iterations; iteration++) {
+            database.insert(RandomBean.getRandomBean(#{classname}.class, iteration));
+        }
+    }
+
+    @Test
+    public void testPrimaryKey() throws Exception {
+        assertNotNull(getCallerMethodName(), DatabaseUtil.getPrimaryKeyName(#{classname}.class));
+    }
+
+    @Test
+    public void testQueryOneFilter() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
+        database.insert(expected);
+
+        #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName(), expected, actual);
+    }
+
+    @Test
+    public void testQueryAll() throws Exception {
+
+        List<#{classname}> items = database.queryList(#{classname}.class);
+        assertNotEmpty(getCallerMethodName() + ", Nothing returned: ", items);
+
+        for (#{classname} item : items) {
+            assertNotNull(getCallerMethodName() + ", id:" + item.get#{java.toPrimaryKeyName(table)}(), item.get#{java.toPrimaryKeyName(table)}());
+        }
+    }
+
+    @Test
+    public void testQuery() throws Exception {
+
+       #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
+        database.insert(expected);
+
+        #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName(), expected, actual);
+    }
+
+    @Test
+    public void testQueryList() throws Exception {
+
+        List<#{classname}> list = database.queryList(#{classname}.class);
+        assertNotEmpty(getCallerMethodName() + ", Nothing returned: ", list);
+
+        for (#{classname} item : list) {
+            assertNotNull(getCallerMethodName() + ", id:" + item.get#{java.toPrimaryKeyName(table)}(), item.get#{java.toPrimaryKeyName(table)}());
+        }
+    }
+
+    @Test
+    public void testQueryListFilter() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
+        database.insert(expected);
+
+        List<#{classname}> list = database.queryList(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName(), expected, list.get(0));
+    }
+    
+    @Test
+    public void testQueryPage() throws Exception {
+    
+        long size = database.size(#{classname}.class);
+        
+        long pagesize = 50;
+        long pageno = 1;
+        
+        List<#{classname}> list = database.queryList(#{classname}.class, database.PAGENO_KEY, pageno, database.PAGESIZE_KEY, pagesize);
+        assertNotNull(getCallerMethodName(), list);
+        assertEquals(getCallerMethodName() + ":" + size, pagesize, list.size()); 
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1);
+        DatabaseUtil.setValue(expected,  DatabaseUtil.getPrimaryKeyName(#{classname}.class), 0);
+        database.insert(expected);
+
+        #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName(), expected, actual);
+
+        database.delete(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+
+        #{classname} deleted = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertNull(getCallerMethodName() + ", deleted object was found in database ", deleted);
+    }
+
+    @Test
+    public <T> void testDeleteAll() throws Exception {
+        assertTrue("Test Not Implemented. Not desireable to delete everything.", true);
+    }
+
+    @Test
+    public void testInsertBean() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1002); 
+        database.insert(expected);
+
+        #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName() + ", Error occurred on insert: ", expected, actual);
+    }
+
+    @Test
+    public void testInsertAll() throws Exception {
+        assertTrue("Test Not Implemented. Not desirable to insert all into #{classname}.", true);
+    }
+}
+## util.write(filename, writer);
+## }
+## }

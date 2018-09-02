@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/TRIGGERS.xml">
+    <table name="TRIGGERS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="TRIGGER_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="TRIGGER_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TRIGGER_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="EVENT_MANIPULATION" java-type="String" data-type="varchar" extra-data-type="varchar(6)" size="6" order="1" persistent="true" required="true"/>
+        <column name="EVENT_OBJECT_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="EVENT_OBJECT_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="EVENT_OBJECT_TABLE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="ACTION_ORDER" java-type="long" data-type="bigint" extra-data-type="bigint(4)" default-value="0" size="19" order="1" persistent="true" required="true"/>
+        <column name="ACTION_CONDITION" java-type="String" data-type="longtext" extra-data-type="longtext" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="ACTION_STATEMENT" java-type="String" data-type="longtext" extra-data-type="longtext" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="ACTION_ORIENTATION" java-type="String" data-type="varchar" extra-data-type="varchar(9)" size="9" order="1" persistent="true" required="true"/>
+        <column name="ACTION_TIMING" java-type="String" data-type="varchar" extra-data-type="varchar(6)" size="6" order="1" persistent="true" required="true"/>
+        <column name="ACTION_REFERENCE_OLD_TABLE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="ACTION_REFERENCE_NEW_TABLE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="ACTION_REFERENCE_OLD_ROW" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="ACTION_REFERENCE_NEW_ROW" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="CREATED" java-type="long" data-type="datetime" extra-data-type="datetime(2)" order="1" persistent="true" required="true"/>
+        <column name="SQL_MODE" java-type="String" data-type="varchar" extra-data-type="varchar(8192)" size="8192" order="1" persistent="true" required="true"/>
+        <column name="DEFINER" java-type="String" data-type="varchar" extra-data-type="varchar(93)" size="93" order="1" persistent="true" required="true"/>
+        <column name="CHARACTER_SET_CLIENT" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="COLLATION_CONNECTION" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="DATABASE_COLLATION" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+    </table>
+</database>

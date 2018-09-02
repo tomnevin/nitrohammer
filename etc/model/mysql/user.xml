@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/user.xml">
+    <table name="user" database-name="mysql" table-type="base-table" collation-name="utf8_bin" description="Users and global privileges" engine="myisam" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Host" java-type="String" data-type="char" extra-data-type="char(60)" size="60" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="User" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Select_priv" java-type="UserSelectPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Insert_priv" java-type="UserInsertPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Update_priv" java-type="UserUpdatePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Delete_priv" java-type="UserDeletePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Create_priv" java-type="UserCreatePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Drop_priv" java-type="UserDropPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Reload_priv" java-type="UserReloadPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Shutdown_priv" java-type="UserShutdownPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Process_priv" java-type="UserProcessPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="File_priv" java-type="UserFilePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Grant_priv" java-type="UserGrantPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="References_priv" java-type="UserReferencesPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Index_priv" java-type="UserIndexPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Alter_priv" java-type="UserAlterPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Show_db_priv" java-type="UserShowDbPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Super_priv" java-type="UserSuperPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Create_tmp_table_priv" java-type="UserCreateTmpTablePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Lock_tables_priv" java-type="UserLockTablesPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Execute_priv" java-type="UserExecutePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Repl_slave_priv" java-type="UserReplSlavePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Repl_client_priv" java-type="UserReplClientPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Create_view_priv" java-type="UserCreateViewPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Show_view_priv" java-type="UserShowViewPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Create_routine_priv" java-type="UserCreateRoutinePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Alter_routine_priv" java-type="UserAlterRoutinePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Create_user_priv" java-type="UserCreateUserPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Event_priv" java-type="UserEventPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Trigger_priv" java-type="UserTriggerPrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="Create_tablespace_priv" java-type="UserCreateTablespacePrivEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="ssl_type" java-type="UserSslTypeEnum" data-type="enum" extra-data-type="enum('','ANY','X509','SPECIFIED')" size="9" order="1" persistent="true" required="true">
+            <enum-value name=""></enum-value>
+            <enum-value name="ANY">ANY</enum-value>
+            <enum-value name="X509">X509</enum-value>
+            <enum-value name="SPECIFIED">SPECIFIED</enum-value>
+        </column>
+        <column name="ssl_cipher" java-type="java.sql.Blob" data-type="blob" extra-data-type="blob" size="65535" order="1" persistent="true" required="true"/>
+        <column name="x509_issuer" java-type="java.sql.Blob" data-type="blob" extra-data-type="blob" size="65535" order="1" persistent="true" required="true"/>
+        <column name="x509_subject" java-type="java.sql.Blob" data-type="blob" extra-data-type="blob" size="65535" order="1" persistent="true" required="true"/>
+        <column name="max_questions" java-type="int" data-type="int" extra-data-type="int(11) unsigned" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="max_updates" java-type="int" data-type="int" extra-data-type="int(11) unsigned" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="max_connections" java-type="int" data-type="int" extra-data-type="int(11) unsigned" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="max_user_connections" java-type="int" data-type="int" extra-data-type="int(11) unsigned" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="plugin" java-type="String" data-type="char" extra-data-type="char(64)" default-value="mysql_native_password" size="64" order="1" persistent="true" required="true"/>
+        <column name="authentication_string" java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="password_expired" java-type="UserPasswordExpiredEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+        <column name="password_last_changed" java-type="long" data-type="timestamp" extra-data-type="timestamp" order="1" persistent="true" required="true"/>
+        <column name="password_lifetime" java-type="int" data-type="smallint" extra-data-type="smallint(5) unsigned" size="5" order="1" persistent="true" required="true"/>
+        <column name="account_locked" java-type="UserAccountLockedEnum" data-type="enum" extra-data-type="enum('N','Y')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="N">N</enum-value>
+            <enum-value name="Y">Y</enum-value>
+        </column>
+    </table>
+</database>

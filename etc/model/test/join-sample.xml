@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="sample"  package-name="com.viper.unit.model">
+	<table name="Department" is-rest-service="true">
+		<column name="id" java-type="int" primary-key="true" id-method="autoincrement" />
+		<column name="name" size="100" java-type="String" index-name="department_unique_name" />
+		<column name="dept" size="100" java-type="String" />
+		<column name="phone" java-type="String" size="15" />
+		<index name="department_unique_name" index-class="default" index-type="default" />
+		<row>
+			<cell>1</cell>
+			<cell>Executive Management</cell>
+			<cell>0001</cell>
+			<cell>927-897-6651</cell>
+		</row>
+		<row>
+			<cell>2</cell>
+			<cell>Finance</cell>
+			<cell>0002</cell>
+			<cell>927-897-6652</cell>
+		</row>
+		<row>
+			<cell>3</cell>
+			<cell>Human Resources</cell>
+			<cell>0003</cell>
+			<cell>927-897-6653</cell>
+		</row>
+		<row>
+			<cell>4</cell>
+			<cell>Research and Development</cell>
+			<cell>0004</cell>
+			<cell>927-897-6654</cell>
+		</row>
+		<row>
+			<cell>5</cell>
+			<cell>Operations</cell>
+			<cell>0005</cell>
+			<cell>927-897-6655</cell>
+		</row>
+		<row>
+			<cell>6</cell>
+			<cell>Sales/Marketing</cell>
+			<cell>0006</cell>
+			<cell>927-897-6656</cell>
+		</row>
+	</table>
+	<table name="Worker">
+		<column name="id" java-type="int" primary-key="true" id-method="autoincrement" />
+		<column name="name" size="100" java-type="String" index-name="worker_unique_name" />
+		<column name="dept" size="100" java-type="String" />
+		<column name="phone" java-type="String" size="15" />
+		<index name="worker_unique_name" index-class="default" index-type="default" />
+		<row>
+			<cell>1</cell>
+			<cell>Christena</cell>
+			<cell>0001</cell>
+			<cell>928-891-6656</cell>
+		</row>
+		<row>
+			<cell>2</cell>
+			<cell>Dana</cell>
+			<cell>0002</cell>
+			<cell>928-892-6656</cell>
+		</row>
+		<row>
+			<cell>3</cell>
+			<cell>Jennifer</cell>
+			<cell>0002</cell>
+			<cell>928-892-6651</cell>
+		</row>
+		<row>
+			<cell>4</cell>
+			<cell>Billy</cell>
+			<cell>0003</cell>
+			<cell>928-893-6754</cell>
+		</row>
+		<row>
+			<cell>5</cell>
+			<cell>Tom</cell>
+			<cell>0003</cell>
+			<cell>928-567-7656</cell>
+		</row>
+		<row>
+			<cell>6</cell>
+			<cell>Mike</cell>
+			<cell>0003</cell>
+			<cell>928-122-4098</cell>
+		</row>
+		<row>
+			<cell>7</cell>
+			<cell>Michelle</cell>
+			<cell>0004</cell>
+			<cell>928-212-3214</cell>
+		</row>
+		<row>
+			<cell>8</cell>
+			<cell>Patricia</cell>
+			<cell>0004</cell>
+			<cell>928-390-8876</cell>
+		</row>
+		<row>
+			<cell>9</cell>
+			<cell>Sharon</cell>
+			<cell>0005</cell>
+			<cell>928-415-0090</cell>
+		</row>
+		<row>
+			<cell>10</cell>
+			<cell>Ruth</cell>
+			<cell>0005</cell>
+			<cell>928-552-5135</cell>
+		</row>
+		<row>
+			<cell>11</cell>
+			<cell>Chloe</cell>
+			<cell>0005</cell>
+			<cell>928-676-4453</cell>
+		</row>
+		<row>
+			<cell>12</cell>
+			<cell>Amanda</cell>
+			<cell>0005</cell>
+			<cell>928-782-0143</cell>
+		</row>
+	</table>
+</database>

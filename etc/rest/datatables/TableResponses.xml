@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="TableResponses" table-type="bean">
+		<column name="tables" java-type="java.util.List" generic-type="Object" />
+		<!-- Optional: If an error occurs during the running of the server-side processing script, you can inform the user of this error by 
+			passing back the error message to be displayed using this parameter. Do not include if there is no error. -->
+		<column name="error" java-type="String" />
+
+	</table>
+</database>

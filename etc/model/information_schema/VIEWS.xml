@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/VIEWS.xml">
+    <table name="VIEWS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="TABLE_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="TABLE_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TABLE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="VIEW_DEFINITION" java-type="String" data-type="longtext" extra-data-type="longtext" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="CHECK_OPTION" java-type="String" data-type="varchar" extra-data-type="varchar(8)" size="8" order="1" persistent="true" required="true"/>
+        <column name="IS_UPDATABLE" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="DEFINER" java-type="String" data-type="varchar" extra-data-type="varchar(93)" size="93" order="1" persistent="true" required="true"/>
+        <column name="SECURITY_TYPE" java-type="String" data-type="varchar" extra-data-type="varchar(7)" size="7" order="1" persistent="true" required="true"/>
+        <column name="CHARACTER_SET_CLIENT" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="COLLATION_CONNECTION" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+    </table>
+</database>

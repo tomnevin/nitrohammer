@@ -1,0 +1,151 @@
+## for (var table : root.tables) {
+## if (table.isRestService) {
+## if (table.tableType.value() == 'table' || table.tableType.value() == 'view' || table.tableType.value() == 'base-table') {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/rs/client/test/Test" + classname + "RestClient.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.rs.client.test;
+
+import java.util.List;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import #{database.packageName}.#{classname};
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+import com.viper.database.dao.DatabaseUtil;
+import com.viper.rest.client.RestClient;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+
+public class Test#{classname}RestClient extends AbstractTestCase {
+
+    private final static String RestServiceUsername = System.getProperty("rest.service.username", "tom@bliss.com");
+    private final static String RestServicePassword = System.getProperty("rest.service.password", "password");
+    private final static String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost:80/rest/classes/");
+    private final static String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost:80/rest/authorize/");
+    private static final RestClient client = new RestClient(AuthorizeServiceUrl, RestServiceUrl);
+
+    @BeforeClass
+    public static final void initializeClass() throws Exception {
+        Logger.getGlobal().setLevel(Level.FINEST);
+    }
+
+    @Test
+    public final void testLogin() throws Exception {
+        
+        boolean response = client.authorize(RestServiceUsername, RestServicePassword);
+
+        assertEquals(getCallerMethodName() + ", status ", true, response);
+    }
+
+    @Test
+    public final void testQueryOne() throws Exception {
+ 
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        #{classname} result = client.insert(expected);
+        assertNotNull(getCallerMethodName() + ", result= ", result);
+        
+        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result);
+        
+        #{classname} actual = client.query(#{classname}.class, name, value);
+
+        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+    }
+    
+    @Test
+    public final void testQueryTwo() throws Exception {
+ 
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        #{classname} result = client.insert(expected);
+        assertNotNull(getCallerMethodName() + ", result= ", result);
+        
+        List<String> names = DatabaseUtil.getColumnNames(#{classname}.class);
+        List<Object> items = new java.util.ArrayList<Object>();
+        for (int i = 1; i < names.size(); i++) {
+            if (i >= 3) {
+                break;
+            }
+            items.add(names.get(i));
+            items.add(DatabaseUtil.getValue(result, names.get(i)));
+        }
+        
+        #{classname} actual = client.query(#{classname}.class, (Object[])items.toArray());
+
+        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+    }
+
+    @Test
+    public final void testQueryList() throws Exception {
+
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 100);
+        client.insertAll(expected);
+        
+        List<#{classname}> beans = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", null beans", beans);
+        assertTrue(getCallerMethodName() + " beans.size() is zero", beans.size() > 0);
+    }
+
+    @Test
+    public final void testUpdate() throws Exception {
+        
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
+        #{classname} result = client.update(bean);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+
+    @Test
+    public final void testCreate() throws Exception {
+
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 6);
+        #{classname} result = client.insert(bean);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+    
+    @Test
+    public final void testCreateList() throws Exception {
+
+        int numberOfBeans = 100;
+        List<#{classname}> beans = RandomBean.getRandomBeans(#{classname}.class, 6, numberOfBeans);
+        client.insertAll(beans);
+        
+        List<#{classname}> actual = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", actual beans", actual);
+        assertTrue(getCallerMethodName() + " actual.size() is not big enough: " + actual.size(), actual.size() >= numberOfBeans);
+       // assertContains(getCallerMethodName() + " not all the beans were created in the database", actual, beans);
+    }
+
+    @Test
+    public final void testDelete() throws Exception {
+
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 7);
+        #{classname} result = client.insert(bean);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+        
+        client.delete(result);
+    }
+}
+## util.write(filename, writer);
+## }
+## }
+## }

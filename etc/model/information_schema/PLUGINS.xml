@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/PLUGINS.xml">
+    <table name="PLUGINS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="PLUGIN_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_VERSION" java-type="String" data-type="varchar" extra-data-type="varchar(20)" size="20" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_STATUS" java-type="String" data-type="varchar" extra-data-type="varchar(10)" size="10" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_TYPE" java-type="String" data-type="varchar" extra-data-type="varchar(80)" size="80" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_TYPE_VERSION" java-type="String" data-type="varchar" extra-data-type="varchar(20)" size="20" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_LIBRARY" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_LIBRARY_VERSION" java-type="String" data-type="varchar" extra-data-type="varchar(20)" size="20" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_AUTHOR" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_DESCRIPTION" java-type="String" data-type="longtext" extra-data-type="longtext" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="PLUGIN_LICENSE" java-type="String" data-type="varchar" extra-data-type="varchar(80)" size="80" order="1" persistent="true" required="true"/>
+        <column name="LOAD_OPTION" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+    </table>
+</database>

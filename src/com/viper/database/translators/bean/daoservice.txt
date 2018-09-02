@@ -1,0 +1,78 @@
+## for (var table : root.tables) {
+## if (table.tableType.value() == 'table' || table.tableType.value() == 'view' || table.tableType.value() == 'base-table') {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/dao/" + classname + "DaoService.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.dao;
+
+import java.util.List;
+import java.util.logging.Logger;
+
+import com.viper.database.dao.DatabaseFactory;
+import com.viper.database.dao.DatabaseInterface;
+import #{database.packageName}.#{classname};
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+public class #{classname}DaoService {
+
+    private static final Logger log = Logger.getLogger(#{classname}DaoService.class.getName());
+    
+    public String getDatabaseName() throws Exception {
+    	return com.viper.database.utils.ResourceUtil.getResource("DATABASE_LOCATOR", "test");
+    }
+  
+    public #{classname} queryOne(String value) throws Exception {
+
+		String DatabaseInstanceName = getDatabaseName();
+        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+        return database.query(#{classname}.class, "objectId", value);
+    }
+    
+    public #{classname} queryOne(String key, String value) throws Exception {
+
+		String DatabaseInstanceName = getDatabaseName();
+        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+        return database.query(#{classname}.class, key, value);
+    }
+    
+    public List<#{classname}> queryList() throws Exception {
+
+		String DatabaseInstanceName = getDatabaseName();
+        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+        return database.queryList(#{classname}.class);
+    }
+
+    public void insert(#{classname} bean) throws Exception {
+
+		String DatabaseInstanceName = getDatabaseName();
+        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+        database.insert(bean);
+    }
+
+    public void createItem(#{classname} bean) throws Exception {
+
+		String DatabaseInstanceName = getDatabaseName();
+        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+        database.insert(bean);
+    }
+
+    public void deleteItem(String id) throws Exception {
+
+		String DatabaseInstanceName = getDatabaseName();
+        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+        database.delete(#{classname}.class, "objectId", id);
+    }
+}
+## util.write(filename, writer);
+## }
+## }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyLayout" table-type="bean">
+		<column name="title" java-type="String" />
+		<column name="showlegend" java-type="boolean" />
+		<column name="autosize" java-type="boolean" />
+		<column name="xaxis" java-type="com.viper.database.rest.model.PlotlyAxis" />
+		<column name="yaxis" java-type="com.viper.database.rest.model.PlotlyAxis" />
+		<column name="updatemenus" java-type="java.util.List"  generic-type="com.viper.database.rest.model.PlotlyUpdateMenu" />
+	</table>
+</database>

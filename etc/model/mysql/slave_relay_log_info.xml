@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/slave_relay_log_info.xml">
+    <table name="slave_relay_log_info" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="Relay Log Information" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Number_of_lines" description="Number of lines in the file or rows in the table. Used to version table definitions." java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="Relay_log_name" description="The name of the current relay log file." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Relay_log_pos" description="The relay log position of the last executed event." java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="Master_log_name" description="The name of the master binary log file from which the events in the relay log file were read." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Master_log_pos" description="The master log position of the last executed event." java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="Sql_delay" description="The number of seconds that the slave must lag behind the master." java-type="int" data-type="int" extra-data-type="int(11)" size="10" order="1" persistent="true" required="true"/>
+        <column name="Number_of_workers" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="Id" description="Internal Id that uniquely identifies this record." java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="Channel_name" description="The channel on which the slave is connected to a source. Used in Multisource Replication" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+    </table>
+</database>

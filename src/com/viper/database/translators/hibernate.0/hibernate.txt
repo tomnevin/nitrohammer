@@ -1,0 +1,63 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + ".hbm.xml";
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="#{packagename}" schema="#{root.name}">
+    <class name="#{classname}" table="#{table.name}" lazy="true">
+		## for (var column : table.column) {
+		## if (column.persistent and column.primaryKey) {
+		<id name="#{java.toJavaVariableName(column)}" column="#{column.name}">
+			## if (java.toGeneratorClass(column) != 'none') {
+			<generator class="#{java.toGeneratorClass(column)}"/>
+			## }
+		</id>
+		## }
+		## }
+			
+		## for (var column : table.columns) {
+		## if (column.persistent and not column.primaryKey) {
+		<property column="#{column.name}" name="#{java.toJavaVariableName(column)}" type="#{java.toHibernateType(column)}" 
+		## if (java.toSize(column) > 0) {
+        length="#{java.toSize(column)}" 
+		## } 
+		not-null="#{column.required}" />
+        ## } 
+        ## } 
+		
+		## if (table.tableType == 'bean') {
+			<resultset name="#{table.name}">
+				<return alias="#{table.name}" class="#{table.name}">
+					## for (var column : table.columns) {
+					## if (column.persistent) {
+					<return-property name="#{java.toJavaVariableName(column)}" column="#{column.field}" />
+                    ## } 
+                    ## } 
+				</return>
+				<sql-query name="#{table.name}" resultset-ref="#{table.name}">
+					## if (not empty(table.sqlSelect)) {
+					#{table.sqlSelect} 
+                    ## } 
+				</sql-query>
+			</resultset>
+        ## } 
+			
+		## for (var foreignKey : table.foreignKeys) {
+			## if (foreignKey.unique) {
+			<one-to-one name="#{java.toJavaVariableNameFromField(foreignKey.foreignTable)}" foreign-key="#{foreignKey.foreignKeyReference[0].localColumn}" class="#{java.toJavaNameFromField(foreignKey.foreignTable)}" />
+            ## } 
+        ## } 
+
+		## for (var foreignKey : table.foreignKeys) {
+			## if (not foreignKey.unique) {
+			<list name="#{java.toJavaVariableNameFromField(foreignKey.foreignTable)}s">
+				<key column="#{foreignKey.foreignKeyReference[0].localColumn}" not-null="true" />
+				<index column="#{foreignKey.foreignKeyReference[0].foreignColumn}_idx" />
+				<one-to-many class="#{java.toJavaNameFromField(foreignKey.foreignTable)}" />
+			</list>
+            ## } 
+        ## } 
+	</class>
+</hibernate-mapping>
+## util.write(filename, writer);
+## } 

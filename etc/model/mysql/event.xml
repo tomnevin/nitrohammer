@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/event.xml">
+    <table name="event" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="Events" engine="myisam" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="db" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="body" java-type="byte[]" data-type="longblob" extra-data-type="longblob" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="definer" java-type="String" data-type="char" extra-data-type="char(93)" size="93" order="1" persistent="true" required="true"/>
+        <column name="execute_at" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="interval_value" java-type="int" data-type="int" extra-data-type="int(11)" size="10" order="1" persistent="true" required="true"/>
+        <column name="interval_field" java-type="EventIntervalFieldEnum" data-type="enum" extra-data-type="enum('YEAR','QUARTER','MONTH','DAY','HOUR','MINUTE','WEEK','SECOND','MICROSECOND','YEAR_MONTH','DAY_HOUR','DAY_MINUTE','DAY_SECOND','HOUR_MINUTE','HOUR_SECOND','MINUTE_SECOND','DAY_MICROSECOND','HOUR_MICROSECOND','MINUTE_MICROSECOND','SECOND_MICROSECOND')" size="18" order="1" persistent="true" required="true">
+            <enum-value name="YEAR">YEAR</enum-value>
+            <enum-value name="QUARTER">QUARTER</enum-value>
+            <enum-value name="MONTH">MONTH</enum-value>
+            <enum-value name="DAY">DAY</enum-value>
+            <enum-value name="HOUR">HOUR</enum-value>
+            <enum-value name="MINUTE">MINUTE</enum-value>
+            <enum-value name="WEEK">WEEK</enum-value>
+            <enum-value name="SECOND">SECOND</enum-value>
+            <enum-value name="MICROSECOND">MICROSECOND</enum-value>
+            <enum-value name="YEAR_MONTH">YEAR_MONTH</enum-value>
+            <enum-value name="DAY_HOUR">DAY_HOUR</enum-value>
+            <enum-value name="DAY_MINUTE">DAY_MINUTE</enum-value>
+            <enum-value name="DAY_SECOND">DAY_SECOND</enum-value>
+            <enum-value name="HOUR_MINUTE">HOUR_MINUTE</enum-value>
+            <enum-value name="HOUR_SECOND">HOUR_SECOND</enum-value>
+            <enum-value name="MINUTE_SECOND">MINUTE_SECOND</enum-value>
+            <enum-value name="DAY_MICROSECOND">DAY_MICROSECOND</enum-value>
+            <enum-value name="HOUR_MICROSECOND">HOUR_MICROSECOND</enum-value>
+            <enum-value name="MINUTE_MICROSECOND">MINUTE_MICROSECOND</enum-value>
+            <enum-value name="SECOND_MICROSECOND">SECOND_MICROSECOND</enum-value>
+        </column>
+        <column name="created" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="CURRENT_TIMESTAMP" order="1" persistent="true" required="true"/>
+        <column name="modified" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="0000-00-00 00:00:00" order="1" persistent="true" required="true"/>
+        <column name="last_executed" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="starts" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="ends" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="status" java-type="EventStatusEnum" data-type="enum" extra-data-type="enum('ENABLED','DISABLED','SLAVESIDE_DISABLED')" default-value="ENABLED" size="18" order="1" persistent="true" required="true">
+            <enum-value name="ENABLED">ENABLED</enum-value>
+            <enum-value name="DISABLED">DISABLED</enum-value>
+            <enum-value name="SLAVESIDE_DISABLED">SLAVESIDE_DISABLED</enum-value>
+        </column>
+        <column name="on_completion" java-type="EventOnCompletionEnum" data-type="enum" extra-data-type="enum('DROP','PRESERVE')" default-value="DROP" size="8" order="1" persistent="true" required="true">
+            <enum-value name="DROP">DROP</enum-value>
+            <enum-value name="PRESERVE">PRESERVE</enum-value>
+        </column>
+        <column name="sql_mode" java-type="Object" data-type="set" extra-data-type="set('REAL_AS_FLOAT','PIPES_AS_CONCAT','ANSI_QUOTES','IGNORE_SPACE','NOT_USED','ONLY_FULL_GROUP_BY','NO_UNSIGNED_SUBTRACTION','NO_DIR_IN_CREATE','POSTGRESQL','ORACLE','MSSQL','DB2','MAXDB','NO_KEY_OPTIONS','NO_TABLE_OPTIONS','NO_FIELD_OPTIONS','MYSQL323','MYSQL40','ANSI','NO_AUTO_VALUE_ON_ZERO','NO_BACKSLASH_ESCAPES','STRICT_TRANS_TABLES','STRICT_ALL_TABLES','NO_ZERO_IN_DATE','NO_ZERO_DATE','INVALID_DATES','ERROR_FOR_DIVISION_BY_ZERO','TRADITIONAL','NO_AUTO_CREATE_USER','HIGH_NOT_PRECEDENCE','NO_ENGINE_SUBSTITUTION','PAD_CHAR_TO_FULL_LENGTH')" size="478" order="1" persistent="true" required="true"/>
+        <column name="comment" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="originator" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="time_zone" java-type="String" data-type="char" extra-data-type="char(64)" default-value="SYSTEM" size="64" order="1" persistent="true" required="true"/>
+        <column name="character_set_client" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="collation_connection" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="db_collation" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="body_utf8" java-type="byte[]" data-type="longblob" extra-data-type="longblob" size="4294967295" order="1" persistent="true" required="true"/>
+    </table>
+</database>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyData" table-type="bean">
+		<column name="type" java-type="String" />
+		<column name="mode" java-type="String" />
+		<column name="name" java-type="String" />
+		<column name="x" java-type="java.util.List" />
+		<column name="y" java-type="java.util.List" />
+		<column name="line" java-type="Object" />
+		<column name="visible" java-type="boolean" default-value="true" />
+		<column name="clientData" java-type="Object" />
+	</table>
+</database>

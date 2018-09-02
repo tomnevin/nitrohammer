@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test" version="3.2" filename="etc/models/schema.xml">
+	<table name="INDEXTABLE" table-type="table" engine="myisam">
+		<column default-value="1" description="Sample Description" persistent="true" primary-key="true"
+			required="true" java-type="int" name="ID" size="10" />
+		<column default-value="1" description="Sample Description" persistent="true" primary-key="false"
+			required="true" java-type="String" name="NAME" size="50" index-name="index00001" />
+		<index index-class="unique" index-type="btree" name="index0001" />		<!-- <index -->
+		<row>
+			<cell name="id">1</cell>
+			<cell name="name">Tom</cell>
+		</row>
+		<row>
+			<cell name="id">2</cell>
+			<cell name="name">Dana</cell>
+		</row>
+		<row>
+			<cell name="id">3</cell>
+			<cell name="name">Chrissy</cell>
+		</row>
+	</table>
+	<table name="INDEXTABLE2" table-type="table" engine="memory">
+		<column java-type="int" default-value="1" name="ID" />
+		<column java-type="String" default-value="1" name="NAME" index-name="index00010" />
+		<index index-class="unique" index-type="hash" name="index0010" />
+		<row>
+			<cell name="id">1</cell>
+			<cell name="name">Tom</cell>
+		</row>
+		<row>
+			<cell name="id">2</cell>
+			<cell name="name">Dana</cell>
+		</row>
+		<row>
+			<cell name="id">3</cell>
+			<cell name="name">Chrissy</cell>
+		</row>
+	</table>
+</database>

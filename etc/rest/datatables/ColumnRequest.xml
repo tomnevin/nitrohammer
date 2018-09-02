@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="ColumnRequest" table-type="bean">
+		<!-- Global search value. To be applied to all columns which have searchable as true. -->
+		<column name="value" java-type="String" />
+		<!-- Ordering direction for this column. It will be asc or desc to indicate ascending ordering or descending ordering, 
+			respectively. -->
+		<column name="regex" java-type="boolean" default-value="false" />
+		<!-- Column's data source, as defined by columns.data. -->
+		<column name="data" java-type="String" />
+		<!-- Column's name, as defined by columns.name. -->
+		<column name="name" java-type="String" />
+		<!-- Flag to indicate if this column is searchable (true) or not (false). This is controlled by columns.searchable. -->
+		<column name="searchable" java-type="boolean" />
+		<!-- Column's name, as defined by columns.name. -->
+		<column name="orderable" java-type="boolean" />
+		<column name="search" java-type="java.util.List" generic-type="SearchRequest" />
+	</table>
+</database>

@@ -1,0 +1,65 @@
+## for (var table : root.tables) {
+##   var beanclass = java.toJavaName(table);
+##   var classname = java.toJavaName(table) + 'Writable';
+##   var filename = outdir + '/' + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{packagename};
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import #{java.getParent(packagename)}.#{beanclass};
+import com.viper.database.dao.DatabaseUtil;
+
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.mapreduce.lib.db.DBWritable;
+
+@SuppressWarnings("serial")
+
+public class #{classname} implements Writable, DBWritable, java.io.Serializable {
+
+   private #{beanclass} bean;
+
+   public  #{classname}(#{beanclass} bean) {
+     this.bean = bean;
+   }
+
+   @Override
+   public void readFields(DataInput in) throws IOException { 
+   }
+
+   @Override
+   public void readFields(ResultSet rs) throws SQLException { 
+      ## for (var column : table.columns) {
+      ## var fieldname = java.toJavaVariableName(column);
+      DatabaseUtil.setValue(bean, "#{fieldname}", rs.getObject("#{fieldname}")); 
+      ## }
+   }
+
+   @Override
+   public void write(DataOutput out) throws IOException {   
+   }
+
+   @Override
+   public void write(PreparedStatement ps) throws SQLException {
+      ## var counter = 0;
+      ## for (var column : table.columns) {
+      ## var fieldname = java.toJavaVariableName(column);
+      ## counter = counter + 1;
+      ps.setObject(#{counter}, DatabaseUtil.getValue(bean, "#{fieldname}"));
+      ## }
+   }
+}
+## util.write(filename, writer);
+## }

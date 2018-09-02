@@ -1,0 +1,581 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" jaxb:extensionBindingPrefixes="xjc" elementFormDefault="qualified">
+	<xs:element name="databaseConnections" type="DatabaseConnections" />
+	<xs:complexType name="DatabaseConnections">
+		<xs:sequence>
+			<xs:element name="definition" type="Definition" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="connection" type="DatabaseConnection" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="filename" type="xs:string" default="../databases.xml" />
+		<xs:attribute name="resource" type="xs:string" />
+		<xs:attribute name="project-state" type="ProjectStateType" default="opened" />
+	</xs:complexType>
+	<xs:element name="databaseConnection" type="DatabaseConnection" />
+	<xs:complexType name="DatabaseConnection">
+		<xs:sequence>
+			<xs:element name="ssh" type="SSHConnection" minOccurs="0" maxOccurs="1" />
+			<xs:element name="database-timeout" type="xs:int" default="0" />
+			<xs:element name="show-errors" type="xs:boolean" default="true" />
+			<xs:element name="show-drop-errors" type="xs:boolean" default="true" />
+			<xs:element name="create-database" type="xs:boolean" default="false" />
+			<xs:element name="auto-commit" type="xs:boolean" default="true" />
+			<xs:element name="verbose" type="xs:boolean" default="true" />
+			<xs:element name="number-of-rows-limit" type="xs:int" default="0" />
+			<xs:element name="cache-timeout" type="xs:int" default="0" />
+			<xs:element name="connection-kind" type="ConnectionKind" default="TCP" />
+			<xs:element name="database-url" type="xs:string" />
+			<xs:element name="driver" type="xs:string" />
+			<xs:element name="username" type="xs:string" />
+			<xs:element name="password" type="xs:string" />
+			<xs:element name="model" type="xs:string" />
+			<xs:element name="jndi-name" type="xs:string" />
+			<xs:element name="datasource" type="xs:string" />
+			<xs:element name="datasource-class" type="xs:string" />
+			<xs:element name="description" type="xs:string" />
+			<xs:element name="server-filename" type="xs:string" />
+			<xs:element name="resource-filename" type="xs:string" />
+			<xs:element name="package-name" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="schema-alias" type="Param" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="param" type="Param" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="name-case" type="CaseType" default="normal" />
+			<xs:element name="vendor" type="xs:string" default="mysql" />
+			<xs:element name="pool-validation-query" type="xs:string" default="select 1" />
+			<xs:element name="pool-max-total" type="xs:int" default="8" />
+			<xs:element name="pool-max-idle" type="xs:int" default="8" />
+			<xs:element name="pool-min-idle" type="xs:int" default="0" />
+			<xs:element name="pool-max-wait-millis" type="xs:int" default="-1" />
+			<xs:element name="pool-time-between-eviction-runs-millis" type="xs:int" default="-1" />
+			<xs:element name="pool-min-evictable-idle-time-millis" type="xs:int" default="1800000" />
+			<xs:element name="pool-test-while-idle" type="xs:boolean" default="true" />
+			<xs:element name="pool-test-on-borrow" type="xs:boolean" default="true" />
+			<xs:element name="pool-remove-abandoned" type="xs:boolean" default="false" />
+			<xs:element name="pool-remove-abandoned-timeout-seconds" type="xs:int" default="300" />
+			<xs:element name="pool-log-abandoned" type="xs:boolean" default="false" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+	<!-- local host and local port are part of the jdc url -->
+	<xs:complexType name="SSHConnection">
+		<xs:sequence>
+			<xs:element name="ssh-username" type="xs:string" />
+			<xs:element name="ssh-password" type="xs:string" />
+			<xs:element name="ssh-host" type="xs:string" />
+			<xs:element name="ssh-port" type="xs:int" />
+			<xs:element name="remote-host" type="xs:string" />
+			<xs:element name="remote-port" type="xs:int" />
+			<xs:element name="local-port" type="xs:int" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Definition">
+		<xs:sequence>
+			<xs:element name="database" type="Database" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="filename" type="xs:string" use="required" />
+	</xs:complexType>
+	<xs:simpleType name="ProjectStateType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="opened" />
+			<xs:enumeration value="closed" />
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- The <databases> tag will define a databases -->
+	<xs:element name="databases" type="Databases" />
+	<xs:complexType name="Databases">
+		<xs:sequence>
+			<xs:element name="database" type="Database" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="user" type="User" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="privilege" type="Privilege" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<!-- The <database> tag will define a database, this usually indicates -->
+	<xs:element name="database" type="Database" />
+	<xs:complexType name="Database">
+		<xs:sequence>
+			<xs:element name="table" type="Table" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="procedure" type="Procedure" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="trigger" type="Trigger" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="catalog" type="xs:string" />
+		<xs:attribute name="charset-name" type="xs:string" />
+		<xs:attribute name="collation-name" type="xs:string" />
+		<xs:attribute name="default-base-class" type="xs:string" />
+		<xs:attribute name="default-java-naming-method" type="JavaNamingMethodType" default="javaname" />
+		<xs:attribute name="filename" type="xs:string" />
+		<xs:attribute name="package-name" type="xs:string" />
+		<xs:attribute name="version" type="xs:string" />
+	</xs:complexType>
+	<!-- The <table> tag defines a table within the database. -->
+	<!-- -->
+	<!-- *) name - the name of the table, in terms of the database. -->
+	<xs:element name="table" type="Table" />
+	<xs:complexType name="Table">
+		<xs:sequence>
+			<xs:element name="column" type="Column" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="import-table" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="foreign-key" type="ForeignKey" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:appinfo>
+						<jaxb:property name="foreignKeys" />
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="validator" type="xs:string" />
+			<xs:element name="converter" type="xs:string" />
+			<xs:element name="generator" type="xs:string" />
+			<xs:element name="filter" type="xs:string" />
+			<xs:element name="index" type="Index" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="sql-select" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="sql-update" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="sql-insert" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="sql-delete" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="query-class-name" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="row" type="Row" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="table-name" type="xs:string" />
+		<xs:attribute name="java-name" type="xs:string" />
+		<xs:attribute name="database-name" type="xs:string" />
+		<xs:attribute name="table-type" type="TableType" default="table" />
+		<xs:attribute name="base-class" type="xs:string" />
+		<xs:attribute name="charset-name" type="xs:string" />
+		<xs:attribute name="collation-name" type="xs:string" />
+		<xs:attribute name="data-directory" type="xs:string" />
+		<xs:attribute name="description" type="xs:string" />
+		<xs:attribute name="delay-key-write" type="xs:boolean" default="false" />
+		<xs:attribute name="engine" type="EngineType" />
+		<xs:attribute name="has-checksum" type="xs:boolean" default="false" />
+		<xs:attribute name="index-directory" type="xs:string" />
+		<xs:attribute name="interface" type="xs:string" />
+		<xs:attribute name="is-schema-updatable" type="xs:boolean" default="false" />
+		<xs:attribute name="is-rest-service" type="xs:boolean" default="false" />
+		<xs:attribute name="is-abstract" type="xs:boolean" default="false" />
+		<xs:attribute name="is-default" type="xs:boolean" default="false" />
+		<xs:attribute name="is-final" type="xs:boolean" default="true" />
+		<xs:attribute name="is-large-table" type="xs:boolean" default="false" />
+		<xs:attribute name="is-monitor-changes" type="xs:boolean" default="false" />
+		<xs:attribute name="fields-all-nullable" type="xs:boolean" default="false" />
+		<xs:attribute name="maximum-rows" type="xs:int" />
+		<xs:attribute name="minimum-rows" type="xs:int" />
+		<xs:attribute name="pack-keys" type="PackKeysType" />
+		<xs:attribute name="password" type="xs:string" />
+		<xs:attribute name="raid-type" type="RaidType" />
+		<xs:attribute name="raid-chunks" type="xs:string" />
+		<xs:attribute name="raid-chunk-size" type="xs:int" />
+		<xs:attribute name="row-format" type="RowFormatType" />
+		<xs:attribute name="skip-sql" type="xs:boolean" default="false" />
+		<xs:attribute name="union" type="xs:string" />
+		<xs:attribute name="iterations" type="xs:int" default="0" />
+	</xs:complexType>
+	<!-- The <column> tag defines a column within the database. -->
+	<!-- -->
+	<!-- *) name - the database name of the column -->
+	<!-- *) autoIncrement - auto increment this column -->
+	<!-- *) catalog - this value is used for auto-value generation for -->
+	<!-- testing purposes -->
+	<!-- *) decimal-size - the number of digits to the right -->
+	<!-- for types as float and double. -->
+	<!-- *) default - the default value of the column -->
+	<!-- *) description - textual description of this column, -->
+	<!-- usually can be added to the database. -->
+	<!-- *) inheritance - -->
+	<!-- *) validator - classname for validating the input -->
+	<!-- fields. -->
+	<!-- *) javaName - the name of the column in terms of the java bean, -->
+	<!-- if not specified then a java name will be generated via the -->
+	<!-- java-naming-method. -->
+	<!-- *) javaType - the type name of the column in the java beans, if -->
+	<!-- none specified, the type attribute is converted to meaningful -->
+	<!-- java type. -->
+	<!-- *) javaNamingMethod - see Database javaNamingMethod. -->
+	<!-- *) primaryKey - if true, this column is a primary key. -->
+	<!-- *) required - if true, this column is required to have a value. -->
+	<!-- The value of required would be the opposite of the value isNullable -->
+	<!-- for some databases. -->
+	<!-- *) type - the database type name to be used for this column. -->
+	<xs:complexType name="Column">
+		<xs:sequence>
+			<xs:element name="enum-value" type="EnumItem" minOccurs="0" maxOccurs="unbounded" />
+			<!-- UI Modeling -->
+			<xs:element name="validator" type="xs:string" />
+			<xs:element name="converter" type="xs:string" />
+			<xs:element name="renderer" type="xs:string" />
+			<xs:element name="action" type="xs:string" />
+			<xs:element name="minimum-value" type="xs:string" />
+			<xs:element name="maximum-value" type="xs:string" />
+			<xs:element name="options" type="xs:string" />
+			<xs:element name="component-type" type="xs:string" />
+			<xs:element name="values-classname" type="xs:string" />
+			<xs:element name="validation-message" type="xs:string" />
+			<xs:element name="tooltip-message" type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="table-name" type="xs:string" />
+		<xs:attribute name="database-name" type="xs:string" />
+		<xs:attribute name="description" type="xs:string" />
+		<xs:attribute name="index-name" type="xs:string" />
+		<xs:attribute name="id-method" type="IdMethodType" default="none" />
+		<xs:attribute name="java-type" type="xs:string" />
+		<xs:attribute name="field" type="xs:string" />
+		<xs:attribute name="generic-type" type="xs:string" />
+		<xs:attribute name="logical-type" type="xs:string" />
+		<xs:attribute name="data-type" type="xs:string" />
+		<xs:attribute name="extra-data-type" type="xs:string" />
+		<xs:attribute name="decimal-size" type="xs:int" default="0" />
+		<xs:attribute name="default-value" type="xs:string" />
+		<xs:attribute name="size" type="xs:long" default="0" />
+		<xs:attribute name="order" type="xs:int" default="1" />
+		<xs:attribute name="columnVisibility" type="ColumnVisibilityType" default="normal" />
+		<!-- Flags -->
+		<xs:attribute name="natural-key" type="xs:boolean" default="false" />
+		<xs:attribute name="primary-key" type="xs:boolean" default="false" />
+		<xs:attribute name="persistent" type="xs:boolean" default="true" />
+		<xs:attribute name="optional" type="xs:boolean" default="false" />
+		<xs:attribute name="required" type="xs:boolean" default="false" />
+		<xs:attribute name="secure" type="xs:boolean" default="false" />
+		<xs:attribute name="unique" type="xs:boolean" default="false" />
+		<xs:attribute name="unsigned" type="xs:boolean" default="false" />
+		<xs:attribute name="zero-fill" type="xs:boolean" default="false" />
+		<xs:attribute name="binary" type="xs:boolean" default="false" />
+		<xs:attribute name="ascii" type="xs:boolean" default="false" />
+		<xs:attribute name="unicode" type="xs:boolean" default="false" />
+		<xs:attribute name="is-nullable" type="xs:boolean" default="false" />
+	</xs:complexType>
+	<!-- The <databases> tag will define a databases -->
+	<xs:complexType name="Privileges">
+		<xs:sequence>
+			<xs:element name="privilege" type="Privilege" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<!-- -->
+	<xs:complexType name="Privilege">
+		<xs:attribute name="grantor" type="xs:string" />
+		<xs:attribute name="grantee" type="xs:string" use="required" />
+		<xs:attribute name="privilege" type="xs:string" use="required" />
+		<xs:attribute name="is-grantable" type="xs:boolean" default="false" />
+	</xs:complexType>
+	<!-- -->
+	<xs:element name="user" type="User" />
+	<xs:complexType name="User">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="password" type="xs:string" use="required" />
+		<xs:attribute name="host" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="DashboardType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BAR_CHART" />
+			<xs:enumeration value="BUBBLE_CHART" />
+			<xs:enumeration value="CANDLESTICK_CHART" />
+			<xs:enumeration value="DATE_CHART" />
+			<xs:enumeration value="DONUT_CHART" />
+			<xs:enumeration value="GAUGE_CHART" />
+			<xs:enumeration value="LINE_CHART" />
+			<xs:enumeration value="OHLC_CHART" />
+			<xs:enumeration value="PIE_CHART" />
+			<xs:enumeration value="TEXT" />
+			<xs:enumeration value="TABLE" />
+			<xs:enumeration value="MAP" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Rows">
+		<xs:sequence>
+			<xs:element name="row" type="Row" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Row">
+		<xs:sequence>
+			<xs:element name="cell" type="Cell" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Cell">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" />
+				<xs:attribute name="type" type="xs:string" default="int" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Param">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="EngineType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="default" />
+			<xs:enumeration value="bdb" />
+			<xs:enumeration value="heap" />
+			<xs:enumeration value="isam" />
+			<xs:enumeration value="innodb" />
+			<xs:enumeration value="merge" />
+			<xs:enumeration value="mrg_myisam" />
+			<xs:enumeration value="myisam" />
+			<xs:enumeration value="memory" />
+			<xs:enumeration value="blackhole" />
+			<xs:enumeration value="csv" />
+			<xs:enumeration value="archive" />
+			<xs:enumeration value="performance_schema" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="InsertMethodType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="no" />
+			<xs:enumeration value="first" />
+			<xs:enumeration value="last" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PackKeysType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0" />
+			<xs:enumeration value="1" />
+			<xs:enumeration value="default" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RaidType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1" />
+			<xs:enumeration value="striped" />
+			<xs:enumeration value="raid0" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RowFormatType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="default" />
+			<xs:enumeration value="dynamic" />
+			<xs:enumeration value="fixed" />
+			<xs:enumeration value="compressed" />
+			<xs:enumeration value="redundant" />
+			<xs:enumeration value="compact" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TableType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="table" />
+			<xs:enumeration value="local-temporary" />
+			<xs:enumeration value="bean" />
+			<xs:enumeration value="view" />
+			<xs:enumeration value="viewapp" />
+			<xs:enumeration value="system-table" />
+			<xs:enumeration value="system-view" />
+			<xs:enumeration value="global-temporary" />
+			<xs:enumeration value="alias" />
+			<xs:enumeration value="synonym" />
+			<xs:enumeration value="data" />
+			<xs:enumeration value="base-table" />
+			<xs:enumeration value="crud-bean" />
+			<xs:enumeration value="interface" />
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- -->
+	<xs:element name="procedure" type="Procedure" />
+	<xs:complexType name="Procedure">
+		<xs:sequence>
+			<xs:element name="source" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="column" type="Column" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="database-name" type="xs:string" />
+		<xs:attribute name="filename" type="xs:string" />
+		<xs:attribute name="sql-characteristics" type="xs:string" />
+		<xs:attribute name="sql-security" type="xs:string" />
+		<xs:attribute name="description" type="xs:string" />
+		<xs:attribute name="vendor" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="InheritanceType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="false" />
+			<xs:enumeration value="single" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SortType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="none" />
+			<xs:enumeration value="ascend" />
+			<xs:enumeration value="descend" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UpdateType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="cascade" />
+			<xs:enumeration value="setnull" />
+			<xs:enumeration value="restrict" />
+			<xs:enumeration value="none" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ForeignKey">
+		<xs:sequence>
+			<xs:element name="foreign-key-reference" type="ForeignKeyReference" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="local-database" type="xs:string" />
+		<xs:attribute name="local-table" type="xs:string" use="required" />
+		<xs:attribute name="foreign-database" type="xs:string" />
+		<xs:attribute name="foreign-table" type="xs:string" use="required" />
+		<xs:attribute name="constraint-name" type="xs:string" />
+		<xs:attribute name="unique" type="xs:boolean" default="false" />
+		<xs:attribute name="deferrability" type="xs:string" />
+		<xs:attribute name="on-update" type="UpdateType" />
+		<xs:attribute name="on-delete" type="UpdateType" />
+	</xs:complexType>
+	<!-- -->
+	<xs:complexType name="ForeignKeyReference">
+		<xs:attribute name="local-column" type="xs:string" use="required" />
+		<xs:attribute name="foreign-column" type="xs:string" use="required" />
+		<xs:attribute name="sequence-number" type="xs:int" />
+	</xs:complexType>
+	<!-- -->
+	<xs:complexType name="Index">
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="table-name" type="xs:string" />
+		<xs:attribute name="database-name" type="xs:string" />
+		<xs:attribute name="column-name" type="xs:string" />
+		<xs:attribute name="index-class" type="IndexClassType" default="default" />
+		<xs:attribute name="index-type" type="IndexType" default="default" />
+		<xs:attribute name="editable" type="xs:boolean" default="true" />
+		<xs:attribute name="primary" type="xs:boolean" default="false" />
+		<xs:attribute name="description" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="IndexClassType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="unique" />
+			<xs:enumeration value="fulltext" />
+			<xs:enumeration value="spatial" />
+			<xs:enumeration value="default" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IndexType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="btree" />
+			<xs:enumeration value="hash" />
+			<xs:enumeration value="default" />
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- -->
+	<xs:complexType name="Trigger">
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="table-name" type="xs:string" />
+		<xs:attribute name="database-name" type="xs:string" />
+		<xs:attribute name="username" type="xs:string" />
+		<xs:attribute name="time" type="TimeType" />
+		<xs:attribute name="event" type="EventType" />
+		<xs:attribute name="statement" type="xs:string" />
+		<xs:attribute name="drop-if-exists" type="xs:boolean" default="false" />
+	</xs:complexType>
+	<!-- -->
+	<xs:simpleType name="TimeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="before" />
+			<xs:enumeration value="after" />
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- -->
+	<xs:simpleType name="ConnectionKind">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TCP" />
+			<xs:enumeration value="Named Pipe" />
+			<xs:enumeration value="Memory" />
+			<xs:enumeration value="SSL" />
+			<xs:enumeration value="SSH" />
+			<xs:enumeration value="HTTP Proxy" />
+			<xs:enumeration value="HTTP Tunnel" />
+			<xs:enumeration value="Data Source" />
+			<xs:enumeration value="Resource Ref" />
+			<xs:enumeration value="JDBC Connection Pool" />
+			<xs:enumeration value="JDBC Resource" />
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- -->
+	<xs:simpleType name="EventType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="update" />
+			<xs:enumeration value="delete" />
+			<xs:enumeration value="insert" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DataScope">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SCHEMA" />
+			<xs:enumeration value="DATA" />
+			<xs:enumeration value="ALL" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FileFormat">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SQL" />
+			<xs:enumeration value="XML" />
+			<xs:enumeration value="CSV" />
+			<xs:enumeration value="TEXT" />
+			<xs:enumeration value="HTML" />
+			<xs:enumeration value="EXCEL" />
+			<xs:enumeration value="META" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IdMethodType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="idbroker" />
+			<xs:enumeration value="native" />
+			<xs:enumeration value="autoincrement" />
+			<xs:enumeration value="sequence" />
+			<xs:enumeration value="assigned" />
+			<xs:enumeration value="none" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="JavaNamingMethodType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="nochange" />
+			<xs:enumeration value="underscore" />
+			<xs:enumeration value="javaname" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MetaFormatType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="simple-format" />
+			<xs:enumeration value="complete-format" />
+			<xs:enumeration value="reduced-format" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CaseType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="normal" />
+			<xs:enumeration value="upper" />
+			<xs:enumeration value="lower" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ColumnVisibilityType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="normal" />
+			<xs:enumeration value="required" />
+			<xs:enumeration value="optional" />
+			<xs:enumeration value="hidden" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TransactionIsolationLevels">
+		<xs:sequence>
+			<xs:element name="TransactionSerializable" type="xs:boolean" default="true" />
+			<xs:element name="TransactionRepeatableRead" type="xs:boolean" default="true" />
+			<xs:element name="TransactionReadCommitted" type="xs:boolean" default="true" />
+			<xs:element name="TransactionReadUncommitted" type="xs:boolean" default="true" />
+			<xs:element name="TransactionNone" type="xs:boolean" default="false" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResultSetType">
+		<xs:sequence>
+			<xs:element name="ForwardOnly" type="xs:boolean" default="false" />
+			<xs:element name="ScrollInsensitive" type="xs:boolean" default="true" />
+			<xs:element name="ScrollSensitive" type="xs:boolean" default="false" />
+		</xs:sequence>
+	</xs:complexType>
+	<!-- -->
+	<xs:complexType name="EnumItem">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+	<info organisation="com.viper" module="database" />
+	<configurations defaultconfmapping="default->master">
+		<conf name="libgen" description="Application jars" />
+		<conf name="drivers" description="Dataabse driver jars" />
+		<conf name="libdev" description="Development jars (Dont ship)" />
+	</configurations>
+	<dependencies defaultconf="default">
+
+		<!-- DATABASE DRIVERS -->
+		<!-- Mysql Drivers -->
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.35" conf="drivers->master" />
+
+		<!-- H2 Database (MYSQL driver required) -->
+		<dependency org="com.h2database" name="h2" rev="1.4.192" conf="drivers->master" />
+
+		<!-- Hadoop database cliet (Optional) -->
+		<dependency org="org.apache.hadoop" name="hadoop-mapreduce-client-common" rev="2.7.2" conf="drivers->master" />
+		<dependency org="org.apache.hadoop" name="hadoop-mapreduce-client-core" rev="2.7.2" conf="drivers->master" />
+		<dependency org="org.apache.hadoop" name="hadoop-common" rev="2.7.2" conf="drivers->master" />
+
+		<!-- Mongo database client -->
+		<dependency org="org.mongodb" name="mongo-java-driver" rev="3.5.0" conf="drivers->master" />
+
+		<!-- HBase database client -->
+		<dependency org="org.apache.hbase" name="hbase-client" rev="1.3.1" conf="drivers->master" />
+		<dependency org="org.apache.hbase" name="hbase-common" rev="1.3.1" conf="drivers->master" />
+
+		<!-- OJDBC -->
+		<!-- https://mvnrepository.com/artifact/com.oracle/ojdbc14 -->
+		<!-- <dependency org="com.oracle" name="ojdbc14" rev="10.2.0.3.0" conf="drivers->master" /> -->
+
+		<!-- OPENJPA-ALL -->
+		<!-- https://mvnrepository.com/artifact/org.apache.openjpa/openjpa-all -->
+		<dependency org="org.apache.openjpa" name="openjpa-all" rev="3.0.0" conf="drivers->master" />
+		<dependency org="com.google.protobuf" name="protobuf-java" rev="3.6.1" conf="drivers->master" />
+
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency org="com.google.guava" name="guava" rev="19.0" conf="drivers->master" />
+		<dependency org="net.sourceforge.jtds" name="jtds" rev="1.3.1" conf="drivers->master" />
+
+		<!--  LIBGEN  S/B COMMON -->
+		<!-- log4j -->
+		<dependency org="org.apache.logging.log4j" name="log4j" rev="2.9.1" conf="libgen->master" />
+
+		<!-- JERSEY -->
+		<!-- <dependency org="javax.ws.rs" name="javax.ws.rs-api" rev="2.1" conf="libgen->master" /> -->
+		<!-- JERSEY Extensions (ext) -->
+		<!-- <dependency org="org.glassfish.hk2.external" name="javax.inject" rev="2.5.0-b61" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.hk2" name="osgi-resource-locator" rev="2.5.0-b42" conf="libgen->master" /> -->
+		<!-- <dependency org="javax.annotation" name="javax.annotation-api" rev="1.3.2" conf="libgen->master" /> -->
+		<!-- <dependency org="javax.validation" name="validation-api" rev="2.0.1.Final" conf="libgen->master" /> -->	
+		<!-- <dependency org="org.osgi" name="org.osgi.core" rev="4.2.0" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.hk2.external" name="javax.inject" rev="2.5.0-b42" conf="libgen->master" /> -->
+		<!-- JERSEY implementation (lib) -->
+		<!-- <dependency org="org.glassfish.jersey.core" name="jersey-client" rev="2.27" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jersey.core" name="jersey-common" rev="2.27" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jersey.core" name="jersey-server" rev="2.27" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jersey.media" name="jersey-media-jaxb" rev="2.27" conf="libgen->master" /> -->
+
+		<!-- Apache Johnzon -->
+		<!-- https://mvnrepository.com/artifact/org.apache.johnzon/apache-johnzon -->
+		<dependency org="javax.json" name="javax.json-api" rev="1.1.2" conf="libgen->master" />
+		<dependency org="org.apache.johnzon" name="johnzon-core" rev="1.1.8" conf="libgen->master" />
+		<dependency org="org.apache.johnzon" name="johnzon-jaxrs" rev="1.1.8" conf="libgen->master" />
+		<dependency org="org.apache.johnzon" name="johnzon-jsonb" rev="1.1.8" conf="libgen->master" />
+		<dependency org="org.apache.johnzon" name="johnzon-mapper" rev="1.1.8" conf="libgen->master" />
+		<dependency org="javax.annotation" name="javax.annotation-api" rev="1.3.2" conf="libgen->master" />
+
+		<!-- JAXB -->
+		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+		<!-- <dependency org="javax.activation" name="activation" rev="1.1.1" conf="libgen->master" /> -->
+		<!-- <dependency org="javax.xml.bind" name="jaxb-api" rev="2.3.0" conf="libgen->master" /> -->
+		<!-- <dependency org="javax.xml.bind" name="jsr173_api" rev="1.0" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-runtime" rev="2.3.0.1" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-core" rev="2.3.0.1" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-xjc" rev="2.3.0.1" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-jxc" rev="2.3.0.1" conf="libgen->master" /> -->
+		<!-- <dependency org="org.glassfish.jaxb" name="txw2" rev="2.3.0.1" conf="libgen->master" /> -->
+
+		<!-- JACKSON -->
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.9.6" conf="libgen->master" />
+		<dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.9.6" conf="libgen->master" />
+		<dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.9.6" conf="libgen->master" />
+
+		<!-- QUARTZ -->
+		<dependency org="org.quartz-scheduler" name="quartz" rev="2.3.0" conf="libgen->master" />
+
+		<!-- SNMPJ4 -->
+		<!-- https://mvnrepository.com/artifact/org.snmp4j/snmp4j -->
+		<dependency org="org.snmp4j" name="snmp4j" rev="2.6.2" conf="libgen->master" />
+
+		<!-- COMMONS -->
+		<dependency org="commons-beanutils" name="commons-beanutils" rev="1.9.3" conf="libgen->master" />
+		<dependency org="commons-codec" name="commons-codec" rev="1.11" conf="libgen->master" />
+		<dependency org="org.apache.commons" name="commons-configuration2" rev="2.3" conf="libgen->master" />
+		<dependency org="org.apache.commons" name="commons-csv" rev="1.5" conf="libgen->master" />
+		<dependency org="org.apache.commons" name="commons-dbcp2" rev="2.5.0" conf="libgen->master" />
+		<dependency org="commons-dbutils" name="commons-dbutils" rev="1.7" conf="libgen->master" />
+		<dependency org="org.apache.commons" name="commons-jexl" rev="2.1.1" conf="libgen->master" />
+		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="libgen->master" />
+		<dependency org="org.apache.commons" name="commons-lang3" rev="3.7" conf="libgen->master" />
+		<dependency org="org.apache.commons" name="commons-pool2" rev="2.6.0" conf="libgen->master" />
+		<dependency org="org.apache.commons" name="commons-email" rev="1.5" conf="libgen->master" />
+
+		<!-- LOG4J -->
+		<dependency org="log4j" name="log4j" rev="1.2.17" conf="libgen->master" />
+
+		<!-- hamcrest -->
+		<!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all -->
+		<dependency org="org.hamcrest" name="hamcrest-all" rev="1.3" conf="libgen->master" />
+
+		<!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
+		<dependency org="com.jcraft" name="jsch" rev="0.1.54" conf="libgen->master" />
+
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency org="org.json" name="json" rev="20180130" conf="libgen->master" />
+
+		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+		<dependency org="javax.mail" name="mail" rev="1.4" conf="libgen->master" />
+
+		<dependency org="org.xmlunit" name="xmlunit-core" rev="2.6.1" conf="libgen->master" />
+		<dependency org="org.xmlunit" name="xmlunit-matchers" rev="2.6.1" conf="libgen->master" />
+
+		<!-- DEVELOPMENT (DONT USE PRODUCTION -->
+		<dependency org="tomcat" name="catalina-ant" rev="5.5.23" conf="libdev->master" />
+		<dependency org="org.apache.maven.shared" name="maven-dependency-analyzer" rev="1.10" conf="libdev->master" />
+
+		<!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.agent -->
+		<dependency org="org.jacoco" name="org.jacoco.agent" rev="0.8.1" conf="libdev->master" />
+		<dependency org="org.jacoco" name="org.jacoco.core" rev="0.8.1" conf="libdev->master" />
+		<dependency org="org.jacoco" name="org.jacoco.ant" rev="0.8.1" conf="libdev->master" />
+		<dependency org="org.jacoco" name="org.jacoco.report" rev="0.8.1" conf="libdev->master" />
+
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency org="junit" name="junit" rev="4.12" conf="libdev->master" />
+		<dependency org="junitperf" name="junitperf" rev="1.8" conf="libdev->master" />
+		<dependency org="com.carrotsearch" name="junit-benchmarks" rev="0.7.2" conf="libdev->master" />
+		<dependency org="com.puppycrawl.tools" name="checkstyle" rev="8.11" conf="libdev->master" />
+		<dependency org="org.ow2.asm" name="asm" rev="6.2.1" conf="libdev->master" />
+		<dependency org="org.antlr" name="antlr4-runtime" rev="4.7.1" conf="libdev->master" />
+		<dependency org="commons-cli" name="commons-cli" rev="1.4" conf="libdev->master" />
+
+	</dependencies>
+</ivy-module>

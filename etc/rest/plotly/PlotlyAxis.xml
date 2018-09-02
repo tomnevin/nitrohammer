@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyAxis" table-type="bean">
+		<column name="autorange" java-type="boolean" />
+		<column name="autotick" java-type="boolean" />
+		<column name="showgrid" java-type="boolean" />
+		<column name="zeroline" java-type="boolean" />
+		<column name="fixedrange" java-type="boolean" />
+		<column name="showline" java-type="boolean" />
+		<column name="showticklabels" java-type="boolean" />
+		<column name="ticks" java-type="String" />
+		<column name="nticks" java-type="int" />
+		<column name="tickmode" java-type="String" /> <!--   "auto" | "linear" | "array" -->
+		<column name="title" java-type="String" />
+		<column name="tickangle" java-type="int" />
+		<column name="titlefont" java-type="com.viper.database.rest.model.PlotlyFont" />
+		<column name="tickfont" java-type="com.viper.database.rest.model.PlotlyFont" />
+		<column name="range" java-type="java.util.List" generic-type="String" />
+		<column name="rangeselector" java-type="com.viper.database.rest.model.PlotlyRangeSelector" />
+		<column name="rangeslider" java-type="com.viper.database.rest.model.PlotlyRangeSlider" />
+		<column name="type" java-type="String" />
+		<column name="exponentformat" java-type="String" />
+		<column name="showexponent" java-type="String" />
+	</table>
+</database>

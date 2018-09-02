@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/general_log.xml">
+    <table name="general_log" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="General log" engine="csv" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="event_time" java-type="long" data-type="timestamp" extra-data-type="timestamp(6)" default-value="CURRENT_TIMESTAMP(6)" order="1" persistent="true" required="true"/>
+        <column name="user_host" java-type="String" data-type="mediumtext" extra-data-type="mediumtext" size="16777215" order="1" persistent="true" required="true"/>
+        <column name="thread_id" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="server_id" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="command_type" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="argument" java-type="byte[]" data-type="mediumblob" extra-data-type="mediumblob" size="16777215" order="1" persistent="true" required="true"/>
+    </table>
+</database>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/columns_priv.xml">
+    <table name="columns_priv" database-name="mysql" table-type="base-table" collation-name="utf8_bin" description="Column privileges" engine="myisam" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="Host" java-type="String" data-type="char" extra-data-type="char(60)" size="60" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Db" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="User" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Table_name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Column_name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Timestamp" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="CURRENT_TIMESTAMP" order="1" persistent="true" required="true"/>
+        <column name="Column_priv" java-type="Object" data-type="set" extra-data-type="set('Select','Insert','Update','References')" size="31" order="1" persistent="true" required="true"/>
+    </table>
+</database>

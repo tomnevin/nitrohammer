@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="SearchRequest" table-type="bean">
+		<!-- Global search value. To be applied to all columns which have searchable as true. -->
+		<column name="value" java-type="String" />
+		<!-- Ordering direction for this column. It will be asc or desc to indicate ascending ordering or descending ordering, respectively. -->
+		<column name="regex" java-type="boolean" default-value="false" />
+	</table>
+</database>

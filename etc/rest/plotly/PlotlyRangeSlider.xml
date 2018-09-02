@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyRangeSlider" table-type="bean">
+		<column name="range" java-type="java.util.List" />
+		<column name="visible" java-type="boolean" />
+	</table>
+</database>

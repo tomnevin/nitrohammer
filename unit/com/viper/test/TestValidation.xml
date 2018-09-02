@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test01" version="1.0">
+	<table name="test01" skip-sql="false" description="Description">
+		<column name="Column1" java-type="int" primary-key="true" required="true" default-value="101"
+			description="Test of Column1, primary key" size="10" decimal-size="0" />
+		<column name="Column2" java-type="int" primary-key="false" required="true" default-value="102"
+			description="Test of Column2, primary key" size="10" decimal-size="0" />
+		<column name="Column3" java-type="int" primary-key="false" required="true" default-value="103"
+			description="Test of Column3, primary key" size="10" decimal-size="0" />
+		<column name="Column4" java-type="int" primary-key="false" required="true" default-value="104"
+			description="Test of Column4, primary key" size="10" decimal-size="0" />
+		<column name="Column5" java-type="int" primary-key="false" required="true" default-value="105"
+			description="Test of Column5, primary key" size="10" decimal-size="0" />
+		<column name="Column6" java-type="int" primary-key="false" required="true" default-value="106"
+			description="Test of Column6, primary key" size="10" decimal-size="0" />
+	</table>
+</database>

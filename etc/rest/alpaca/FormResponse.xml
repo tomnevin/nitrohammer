@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="FormResponse" table-type="bean">
+		<column name="schema" java-type="SchemaResponse" />
+		<column name="data" java-type="java.util.Map" generic-type="String, Object" />
+		<column name="options" java-type="OptionsResponse" />
+		<column name="view" java-type="ViewResponse" />
+		<column name="postRender" java-type="String" />
+	</table>
+</database>

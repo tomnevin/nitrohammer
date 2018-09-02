@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd">
+	<database name="test" version="3.2">
+		<table name="basic_table" table-type="table">
+			<column is-primary-key="true" java-type="int" name="ID" />
+			<column java-type="String" name="name" index-name="indexname" />
+			<foreign-key constraint-name="constrain0002" deferrability="deferrability" foreign-catalog="test"
+				foreign-table="assignments" unique="true" name="local-key-name" on-delete="restrict" on-update="cascade">
+				<foreign-key-reference foreign-column="name" local-column="name" />
+			</foreign-key>
+			<index index-class="unique" index-type="btree" name="indexname" />
+			<sql-select>select * from table</sql-select>
+			<sql-update>update a="1", b="2" into table where c="3"</sql-update>
+			<sql-insert>insert (a, b, c) values (1, 2, 4) from table</sql-insert>
+			<sql-delete>delete table</sql-delete>
+			<row>
+				<cell name="id">1</cell>
+				<cell name="name">Tom</cell>
+			</row>
+			<row>
+				<cell name="id">2</cell>
+				<cell name="name">Dana</cell>
+			</row>
+			<row>
+				<cell name="id">3</cell>
+				<cell name="name">Chrissy</cell>
+			</row>
+		</table>
+		<table name="assignments" table-type="view">
+			<column is-persistent="true" is-primary-key="true" java-type="String" name="id" />
+			<column default-value="N" description="Sample Description" required="true" java-type="int" name="lessonid" />
+			<column java-type="String" name="active" />
+			<column java-type="java.sql.Date" name="due_date" size="10" />
+			<sql-select> select ID as id, ID as lessonId, true as active, SYSDATE() as due_date from BASIC_TABLE order by
+				name</sql-select>
+		</table>
+		<procedure description="sample procedure description" name="sumit" vendor="oracle">
+			<source><![CDATA[PROCEDURE sumit (IN a INT, IN b INT, OUT c INT) BEGIN SET c = a + b;END;]]></source>
+		</procedure>
+	</database>
+	<user name="demo" password="pass">
+	</user>
+	<privilege grantee="jenny" grantor="tom" is-grantable="true" privilege="create" />
+</databases>

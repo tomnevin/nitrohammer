@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/INNODB_FT_DEFAULT_STOPWORD.xml">
+    <table name="INNODB_FT_DEFAULT_STOPWORD" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="value" java-type="String" data-type="varchar" extra-data-type="varchar(18)" size="18" order="1" persistent="true" required="true"/>
+    </table>
+</database>

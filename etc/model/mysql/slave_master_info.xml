@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/slave_master_info.xml">
+    <table name="slave_master_info" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="Master Information" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Number_of_lines" description="Number of lines in the file." java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="Master_log_name" description="The name of the master binary log currently being read from the master." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Master_log_pos" description="The master log position of the last read event." java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="Host" description="The host name of the master." java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="User_name" description="The user name used to connect to the master." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="User_password" description="The password used to connect to the master." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Port" description="The network port used to connect to the master." java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="Connect_retry" description="The period (in seconds) that the slave will wait before trying to reconnect to the master." java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="Enabled_ssl" description="Indicates whether the server supports SSL connections." java-type="int" data-type="tinyint" extra-data-type="tinyint(1)" size="3" order="1" persistent="true" required="true"/>
+        <column name="Ssl_ca" description="The file used for the Certificate Authority (CA) certificate." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Ssl_capath" description="The path to the Certificate Authority (CA) certificates." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Ssl_cert" description="The name of the SSL certificate file." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Ssl_cipher" description="The name of the cipher in use for the SSL connection." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Ssl_key" description="The name of the SSL key file." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Ssl_verify_server_cert" description="Whether to verify the server certificate." java-type="int" data-type="tinyint" extra-data-type="tinyint(1)" size="3" order="1" persistent="true" required="true"/>
+        <column name="Heartbeat" java-type="float" data-type="float" extra-data-type="float" size="12" order="1" persistent="true" required="true"/>
+        <column name="Bind" description="Displays which interface is employed when connecting to the MySQL server" java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Ignored_server_ids" description="The number of server IDs to be ignored, followed by the actual server IDs" java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Uuid" description="The master server uuid." java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Retry_count" description="Number of reconnect attempts, to the master, before giving up." java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="Ssl_crl" description="The file used for the Certificate Revocation List (CRL)" java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Ssl_crlpath" description="The path used for Certificate Revocation List (CRL) files" java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="Enabled_auto_position" description="Indicates whether GTIDs will be used to retrieve events from the master." java-type="int" data-type="tinyint" extra-data-type="tinyint(1)" size="3" order="1" persistent="true" required="true"/>
+        <column name="Channel_name" description="The channel on which the slave is connected to a source. Used in Multisource Replication" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Tls_version" description="Tls version" java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+    </table>
+</database>

@@ -1,0 +1,541 @@
+/*
+ * -----------------------------------------------------------------------------
+ *                      VIPER SOFTWARE SERVICES
+ * -----------------------------------------------------------------------------
+ *
+ * MIT License
+ * 
+ * Copyright (c) #{classname}.html #{util.YYYY()} Viper Software Services
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ *
+ * -----------------------------------------------------------------------------
+ */
+
+package com.viper.rest.client;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.johnzon.jaxrs.JohnzonProvider;
+import org.glassfish.jersey.SslConfigurator;
+
+import com.viper.database.dao.DatabaseUtil;
+import com.viper.database.dao.Predicate;
+import com.viper.database.dao.converters.ConverterUtils;
+import com.viper.database.security.Encryptor;
+
+public class RestClient implements com.viper.database.dao.DatabaseInterface {
+
+    private static final String defaultMediaType = MediaType.APPLICATION_JSON;
+    public static boolean debugOn = true;
+
+    private String baseURL = "https://localhost:80/rest/classes/";
+    private String authorizeURL = "https://localhost:80/rest/authorize/";
+    private String sessionToken = null;
+    private Client client = null;
+
+    private boolean useSSL = false;
+    private String trustStoreFile = null;
+    private String trustStorePassword = null;
+    private String keyStoreFile = null;
+    private String keyPassword = null;
+
+    public RestClient(String authorizeURL, String url) {
+        if (url != null) {
+            this.baseURL = url;
+        }
+        if (!this.baseURL.endsWith("/")) {
+            this.baseURL = this.baseURL + "/";
+        }
+        if (authorizeURL != null) {
+            this.authorizeURL = authorizeURL;
+        }
+        if (!this.authorizeURL.endsWith("/")) {
+            this.authorizeURL = this.authorizeURL + "/";
+        }
+
+        System.out.println("RestClient: AuthorizeURL=" + this.authorizeURL);
+        System.out.println("RestClient: baseURL=" + this.baseURL);
+
+    }
+
+    public void setSSLContext(String trustStoreFile, String trustStorePassword, String keyStoreFile, String keyPassword) {
+        this.trustStoreFile = trustStoreFile;
+        this.trustStorePassword = trustStorePassword;
+        this.keyStoreFile = keyStoreFile;
+        this.keyPassword = keyPassword;
+        this.useSSL = true;
+    }
+
+    public Client getClient() throws Exception {
+        if (client == null) {
+
+            ClientBuilder clientBuilder = ClientBuilder.newBuilder();
+            clientBuilder = clientBuilder.register(JohnzonProvider.class);
+            // clientBuilder = clientBuilder.register(JacksonFeature.class);
+
+            if (useSSL) {
+                Encryptor encryptor = new Encryptor();
+                SslConfigurator sslConfig = SslConfigurator.newInstance();
+                sslConfig = sslConfig.trustStoreFile(trustStoreFile);
+                sslConfig = sslConfig.trustStorePassword(encryptor.decrypt(trustStorePassword));
+
+                SSLContext sslContext = sslConfig.createSSLContext();
+                clientBuilder = clientBuilder.sslContext(sslContext);
+                client = clientBuilder.build();
+
+            } else {
+                client = clientBuilder.build();
+            }
+        }
+        return client;
+    }
+
+    public boolean authorize(String username, String password) throws Exception {
+
+        String url = authorizeURL;
+        try {
+            WebTarget webTarget = getClient().target(url).queryParam("username", username).queryParam("password", password);
+
+            Response response = webTarget.request(MediaType.TEXT_PLAIN).get();
+            handleErrorResponse(webTarget, response);
+            
+            String str = response.readEntity(String.class);
+
+            println(webTarget, response, str);
+
+            response.close();
+
+            return true; // TODO
+        } catch (Exception ex) {
+            throw new Exception("Failed to access " + url, ex);
+        }
+    }
+
+    public String login(String username, String password) throws Exception {
+
+        sessionToken = null;
+
+        WebTarget webTarget = getClient().target(authorizeURL).path("login").queryParam("username", username)
+                .queryParam("password", password);
+
+        Response response = webTarget.request(defaultMediaType).get();
+        handleErrorResponse(webTarget, response);
+        
+        String str = response.readEntity(String.class);
+
+        println(webTarget, response, str);
+
+        response.close();
+
+        sessionToken = null; // getJsonField(str, "sessionToken");
+        return sessionToken;
+    }
+
+    public String logout() throws Exception {
+
+        WebTarget webTarget = getClient().target(authorizeURL).path("logout");
+
+        Response response = webTarget.request(defaultMediaType).post(null);
+        handleErrorResponse(webTarget, response);
+        
+        String str = response.readEntity(String.class);
+
+        println(webTarget, response, str);
+
+        response.close();
+
+        sessionToken = null;
+
+        return str;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public final void release() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public <T> long size(Class<T> clazz) throws Exception {
+        return 0L;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public final List<String> listDatabases() {
+        List<String> items = new ArrayList<String>();
+        return items;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public final List<String> listTables(String databaseName) {
+        List<String> items = new ArrayList<String>();
+        return items;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public final <T> List<String> listColumns(Class<T> clazz) {
+        List<String> items = new ArrayList<String>();
+        return items;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public <T> boolean hasChanged(Class<T> clazz) {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public <T> void createDatabase(String packagename) throws Exception {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public final <T> void create(Class<T> clazz) throws Exception {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public <T> T query(Class<T> tableClass, Object... keyValue) throws Exception {
+
+        WebTarget webTarget = null;
+        if (keyValue.length > 2) {
+            List<String> items = toList(keyValue);
+            String path = tableClass.getSimpleName().toLowerCase();
+            webTarget = getClient().target(baseURL).path(path).queryParam("where", items);
+
+        } else if (keyValue.length == 2) {
+            String path = tableClass.getSimpleName().toLowerCase() + "/" + keyValue[0] + "/" + keyValue[1];
+            webTarget = getClient().target(baseURL).path(path);
+
+        } else {
+            return null;
+        }
+
+        Response response = webTarget.request(defaultMediaType).get();
+        handleErrorResponse(webTarget, response);
+        
+        T item = response.readEntity(tableClass);
+
+        println(webTarget, response, "");
+        response.close();
+
+        return item;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> List<T> queryAll(Class<T> clazz) throws Exception {
+
+        String path = clazz.getSimpleName().toLowerCase() + "/all";
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+
+        Response response = webTarget.request(defaultMediaType).get();
+        handleErrorResponse(webTarget, response);
+        
+        String json = response.readEntity(String.class);
+
+        println(webTarget, response, json);
+
+        return ConverterUtils.readJsonToList(json, clazz);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public <T> List<T> queryList(Class<T> clazz, Object... keyValue) throws Exception {
+
+        String path = clazz.getSimpleName().toLowerCase() + "/list/" + keyValue[0] + "/" + keyValue[1];
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+
+        Response response = webTarget.request(defaultMediaType).get();
+        handleErrorResponse(webTarget, response);
+
+        String json = response.readEntity(String.class);
+
+        println(webTarget, response, json);
+
+        return ConverterUtils.readJsonToList(json, clazz);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Note: currently this method is not implemented.
+     */
+    @Override
+    public <T> List<T> queryList(Class<T> tableClass, Predicate<T> filter) throws Exception {
+        return new ArrayList<T>();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> T update(T item) throws Exception {
+
+        String path = item.getClass().getSimpleName().toLowerCase();
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+
+        Response response = webTarget.request(defaultMediaType).put(Entity.json(item));
+        handleErrorResponse(webTarget, response);
+        
+        T bean = response.readEntity((Class<T>) item.getClass());
+
+        println(webTarget, response, "");
+
+        response.close();
+
+        return bean;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> T insert(T item) throws Exception {
+
+        String path = item.getClass().getSimpleName().toLowerCase();
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+
+        Response response = webTarget.request(defaultMediaType).post(Entity.json(item));
+        handleErrorResponse(webTarget, response);
+
+        String msg = "";
+        T bean = null;
+        if (response.getStatus() == 200) {
+            bean = response.readEntity((Class<T>) item.getClass());
+        } else {
+            msg = response.readEntity(String.class);
+        }
+
+        println(webTarget, response, msg);
+
+        response.close();
+        return bean;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> void insertAll(List<T> beans) throws Exception {
+
+        if (beans == null || beans.size() == 0) {
+            return;
+        }
+
+        Class clazz = beans.get(0).getClass();
+        String path = clazz.getSimpleName().toLowerCase() + "/list";
+        String requestStr = ConverterUtils.writeJsonFromList(beans);
+
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+        Response response = webTarget.request(defaultMediaType).post(Entity.json(requestStr));
+        handleErrorResponse(webTarget, response);
+
+        if (response.getStatus() == 200) {
+            String json = response.readEntity(String.class);
+            println(webTarget, response, json);
+
+            List<T> results = ConverterUtils.readJsonToList(json, clazz);
+            // TODO transfer primary key to insert values.
+
+        } else {
+
+            String msg = response.readEntity(String.class);
+            println(webTarget, response, msg);
+            System.out.println("RETURN STATUS: " + msg);
+        }
+
+        response.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> void delete(Class<T> tableClass, Object... keyValue) throws Exception {
+
+        // TODO Need more for the value aside from toString, Arrays dont work so
+        // well
+        String key = (keyValue.length < 1 || keyValue[0] == null) ? "" : keyValue[0].toString();
+        String val = (keyValue.length < 2 || keyValue[1] == null) ? "" : keyValue[1].toString();
+
+        String path = tableClass.getSimpleName().toLowerCase() + "/" + key + "/" + val;
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+
+        Response response = webTarget.request(MediaType.TEXT_PLAIN).delete();
+        handleErrorResponse(webTarget, response);
+
+        String msg = response.readEntity(String.class);
+
+        println(webTarget, response, msg);
+
+        response.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> void delete(T bean) throws Exception {
+
+        String path = bean.getClass().getSimpleName().toLowerCase() + "/" + DatabaseUtil.getPrimaryKeyName(bean.getClass()) + "/"
+                + DatabaseUtil.getPrimaryKeyValue(bean);
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+
+        Response response = webTarget.request(MediaType.TEXT_PLAIN).delete();
+        handleErrorResponse(webTarget, response);
+
+        String msg = response.readEntity(String.class);
+
+        println(webTarget, response, msg);
+
+        response.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> void deleteAll(Class<T> tableClass) throws Exception {
+
+        String path = tableClass.getSimpleName().toLowerCase() + "/all";
+        WebTarget webTarget = getClient().target(baseURL).path(path);
+
+        Response response = webTarget.request(defaultMediaType).delete();
+        handleErrorResponse(webTarget, response);
+
+        String msg = response.readEntity(String.class);
+
+        println(webTarget, response, msg);
+
+        response.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> List<Object> uniqueValues(Class<T> tableClass, String fieldname) throws Exception {
+        return new ArrayList<Object>();
+    }
+
+    private List<String> toList(Object[] pairs) {
+        List<String> items = new ArrayList<String>();
+        for (Object pair : pairs) {
+            items.add(pair.toString());
+        }
+        return items;
+    }
+
+    private void handleErrorResponse(WebTarget webTarget, Response response) throws Exception {
+        if (response.getStatus() != 200) {
+            String  msg = response.readEntity(String.class);
+            throw new Exception("queryAll: " + webTarget.getUri().toString() + ", " + response.getStatus() + ":" + msg);
+        }
+    }
+
+    public final void get(String url) throws Exception {
+
+        WebTarget webTarget = getClient().target(baseURL).path(url);
+
+        String msg = null;
+        Response response = webTarget.request(defaultMediaType).get();
+        if (response.getStatus() != 200) {
+            msg = response.readEntity(String.class);
+        }
+
+        println(webTarget, response, msg);
+
+        response.close();
+    }
+
+    private void println(WebTarget target, Response response, String json) {
+        if (debugOn) {
+            System.out.println("Path: " + target.getUri());
+            System.out.println("Status: " + response.getStatus());
+            System.out.println("JSON: " + json);
+        }
+    }
+}

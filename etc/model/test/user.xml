@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name='test'  package-name="com.viper.unit.model">
+	<table name='User' table-type='table' is-rest-service="true" is-schema-updatable="true">
+		<column name='username' java-type='String' size='32' required='true' primary-key='true' id-method="assigned" logical-type="email:email.txt" />
+		<column name='password' java-type='String' size='32' required='false' logical-type="password:" />
+		<column name='name' java-type='String' size='255' required='false' logical-type="name:firstnames.txt" />
+		<column name='cube' java-type='String' size='32' required='false' />
+		<column name='job' java-type='String' size='32' required='false' />
+		<column name='school' java-type='String' size='255' required='false' />
+		<column name='email' java-type='String' size='255' required='false' logical-type="email:email.txt" />
+		<column name='lastProblem' java-type='String' size='255' required='false' logical-type="name:nouns.csv" />
+		<column name='grade' java-type='int' required='true'  logical-type="int:0,12" />
+		<column name='friends' java-type='java.util.List' generic-type="String" required='true' logical-type="email:email.txt" />
+	</table>
+</database>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/REFERENTIAL_CONSTRAINTS.xml">
+    <table name="REFERENTIAL_CONSTRAINTS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="CONSTRAINT_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="CONSTRAINT_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="CONSTRAINT_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="UNIQUE_CONSTRAINT_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="UNIQUE_CONSTRAINT_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="UNIQUE_CONSTRAINT_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="MATCH_OPTION" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="UPDATE_RULE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="DELETE_RULE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TABLE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="REFERENCED_TABLE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+    </table>
+</database>

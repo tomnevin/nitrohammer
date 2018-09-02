@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/PROCESSLIST.xml">
+    <table name="PROCESSLIST" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="ID" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="USER" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="HOST" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="DB" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="COMMAND" java-type="String" data-type="varchar" extra-data-type="varchar(16)" size="16" order="1" persistent="true" required="true"/>
+        <column name="TIME" java-type="int" data-type="int" extra-data-type="int(7)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="STATE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="INFO" java-type="String" data-type="longtext" extra-data-type="longtext" size="4294967295" order="1" persistent="true" required="true"/>
+    </table>
+</database>

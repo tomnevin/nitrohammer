@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/innodb_table_stats.xml">
+    <table name="innodb_table_stats" database-name="mysql" table-type="base-table" collation-name="utf8_bin" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="database_name" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="table_name" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="last_update" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="CURRENT_TIMESTAMP" order="1" persistent="true" required="true"/>
+        <column name="n_rows" java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="clustered_index_size" java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="sum_of_other_index_sizes" java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+    </table>
+</database>

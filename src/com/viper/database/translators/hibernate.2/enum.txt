@@ -1,0 +1,44 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##
+##   for (column : table.getColumns()) {
+##   if (java.isEnum(column)) {
+##       var filename = outdir + "/enums/" + java.toJavaType(column) + ".java";
+##
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.enums;
+
+public enum #{java.toJavaType(column)} {
+	 #{java.toEnumDefinition(column)};
+	 
+    private final String value;       
+
+    private #{java.toJavaType(column)}(String s) {
+        value = s;
+    }
+    
+    public String toValue() {
+       return value;
+    }
+    
+    public static final #{java.toJavaType(column)} findEnumValue(String s) {
+      	for (#{java.toJavaType(column)} enumValue : values()) {
+        	if ( enumValue.toValue().equals(s)) {
+            	return enumValue;
+       		}
+    	}
+    	return null;
+    }
+}
+
+## util.write(filename, writer);
+## }
+## }
+## }

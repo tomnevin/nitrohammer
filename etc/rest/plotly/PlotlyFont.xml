@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyFont" table-type="bean">
+		<column name="family" java-type="String" />
+		<column name="size" java-type="int" />
+		<column name="color" java-type="String" />
+	</table>
+</database>

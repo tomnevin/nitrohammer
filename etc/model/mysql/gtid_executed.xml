@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/gtid_executed.xml">
+    <table name="gtid_executed" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="source_uuid" description="uuid of the source where the transaction was originally executed." java-type="String" data-type="char" extra-data-type="char(36)" size="36" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="interval_start" description="First number of interval." java-type="long" data-type="bigint" extra-data-type="bigint(20)" size="19" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="interval_end" description="Last number of interval." java-type="long" data-type="bigint" extra-data-type="bigint(20)" size="19" order="1" persistent="true" required="true"/>
+    </table>
+</database>

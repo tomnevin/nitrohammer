@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" name="SampleTest002"
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd">
+	<table name="SampleTable002">
+		<column required="true" primary-key="true" java-type="int" name="KEY" />
+		<column java-type="byte" name="TinyIntColumn" />
+		<column java-type="short" name="SmallIntColumn" />
+		<column java-type="Integer" name="IntegerColumn" />
+		<column java-type="java.math.BigInteger" name="BigIntColumn" />
+		<column java-type="Float" name="FloatColumn" />
+		<column java-type="REAL" name="RealColumn" />
+		<column java-type="NUMERIC" name="NumericColumn" />
+		<column java-type="java.math.BigDecimal" name="DecimalColumn" />
+		<column java-type="char" name="CharColumn" />
+		<column name="VarCharColumn" />
+		<column java-type="LONGVARCHAR" name="LongVarCharColumn" />
+		<column java-type="Date" name="DateColumn" />
+		<column java-type="Time" name="TimeColumn" />
+		<column java-type="Timestamp" name="TimeStampColumn" />
+		<column java-type="BINARY" name="BinaryColumn" />
+		<column java-type="VARBINARY" name="VarBinaryColumn" />
+		<column java-type="LONGVARBINARY" name="LongVarBinaryColumn" />
+		<column java-type="NULL" name="NullColumn" />
+		<column java-type="OTHER" name="OtherColumn" />
+		<column java-type="JAVA_OBJECT" name="JavaObjectColumn" />
+		<column java-type="DISTINCT" name="DistinctColumn" />
+		<column java-type="STRUCT" name="StructColumn" />
+		<column java-type="ARRAY" name="ArrayColumn" />
+		<column java-type="BLOB" name="BlobColumn" />
+		<column java-type="CLOB" name="ClobColumn" />
+		<column java-type="REF" name="RefColumn" />
+		<column java-type="Boolean" name="BooleanColumn" />
+		<column java-type="Double" name="DoubleColumn" />
+		<row>
+			<cell name="arraycolumn">other</cell>
+			<cell name="bigintcolumn">5</cell>
+			<cell name="binarycolumn">1</cell>
+			<cell name="blobcolumn">java</cell>
+			<cell name="booleancolumn">java</cell>
+			<cell name="charcolumn">b</cell>
+			<cell name="clobcolumn"></cell>
+			<cell name="datecolumn">11:30:45</cell>
+			<cell name="decimalcolumn">a</cell>
+			<cell name="distinctcolumn">java</cell>
+			<cell name="floatcolumn">6.0</cell>
+			<cell name="integercolumn">4</cell>
+			<cell name="javaobjectcolumn">other</cell>
+			<cell name="key">1</cell>
+			<cell name="longvarbinarycolumn">other</cell>
+			<cell name="longvarcharcolumn">10-May-2005</cell>
+			<cell name="nullcolumn">java</cell>
+			<cell name="numericcolumn">8.0</cell>
+			<cell name="othercolumn"></cell>
+			<cell name="realcolumn">7.0</cell>
+			<cell name="refcolumn">other</cell>
+			<cell name="smallintcolumn">3</cell>
+			<cell name="structcolumn"></cell>
+			<cell name="timecolumn">12-Aug-2005 12:45:12</cell>
+			<cell name="timestampcolumn">1</cell>
+			<cell name="tinyintcolumn">2</cell>
+			<cell name="varbinarycolumn"></cell>
+			<cell name="varcharcolumn">c</cell>
+		</row>
+	</table>
+</database>

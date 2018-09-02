@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/servers.xml">
+    <table name="servers" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="MySQL Foreign Servers table" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Server_name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Host" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="Db" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="Username" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="Password" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="Port" java-type="int" data-type="int" extra-data-type="int(4)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="Socket" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="Wrapper" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="Owner" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+    </table>
+</database>

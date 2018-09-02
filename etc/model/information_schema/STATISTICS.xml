@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/STATISTICS.xml">
+    <table name="STATISTICS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="TABLE_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="TABLE_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TABLE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="NON_UNIQUE" java-type="long" data-type="bigint" extra-data-type="bigint(1)" default-value="0" size="19" order="1" persistent="true" required="true"/>
+        <column name="INDEX_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="INDEX_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="SEQ_IN_INDEX" java-type="long" data-type="bigint" extra-data-type="bigint(2)" default-value="0" size="19" order="1" persistent="true" required="true"/>
+        <column name="COLUMN_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="COLLATION" java-type="String" data-type="varchar" extra-data-type="varchar(1)" size="1" order="1" persistent="true" required="true"/>
+        <column name="CARDINALITY" java-type="long" data-type="bigint" extra-data-type="bigint(21)" size="19" order="1" persistent="true" required="true"/>
+        <column name="SUB_PART" java-type="long" data-type="bigint" extra-data-type="bigint(3)" size="19" order="1" persistent="true" required="true"/>
+        <column name="PACKED" java-type="String" data-type="varchar" extra-data-type="varchar(10)" size="10" order="1" persistent="true" required="true"/>
+        <column name="NULLABLE" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="INDEX_TYPE" java-type="String" data-type="varchar" extra-data-type="varchar(16)" size="16" order="1" persistent="true" required="true"/>
+        <column name="COMMENT" java-type="String" data-type="varchar" extra-data-type="varchar(16)" size="16" order="1" persistent="true" required="true"/>
+        <column name="INDEX_COMMENT" java-type="String" data-type="varchar" extra-data-type="varchar(1024)" size="1024" order="1" persistent="true" required="true"/>
+    </table>
+</database>

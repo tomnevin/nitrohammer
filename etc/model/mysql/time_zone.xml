@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/time_zone.xml">
+    <table name="time_zone" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="Time zones" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Time_zone_id" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Use_leap_seconds" java-type="TimeZoneUseLeapSecondsEnum" data-type="enum" extra-data-type="enum('Y','N')" default-value="N" size="1" order="1" persistent="true" required="true">
+            <enum-value name="Y">Y</enum-value>
+            <enum-value name="N">N</enum-value>
+        </column>
+    </table>
+</database>

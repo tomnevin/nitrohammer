@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<database name="test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    package-name="com.viper.unit.model"
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="Organization" is-rest-service="true">
+		<column name="id" java-type="int" primary-key="true" id-method="autoincrement" />
+		<column name="name" java-type="String" size="100" natural-key="true" index-name="organization_unique_name" />
+		<column name="address" java-type="String" size="100" />
+		<column name="zipcode" java-type="String" size="10" />
+		<column name="phone" java-type="String" size="15" />
+		<index name="organization_unique_name" index-class="default" index-type="default" />
+		<row>
+			<cell>1</cell>
+			<cell>Nevin Family</cell>
+			<cell>Nichols</cell>
+			<cell>93535</cell>
+			<cell>925-983-9814</cell>
+		</row>
+	</table>
+</database>

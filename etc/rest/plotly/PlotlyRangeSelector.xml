@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyRangeSelector" table-type="bean">
+		<column name="buttons" java-type="java.util.List" generic-type="com.viper.database.rest.model.PlotlyRangeButton" />
+		<column name="visible" java-type="boolean" />
+	</table>
+</database>

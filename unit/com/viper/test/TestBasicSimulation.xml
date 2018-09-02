@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='ISO-8859-1' standalone='no' ?>
+<database name='test' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" filename="com/viper/test/TestBasicSimulation.xml"
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd">
+	<table name='PERFORMANCE_NO_INDEX'>
+		<column name='ID' java-type="long" primary-key="true" logical-type='Long' />
+		<column name='NAME' java-type="String" logical-type="name:src/com/viper/database/simple/lists/business.txt" />
+		<column name='ORGANIZATIONID' java-type="long" logical-type='Long' />
+		<column name='ACTIVITYCATEGORYID' java-type="long" logical-type='Long' />
+		<column name='DESCRIPTION' java-type="String" logical-type='String' />
+		<column name='ISPAID' java-type="boolean" logical-type='Boolean' />
+		<column name='ISDELETED' java-type="boolean" logical-type='Boolean' />
+		<column name='ADHERENCETOLERANCE' java-type="String" logical-type='String' />
+		<column name='ISUSEDINSHIFT' java-type="boolean" logical-type='Boolean' />
+		<column name='COLOR' java-type="String" logical-type='String' />
+		<column name='ISUSEDINSHIFTEVENT' java-type="boolean" logical-type='Boolean' />
+		<column name='ISUSEDINCALENDAREVENT' java-type="boolean" logical-type='Boolean' />
+		<column name='ISUNAVAILABILITY' java-type="boolean" logical-type='Boolean' />
+		<column name='ISREQUESTABLE' java-type="boolean" logical-type='Boolean' />
+		<column name='ISOUT' java-type="boolean" logical-type='Boolean' />
+		<column name='ISTIMEOFF' java-type="boolean" logical-type='Boolean' />
+		<column name='ISTIMEOFFWITHALLOTMENT' java-type="String" logical-type='String' />
+		<column name='COLORCODE' java-type="long" logical-type='Long' />
+		<column name='EARNINGTYPEID' java-type="long" logical-type='Long' />
+		<column name='MAXDURATIONTHRESHOLD' java-type="String" logical-type='String' />
+		<column name='MODIFIEDBY' java-type="String" logical-type='String' />
+		<column name='LASTMODIFIEDAT' java-type="String" logical-type='String' />
+		<column name='SOURCEMEASUREID' java-type="String" logical-type='String' />
+		<column name='ISVISIBLETOTCMAPPING' java-type="boolean" logical-type='Boolean' />
+		<column name='ISQUEUEHOPPING' java-type="boolean" logical-type='Boolean' />
+	</table>
+	<table name='PERFORMANCE_1_INDEX'>
+		<column name='ID' java-type="long" primary-key="true" logical-type='Long' />
+		<column name='NAME' java-type="String" logical-type="name:src/com/viper/database/simple/lists/business.txt"
+			index-name="index-name" />
+		<column name='ORGANIZATIONID' java-type="long" logical-type='Long' />
+		<column name='ACTIVITYCATEGORYID' java-type="long" logical-type='Long' />
+		<column name='DESCRIPTION' java-type="String" logical-type='String' />
+		<column name='ISPAID' java-type="boolean" logical-type='Boolean' />
+		<column name='ISDELETED' java-type="boolean" logical-type='Boolean' />
+		<column name='ADHERENCETOLERANCE' java-type="String" logical-type='String' />
+		<column name='ISUSEDINSHIFT' java-type="boolean" logical-type='Boolean' />
+		<column name='COLOR' java-type="String" logical-type='String' />
+		<column name='ISUSEDINSHIFTEVENT' java-type="boolean" logical-type='Boolean' />
+		<column name='ISUSEDINCALENDAREVENT' java-type="boolean" logical-type='Boolean' />
+		<column name='ISUNAVAILABILITY' java-type="boolean" logical-type='Boolean' />
+		<column name='ISREQUESTABLE' java-type="boolean" logical-type='Boolean' />
+		<column name='ISOUT' java-type="boolean" logical-type='Boolean' />
+		<column name='ISTIMEOFF' java-type="boolean" logical-type='Boolean' />
+		<column name='ISTIMEOFFWITHALLOTMENT' java-type="String" logical-type='String' />
+		<column name='COLORCODE' java-type="long" logical-type='Long' />
+		<column name='EARNINGTYPEID' java-type="long" logical-type='Long' />
+		<column name='MAXDURATIONTHRESHOLD' java-type="String" logical-type='String' />
+		<column name='MODIFIEDBY' java-type="String" logical-type='String' />
+		<column name='LASTMODIFIEDAT' java-type="String" logical-type='String' />
+		<column name='SOURCEMEASUREID' java-type="String" logical-type='String' />
+		<column name='ISVISIBLETOTCMAPPING' java-type="boolean" logical-type='Boolean' />
+		<column name='ISQUEUEHOPPING' java-type="boolean" logical-type='Boolean' />
+		<index name="index-name" />
+	</table>
+</database>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="ColumnDef" table-type="bean">
+		<!-- application extension -->
+		<column name="key" java-type="String" size="128" />
+		<column name="label" java-type="String" size="128" />
+		<column name="placeHolder" java-type="String" size="128" />
+		<column name="maximumLength" java-type="long" />
+		<column name="minimumValue" java-type="String" />
+		<column name="maximumValue" java-type="String" />
+		<column name="required" java-type="boolean" default-value="false" />
+		<column name="persistent" java-type="boolean" default-value="false" />
+		<column name="logicalType" java-type="String" size="128" />
+		<column name="dataType" java-type="String" size="128" />
+		<column name="validate" java-type="java.util.List" generic-type="String" />
+		<column name="autoComplete" java-type="boolean" default-value="false" />
+		<column name="checked" java-type="boolean" default-value="false" />
+		<column name="pattern" java-type="String" size="128" />
+		<column name="invalidMessage" java-type="String" />
+		<column name="options" java-type="java.util.List" generic-type="javafx.util.Pair" />
+		<column name="availableOptions" java-type="java.util.Map" />
+		<!-- The name to render in the column header. If not specified and field is specified, the field name would be 
+			used as the header name. -->
+		<column name="headerName" java-type="String" size="128" required="true" />
+		<!-- The field of the row to get the cells data from -->
+		<column name="field" java-type="String" size="128" />
+		<!-- hide Set to true for this column to be hidden. Naturally you might think, it would make more sense to call 
+			this field 'visible' and mark it false to hide, however we want all default values to be false and we want columns 
+			to be visible by default. Note: this property is called hideCol when used with Aurelia -->
+		<column name="hide" java-type="boolean" default-value="false" />
+		<!-- cellRenderer to use for this column -->
+		<column name="cellRenderer" java-type="String" size="128" />
+		<!-- Whether to show the column when the group is open / closed. -->
+		<column name="columnGroupShow" java-type="Boolean" />
+		<!-- Class to use for the header cell. Can be string, array of strings, or function. -->
+		<column name="headerClass" java-type="String" />
+		<!-- Class to use for the tool panel cell. Can be string, array of strings, or function. -->
+		<column name="toolPanelClass" java-type="String" />
+		<!-- Set to true if you do not want this column or group to appear in the tool panel. -->
+		<column name="suppressToolPanel" java-type="Boolean" />
+		<!-- The unique ID to give the column. This is optional. If missing, the ID will default to the field. If both 
+			field and colId are missing, a unique ID will be generated. This ID is used to identify the column in the API for 
+			sorting, filtering etc. -->
+		<column name="colId" java-type="String" />
+		<!-- A comma separated string or array of strings containing ColumnType keys which can be used as a template for 
+			a column. This helps to reduce duplication of properties when you have a lot of common column properties. -->
+		<column name="type" java-type="String" />
+		<!-- Initial width, min width and max width for the cell. Always stated in pixels (never percentage values). -->
+		<column name="width" java-type="Integer" />
+		<!-- Initial width, min width and max width for the cell. Always stated in pixels (never percentage values). -->
+		<column name="minWidth" java-type="Integer" />
+		<!-- Initial width, min width and max width for the cell. Always stated in pixels (never percentage values). -->
+		<column name="maxWidth" java-type="Integer" />
+		<!-- Filter component to use for this column -->
+		<column name="filter" java-type="String" />
+		<!-- Filter component to use for this column -->
+		<column name="filterFramework" java-type="String" />
+		<!-- Initial width, min width and max width for the cell. Always stated in pixels (never percentage values). -->
+		<column name="floatingFilterComponent" java-type="String" />
+		<!-- Floating filter component to use for this column. -->
+		<column name="floatingFilterComponentFramework" java-type="String" />
+		<!-- Custom params to be passed to floatingFilterComponent or floatingFilterComponentFramework -->
+		<column name="floatingFilterComponentParams" java-type="String" />
+		<!-- Set to 'left' or 'right' to pin. -->
+		<column name="pinned" java-type="String" data-type="enum" />
+		<!-- Set to true to always have column displayed first. -->
+		<column name="lockPosition" java-type="Boolean" />
+		<!-- Set to true block making column visible / hidden via the UI (API will still work). -->
+		<column name="lockVisible" java-type="Boolean" />
+		<!-- Set to true block pinning column via the UI (API will still work). -->
+		<column name="lockPinned" java-type="Boolean" />
+		<!-- Set to 'asc' or 'desc' to sort by this column by default. -->
+		<column name="sort" java-type="String" data-type="enum" />
+		<!-- If doing multi sort by default, this column should say when the sort for each column was done in milliseconds, 
+			so the grid knows which order to execute the sort. -->
+		<column name="sortedAt" java-type="String" />
+		<!-- Tooltip for the column header -->
+		<column name="headerTooltip" java-type="String" />
+		<!-- The field of the tooltip to apply to the cell. -->
+		<column name="tooltipField" java-type="String" />
+		<!-- A callback that takes (value, valueFormatted, data, node , colDef, rowIndex and api) It must return the string 
+			used as a tooltip. tooltipField takes precedence. -->
+		<column name="tooltip" java-type="String" />
+		<!-- Boolean or Function. Set to true (or return true from function) to render a selection checkbox in the column. -->
+		<column name="checkboxSelection" java-type="Boolean" />
+		<!-- Boolean or Function. Set to true (or return true from function) to render a row drag area in the column. -->
+		<column name="rowDrag" java-type="Boolean" />
+		<!-- Class to use for the cell. Can be string, array of strings, or function. -->
+		<column name="cellClass" java-type="String" />
+		<!-- An object of css values. Or a function returning an object of css values. -->
+		<column name="cellStyle" java-type="String" />
+		<!-- Set to true if this col is editable, otherwise false. Can also be a function to have different rows editable. -->
+		<column name="editable" java-type="Boolean" />
+		<!-- onCellValueChanged(params): Callback for after the value of a cell has changed, due to editing or the application 
+			calling api.setValue(). -->
+		<column name="onCellValueChanged" java-type="String" />
+		<!-- cellRendererFramework to use for this column -->
+		<column name="cellRendererFramework" java-type="String" />
+		<!-- cellRenderer to use for pinned rows in this column. Floating cells will use floatingCellRenderer if available, 
+			if not then cellRenderer. -->
+		<column name="floatingCellRenderer" java-type="String" />
+		<!-- cellRenderer to use for pinned rows in this column. Floating cells will use floatingCellRenderer if available, 
+			if not then cellRenderer. -->
+		<column name="floatingCellRendererFramework" java-type="String" />
+		<!-- cellEditor to use for this column. -->
+		<column name="cellEditor" java-type="String" />
+		<!-- cellEditor to use for this column. -->
+		<column name="cellEditorFramework" java-type="String" />
+		<!-- valueGetter(params) Function or expression. Gets the value from your data for display. -->
+		<column name="valueGetter" java-type="String" />
+		<!-- valueFormatter(params) Function or expression. Formats the value for display. -->
+		<column name="valueFormatter" java-type="String" />
+		<!-- headerValueGetter(params) Function or expression. Gets the value for display in the header. -->
+		<column name="headerValueGetter" java-type="String" />
+		<!-- filterValueGetter(params) Function or expression. Gets the value for filtering purposes. -->
+		<column name="filterValueGetter" java-type="String" />
+		<!-- floatingCellFormatter(params) Function or expression. Formatter to use for a pinned row. If missing, the normal 
+			valueFormatter will be used. -->
+		<column name="floatingCellFormatter" java-type="String" />
+		<!-- valueSetter(params) Function or expression. Sets the value into your data for saving. Return true if the data 
+			changed. -->
+		<column name="valueSetter" java-type="String" />
+		<!-- valueParser(params) Function or expression. Parses the value for saving. -->
+		<column name="valueParser" java-type="String" />
+		<!-- keyCreator(params) Function to return the key for a value - use this if the value is an object (not a primitive 
+			type) and you want to a) use set filter on this field or b) group by this field. -->
+		<column name="keyCreator" java-type="String" />
+		<!-- A function to tell the grid what quick filter text to use for this column if you don't want to use the default 
+			(which is calling toString on the value). -->
+		<column name="getQuickFilterText" java-type="String" />
+		<!-- Name of function to use for aggregation. One of [sum,min,max,first,last]. Or provide your own agg function. -->
+		<column name="aggFunc" java-type="String" />
+		<!-- Aggregation functions allowed on this column eg ['sum','avg']. If missing, all installed functions are allowed. 
+			This will restrict what the GUI allows to select only, does not impact when you set columns function via the API. -->
+		<column name="allowedAggFuncs" java-type="String" />
+		<!-- Set this in columns you want to group by. If only grouping by one column, set this to any number (eg 0). If 
+			grouping by multiple columns, set this to where you want this column to be in the group (eg 0 for first, 1 for second, 
+			and so on). -->
+		<column name="rowGroupIndex" java-type="String" />
+		<!-- Set this in columns you want to pivot by. If only pivoting by one column, set this to any number (eg 0). If 
+			pivoting by multiple columns, set this to where you want this column to be in the order of pivots (eg 0 for first, 
+			1 for second, and so on). -->
+		<column name="pivotIndex" java-type="String" />
+		<!-- comparator(valueA, valueB, nodeA, nodeB, isInverted) Comparator function for custom sorting. -->
+		<column name="comparator" java-type="String" />
+		<!-- pivotComparator(valueA, valueB) Comparator to use when ordering the pivot columns, when this column is used 
+			to pivot on. The values will always be strings, as the pivot service uses strings as keys for the pivot groups. -->
+		<column name="pivotComparator" java-type="String" />
+		<!-- Set to true if you want the unsorted icon to be shown when no sort is applied to this column. -->
+		<column name="unSortIcon" java-type="String" />
+		<!-- (ag-Grid-Enterprise only) Set to true if you want to be able to row group by this column via the GUI. This 
+			will not block if the API or properties are used to achieve row grouping. -->
+		<column name="enableRowGroup" java-type="Boolean" />
+		<!-- (ag-Grid-Enterprise only) Set to true if you want to be able to pivot by this column via the GUI. This will 
+			not block if the API or properties are used to achieve pivot. -->
+		<column name="enablePivot" java-type="Boolean" />
+		<!-- (ag-Grid-Enterprise only) Set to true if you want to introduce pivot total columns when in pivot mode. -->
+		<column name="pivotTotals" java-type="Boolean" />
+		<!-- (ag-Grid-Enterprise only) Set to true if you want to be able to aggregate by this column via the GUI. This 
+			will not block if the API or properties are used to achieve aggregation. -->
+		<column name="enableValue" java-type="Boolean" />
+		<!-- Set to true to get grid to flash the cell when it's refreshed. -->
+		<column name="enableCellChangeFlash" java-type="Boolean" />
+		<!-- Set to an array containing zero, one or many of the following options 'filterMenuTab', 'generalMenuTab' and 
+			'columnsMenuTab'. This is used to figure out which menu tabs and in which order the tabs are shown -->
+		<column name="menuTabs" java-type="String" />
+		<!-- Set to true if no menu should be shown for this column header. -->
+		<column name="suppressMenu" java-type="Boolean" />
+		<!-- Set to true if no sorting should be done for this column. -->
+		<column name="suppressSorting" java-type="Boolean" />
+		<!-- Set to true if you want this columns width to be fixed during 'size to fit' operation. -->
+		<column name="suppressSizeToFit" java-type="Boolean" />
+		<!-- Set to true if you do not want this column to be movable via dragging. -->
+		<column name="suppressMovable" java-type="Boolean" />
+		<!-- Set to true to not allow filter on this column. -->
+		<column name="suppressFilter" java-type="Boolean" />
+		<!-- Set to true if you do not want this column to be resizable by dragging its edge.. -->
+		<column name="suppressResize" java-type="Boolean" />
+		<!-- Set to true if this col is not navigable (ie cannot be tabbed into), otherwise false. Can also be a function 
+			to have different rows navigable. -->
+		<column name="suppressNavigable" java-type="Boolean" />
+		<!-- Set to true then this column will not flash changes. Only applicable if cell flashing is turned on for the 
+			grid -->
+		<column name="suppressCellFlash" java-type="Boolean" />
+		<!-- suppressKeyboardEvent(params) Function to allow skipping default keyboard behaviour of the grid. Eg if you 
+			don't want the grid to move focus up on up arrow key while editing, implement this method to return true when params.editing=true 
+			and params.event.keyCode=[key code for up arrow key]. -->
+		<column name="suppressKeyboardEvent" java-type="String" />
+		<!-- onCellClicked(params) Function callback, gets called when a cell is clicked. -->
+		<column name="onCellClicked" java-type="String" />
+		<!-- onCellDoubleClicked(params) Function callback, gets called when a cell is double clicked. -->
+		<column name="onCellDoubleClicked" java-type="String" />
+		<!-- onCellContextMenu(params) Function callback, gets called when a cell is right clicked. -->
+		<column name="onCellContextMenu" java-type="String" />
+		<!-- Set to true to have the grid calculate height of row based on contents of this column. -->
+		<column name="autoHeight" java-type="Boolean" />
+		<!-- The unique ID to give the column. This is optional. If missing, a unique ID will be generated. This ID is 
+			used to identify the column group in the column API. -->
+		<column name="groupId" java-type="String" />
+		<!-- A list containing a mix of columns and column groups.. -->
+		<column name="children" java-type="java.util.List" generic-type="String" />
+		<!-- Set to 'true' to keep columns in this group beside each other in the grid. Moving the columns outside of the 
+			group (and hence breaking the group) is not allowed. -->
+		<column name="marryChildren" java-type="Boolean" />
+		<!--Set to 'true' if this group should be opened by default. -->
+		<column name="openByDefault" java-type="Boolean" />
+		<!-- Tooltip for the column group header -->
+		<column name="headerGroupTooltip" java-type="String" />
+	</table>
+</database>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseConnections
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/datasource.xsd"
+	filename="src/test/schema/data/databases.xml">
+	<connection
+		database-url="jdbc:mysql://localhost:3306/test?user=root&amp;password=viper1soft"
+		driver="com.mysql.jdbc.Driver"
+		mode="url"
+		model="etc/model/Employee.xml"
+		name="laptop-test"
+		password="viper1soft"
+		username="root" />
+	<connection
+		database-url="jdbc:mysql://localhost:3306?user=root&amp;password=viper1soft"
+		driver="com.mysql.jdbc.Driver"
+		mode="url"
+		model="etc/model/Employee.xml"
+		name="test-mysql"
+		password="viper1soft"
+		username="root" />
+	<connection
+		database-url="jdbc:mysql://localhost:3306/testtypes?user=root&amp;password=viper1soft"
+		driver="com.mysql.jdbc.Driver"
+		mode="url"
+		model="etc/model/testtypes-schema.xml"
+		name="laptop-testtypes"
+		password="viper1soft"
+		username="root" />
+	<connection
+		database-url="jdbc:mysql://localhost:3306/education?user=root&amp;password=viper1soft"
+		driver="com.mysql.jdbc.Driver"
+		mode="url"
+		model="etc/Education.xml"
+		name="laptop-education"
+		password="viper1soft"
+		username="root" />
+	<connection
+		database-url="jdbc:mysql://localhost:3306/education?user=root&amp;password=viper1soft"
+		driver="com.mysql.jdbc.Driver"
+		mode="url"
+		model="etc/Education.xml"
+		name="laptop-word"
+		password="viper1soft"
+		username="root" />
+	<connection
+		database-url="jdbc:mysql://localhost:3306/baseball?user=root&amp;password=viper1soft"
+		driver="com.mysql.jdbc.Driver"
+		mode="url"
+		model="../baseball/etc/model"
+		name="baseball"
+		password="viper1soft"
+		username="root" />
+	<connection
+		database-url="jdbc:oracle:thin:@viper3:1521:educate"
+		driver="oracle.jdbc.driver.OracleDriver"
+		mode="url"
+		name="UpstairsOracle"
+		password="vsiopfetr"
+		username="viper" />
+	<connection
+		database-url="jdbc:oracle:thin:@localhost:1521:XE"
+		driver="oracle.jdbc.driver.OracleDriver"
+		mode="url"
+		name="TEST-oracle"
+		password="viper1soft"
+		username="root" />
+	<connection
+		database-url="jdbc:jtds:sqlserver://CAENG-THOMASN.ca.us.witness.com:1433/BPMAINDB"
+		driver="net.sourceforge.jtds.jdbc.Driver"
+		mode="url"
+		name="sql-bpmaindb"
+		password="blue"
+		username="BPMAINDB" />
+	<connection
+		database-url=""
+		mode="url"
+		name="JNDI Datasource"
+		password="db2"
+		username="db2" />
+	<connection
+		database-url="jdbc:hsqldb:hsql://localhost"
+		driver="org.hsqldb.jdbcDriver"
+		mode="url"
+		name="HypersonicSQL"
+		username="sa" />
+	<connection
+		database-url="jdbc:postgresql:template1"
+		driver="org.postgresql.Driver"
+		mode="url"
+		name="PostgreSQL"
+		username="pg" />
+	<connection
+		database-url="jdbc:db2:test"
+		driver="COM.ibm.db2.jdbc.app.DB2Driver"
+		mode="url"
+		name="DB2"
+		password="db2"
+		username="db2" />
+	<connection
+		database-url=""
+		mode="url"
+		name="DB2/400"
+		password="password"
+		username="user" />
+	<connection
+		database-url="jdbc:db2://systemname"
+		driver="COM.ibm.db2.jdbc.app.DB2Driver"
+		mode="url"
+		name="Native driver" />
+	<connection
+		database-url="jdbc:as400://systemname"
+		driver="com.ibm.as400.access.AS400JDBCDriver"
+		mode="url"
+		name="Toolbox driver" />
+	<connection
+		database-url="jdbc:mysql:///test"
+		driver="com.mysql.jdbc.Driver"
+		mode="url"
+		name="MySQL"
+		username="root" />
+	<connection
+		database-url="jdbc:oracle:thin:@localhost:1521:test"
+		driver="oracle.jdbc.driver.OracleDriver"
+		mode="url"
+		name="Oracle"
+		password="ora"
+		username="ora" />
+	<connection
+		database-url=""
+		driver="com.sybase.jdbc2.jdbc.SybDriver"
+		mode="url"
+		name="Sybase"
+		password="sasasa"
+		username="sa" />
+	<connection
+		database-url="jdbc:mckoi:local://C:/mckoi1.00/db.conf"
+		driver="com.mckoi.JDBCDriver"
+		mode="url"
+		name="Mckoi SQL"
+		password="nimda"
+		username="admin" />
+	<connection
+		database-url="jdbc:sapdb://localhost/TST"
+		driver="com.sap.dbtech.jdbc.DriverSapDB"
+		mode="url"
+		name="SAP DB"
+		password="TEST"
+		username="TEST" />
+	<connection
+		database-url=""
+		mode="url"
+		name="MS SQL Server"
+		password="sa"
+		username="sa" />
+	<connection
+		database-url="jdbc:JSQLConnect://1E1/test"
+		driver="com.jnetdirect.jsql.JSQLDriver"
+		mode="url"
+		name="JSQL Driver" />
+	<connection
+		database-url="jdbc:JTurbo://1E1:1433/test"
+		driver="com.newatlanta.jturbo.driver.Driver"
+		mode="url"
+		name="JTURBO Driver" />
+	<connection
+		database-url="jdbc:weblogic:mssqlserver4:1E1:1433"
+		driver="weblogic.jdbc.mssqlserver4.Driver"
+		mode="url"
+		name="WebLogic Driver" />
+	<connection
+		database-url=""
+		mode="url"
+		name="Interbase"
+		password="masterkey"
+		username="sysdba" />
+	<connection
+		database-url="jdbc:interbase://localhost:3060/C:/firebird/test.gdb"
+		driver="interbase.interclient.Driver"
+		mode="url"
+		name="InterClient" />
+	<connection
+		database-url="jdbc:pointbase:embedded:sample"
+		driver="com.pointbase.jdbc.jdbcUniversalDriver"
+		mode="url"
+		name="Pointbase"
+		password="PBPUBLIC"
+		username="PBPUBLIC" />
+	<connection
+		database-url="help"
+		mode="url"
+		name="Test" />
+</databaseConnections>

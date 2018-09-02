@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name='test'  package-name="com.viper.unit.model">
+	<table name='formatter' table-type='table' is-rest-service="true">
+		<column name='id' java-type='int' id-method="assigned" required='true' primary-key='true' />
+		<column name='day'  java-type="java.util.Date"  required='true' logical-type="datetime:" />
+		
+	</table>
+</database>

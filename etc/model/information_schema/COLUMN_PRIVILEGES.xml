@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/COLUMN_PRIVILEGES.xml">
+    <table name="COLUMN_PRIVILEGES" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="GRANTEE" java-type="String" data-type="varchar" extra-data-type="varchar(81)" size="81" order="1" persistent="true" required="true"/>
+        <column name="TABLE_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="TABLE_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TABLE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="COLUMN_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="PRIVILEGE_TYPE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="IS_GRANTABLE" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+    </table>
+</database>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyMargin" table-type="bean">
+		<column name="t" java-type="int" />
+		<column name="b" java-type="int" />
+		<column name="l" java-type="int" />
+		<column name="r" java-type="int" />
+	</table>
+</database>

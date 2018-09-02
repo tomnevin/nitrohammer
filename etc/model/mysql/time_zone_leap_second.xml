@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/time_zone_leap_second.xml">
+    <table name="time_zone_leap_second" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="Leap seconds information for time zones" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Transition_time" java-type="long" data-type="bigint" extra-data-type="bigint(20)" size="19" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Correction" java-type="int" data-type="int" extra-data-type="int(11)" size="10" order="1" persistent="true" required="true"/>
+    </table>
+</database>

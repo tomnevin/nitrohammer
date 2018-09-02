@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <jdbc-connection-pool
+        name="education-pool"
+        datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource"
+        allow-non-component-callers="true"
+        non-transactional-connections="false"
+        res-type="javax.sql.DataSource">
+        <property
+            name="user"
+            value="tnevin" />
+        <property
+            name="password"
+            value="viper1soft" />
+        <property
+            name="url"
+            value="jdbc:mysql://localhost:3306/test" />
+    </jdbc-connection-pool>
+    <jdbc-resource
+        enabled="true"
+        jndi-name="education-datasource"
+        object-type="user"
+        pool-name="education-pool" />
+</resources>

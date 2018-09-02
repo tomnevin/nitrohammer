@@ -1,0 +1,83 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName};
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.viper.database.annotations.Index;
+import com.viper.database.annotations.ForeignKey;
+import com.viper.database.annotations.Column;
+import com.viper.database.annotations.Table;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+@XmlRootElement(name = "#{classname}")
+@XmlAccessorType(XmlAccessType.FIELD)
+@SuppressWarnings("serial")
+## for (index : table.getIndices()) {
+@Index (#{java.toIndexAnnotation(table, index)})
+## }
+## for (foreignKey : table.getForeignKeys()) {
+@ForeignKey (#{java.toForeignKeyAnnotation(foreignKey)})
+## }
+@Table (#{java.toTableAnnotation(database.name, table)})
+public class #{classname} #{java.toBaseClass(table)} #{java.toInterface(table)}  {
+
+    public #{classname}() {
+    }
+    
+    ## for (column : table.getColumns()) {
+  
+    #{java.toJohnzonAnnotation(column)}
+    @XmlElement(name="#{java.toJavaVariableName(column)}")
+    @Column (#{java.toColumnAnnotation(table, column)})
+    private #{java.toJavaType(column)} #{java.toJavaVariableName(column)}  #{java.toDefaultValue(column)};
+
+    @Column (#{java.toColumnAnnotation(table, column)})
+    public #{java.toFinal(table)} #{java.toJavaType(column)} get#{java.toJavaName(column)}() {
+    ## if (!column.isNullable()) {
+    ## if (java.isList(column)) {
+        if (#{java.toJavaVariableName(column)} == null) {
+            #{java.toJavaVariableName(column)} = new java.util.ArrayList#{java.toGenericType(column)}();
+        }
+    ## }
+    ## if (java.isMap(column)) {
+        if (#{java.toJavaVariableName(column)} == null) {
+            #{java.toJavaVariableName(column)} = new java.util.HashMap#{java.toGenericType(column)}();
+        }
+    ## }
+    ## if (java.isCustomObject(column)) {
+        if (#{java.toJavaVariableName(column)} == null) {
+            #{java.toJavaVariableName(column)} = new #{java.toJavaType(column)}();
+        }
+    ## }
+    ## }
+        return #{java.toJavaVariableName(column)};
+    }
+
+    public #{java.toFinal(table)} void set#{java.toJavaName(column)}(#{java.toJavaType(column)} #{java.toJavaVariableName(column)}) {
+        this.#{java.toJavaVariableName(column)} = #{java.toJavaVariableName(column)};
+    }
+
+    ## }
+
+    public #{java.toFinal(table)} String toString() {
+        return #{java.toStringValue(table)};
+    }
+}
+## util.write(filename, writer);
+## }

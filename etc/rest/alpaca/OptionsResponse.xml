@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="OptionsResponse" table-type="bean">
+		<column name="fields" java-type="java.util.Map" generic-type="String, Object" />
+	</table>
+</database>

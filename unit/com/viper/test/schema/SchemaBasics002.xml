@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test" version="1.0">
+	<table name="TABLE-NAME">
+		<column name="id" java-type="int" primary-key="true" required="true" />
+		<column name="TestColumn" java-type="String" decimal-size="222222" size="111111">
+			<enum-value>RED</enum-value>
+			<enum-value>GREEN</enum-value>
+			<enum-value>BLUE</enum-value>
+		</column>
+		<row>
+			<cell name="id">1</cell>
+			<cell name="TestColumn">INPUT-DATA</cell>
+		</row>
+	</table>
+</database>

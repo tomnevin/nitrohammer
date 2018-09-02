@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test" package-name="com.viper.unit.model">
+	<table name="logical_bean" is-rest-service="true">
+		<column name='id' java-type='int' id-method="autoincrement" required='true' primary-key='true' />
+		<column name="byte_type" java-type="byte" />
+		<column name="byte_array_type" java-type="byte[]" />
+		<column name="byte_large_type" java-type="byte[]" size="1024" />
+		<column name="boolean_type" java-type="boolean" />
+		<column name="boolean_array_type" java-type="boolean[]" />
+		<column name="blob_type" java-type="byte[]" size="10240" />
+		<column name="java_math_biginteger_type" java-type="java.math.BigInteger" />
+		<column name="java_math_bigdecimal_type" java-type="java.math.BigDecimal" />
+		<column name="char_type" java-type="char" />
+		<column name="character_type" java-type="Character" />
+		<column name="char_array_type" java-type="char[]" />
+		<column name="char_large_type" java-type="char[]" size="1024" />
+		<column name="clob_type" java-type="char[]" size="10240" />
+		<column name="double_type" java-type="double" />
+		<column name="float_type" java-type="float" />
+		<column name="int_type" java-type="int" />
+		<column name="integer_type" java-type="Integer" />
+		<column name="int_array_type" java-type="int[]" />
+		<column name="long_type" java-type="long" />
+		<column name="long_array_type" java-type="long[]" />
+		<column name="nclob_type" java-type="char[]" data-type="clob" />
+		<!-- <column name="ref_type" java-type="java.sql.Ref" />    -->
+		<column name="short_type" java-type="short" />
+		<column name="short_array_type" java-type="short[]" />
+		<!-- <column name="struct_type" java-type="java.sql.Struct" />    -->
+		<column name="string_type" java-type="String" />
+		<column name="java_util_date_type" java-type="java.util.Date" />
+		<column name="java_sql_date_type" java-type="java.util.Date" />
+		<column name="java_sql_time_type" java-type="java.util.Date" />
+		<column name="java_sql_timestamp_type" java-type="java.util.Date" />
+		<column name="java_util_list_type" java-type="java.util.List" generic-type="Object" />
+		<column name="java_util_map_type" java-type="java.util.Map" />
+		<column name="ip_type" java-type="String" logical-type="ip:X.X.X.X" />
+	</table>
+</database>

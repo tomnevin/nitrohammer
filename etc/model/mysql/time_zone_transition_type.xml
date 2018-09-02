@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/time_zone_transition_type.xml">
+    <table name="time_zone_transition_type" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="Time zone transition types" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Time_zone_id" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Transition_type_id" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Offset" java-type="int" data-type="int" extra-data-type="int(11)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="Is_DST" java-type="int" data-type="tinyint" extra-data-type="tinyint(3) unsigned" default-value="0" size="3" order="1" persistent="true" required="true"/>
+        <column name="Abbreviation" java-type="String" data-type="char" extra-data-type="char(8)" size="8" order="1" persistent="true" required="true"/>
+    </table>
+</database>

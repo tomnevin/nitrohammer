@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test" version="3.2">
+	<table name="LocalTable" table-type="table" engine="innodb">
+		<column java-type="int"  primary-key="true" name="ID" />
+		<column java-type="String" name="NAME" unique_key="true" size="50" />
+		<column java-type="int" name="FOREIGN_ID" />
+		<foreign-key constraint-name="ForeignIdConstraint" deferrability="deferrability" foreign-catalog="test"
+			foreign-table="ForeignTable" unique="true" name="ForeignIdName" on-delete="restrict" on-update="cascade">
+			<foreign-key-reference foreign-column="id" local-column="FOREIGN_ID" />
+		</foreign-key>
+		<row>
+			<cell name="id">1</cell>
+			<cell name="name">Tom</cell>
+			<cell name="foreign_id">1</cell>
+		</row>
+		<row>
+			<cell name="id">2</cell>
+			<cell name="name">Dana</cell>
+			<cell name="foreign_id">2</cell>
+		</row>
+		<row>
+			<cell name="id">3</cell>
+			<cell name="name">Chrissy</cell>
+			<cell name="foreign_id">3</cell>
+		</row>
+	</table>
+	<table name="ForeignTable" table-type="table" engine="innodb">
+		<column java-type="int" primary-key="true" name="id" />
+		<column java-type="int" name="lessonId" />
+		<column default-value="N" java-type="String" name="active" size="2" />
+		<column java-type="String" name="due_date" size="10" />
+		<row>
+			<cell name="id">1</cell>
+			<cell name="lessonid">25</cell>
+			<cell name="active">Y</cell>
+			<cell name="due_date">2009-10-01</cell>
+		</row>
+		<row>
+			<cell name="id">2</cell>
+			<cell name="lessonid">30</cell>
+			<cell name="active">Y</cell>
+			<cell name="due_date">2009-01-01</cell>
+		</row>
+		<row>
+			<cell name="id">3</cell>
+			<cell name="lessonid">35</cell>
+			<cell name="active">Y</cell>
+			<cell name="due_date">2008-12-01</cell>
+		</row>
+	</table>
+</database>

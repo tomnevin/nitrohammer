@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="bean2"  is-rest-service="true">
+		<column name='id' java-type='int' required='true' primary-key='true' id-method="autoincrement" />
+        <column name="char_type" java-type="char" />
+        <column name='dataBytes' java-type='byte[]' size="64" />
+        <column name='dataBlob' java-type='byte[]' data-type='blob' />
+        <column name='dataClob' java-type='String' data-type="clob" />
+	</table>
+</database>

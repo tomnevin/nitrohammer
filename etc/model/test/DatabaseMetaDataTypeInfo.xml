@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	filename='etc/model/test/DatabaseMetaDataTypeInfo.xml'
+	 package-name="com.viper.unit.model"
+	name="test">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="MetaDataTypeInfo" is-rest-service="true">
+		<column name="ID" java-type="int" primary-key="true" id-method="autoincrement" />
+		<column name="TYPE_NAME" size="255" java-type="String" />
+		<column name="DATA_TYPE" size="255" java-type="String" />
+		<column name="DECIMAL_PRECISION" java-type="int" />
+		<column name="LITERAL_PREFIX" size="255" java-type="String" />
+		<column name="LITERAL_SUFFIX" size="255" java-type="String" />
+		<column name="CREATE_PARAMS" size="255" java-type="String" />
+		<column name="NULLABLE" java-type="int" />
+		<column name="CASE_SENSITIVE" java-type="boolean" />
+		<column name="SEARCHABLE" java-type="int" />
+		<column name="UNSIGNED_ATTRIBUTE" java-type="boolean" />
+		<column name="FIXED_PREC_SCALE" java-type="boolean" />
+		<column name="AUTO_INCR" java-type="boolean" />
+		<column name="LOCAL_TYPE_NAME" size="255" java-type="String" />
+		<column name="MINIMUM_SCALE" java-type="int" />
+		<column name="MAXIMUM_SCALE" java-type="int" />
+		<column name="SQL_DATA_TYPE" java-type="int" />
+		<column name="SQL_DATETIME_SUB" java-type="int" />
+		<column name="NUM_PREC_RADIX" java-type="int" />
+	</table>
+</database>

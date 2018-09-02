@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/engine_cost.xml">
+    <table name="engine_cost" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="engine_name" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="device_type" java-type="int" data-type="int" extra-data-type="int(11)" size="10" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="cost_name" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="cost_value" java-type="float" data-type="float" extra-data-type="float" size="12" order="1" persistent="true" required="true"/>
+        <column name="last_update" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="CURRENT_TIMESTAMP" order="1" persistent="true" required="true"/>
+        <column name="comment" java-type="String" data-type="varchar" extra-data-type="varchar(1024)" size="1024" order="1" persistent="true" required="true"/>
+    </table>
+</database>

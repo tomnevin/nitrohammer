@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/func.xml">
+    <table name="func" database-name="mysql" table-type="base-table" collation-name="utf8_bin" description="User defined functions" engine="myisam" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="ret" java-type="int" data-type="tinyint" extra-data-type="tinyint(1)" default-value="0" size="3" order="1" persistent="true" required="true"/>
+        <column name="dl" java-type="String" data-type="char" extra-data-type="char(128)" size="128" order="1" persistent="true" required="true"/>
+        <column name="type" java-type="FuncTypeEnum" data-type="enum" extra-data-type="enum('function','aggregate')" size="9" order="1" persistent="true" required="true">
+            <enum-value name="function">function</enum-value>
+            <enum-value name="aggregate">aggregate</enum-value>
+        </column>
+    </table>
+</database>

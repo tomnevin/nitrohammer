@@ -1,0 +1,76 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{packagename};
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+@SuppressWarnings("serial")
+@javax.persistence.Entity
+@javax.persistence.Table(name="#{table.name}", schema="#{root.name}")
+@com.viper.database.annotations.Table(#{java.toTableAnnotation(database.name, table)})
+public class #{classname} implements java.io.Serializable {
+## for (var column : table.columns) {
+
+## if (column.name == 'id' or column.primaryKey == true) {
+    @javax.persistence.GeneratedValue(strategy=javax.persistence.GenerationType.AUTO)
+    @javax.persistence.Id
+## } else {
+    @javax.persistence.Column(#{java.toPersistenceColumnAnnotation(column)})
+## }
+    
+    @com.viper.database.annotations.Column (#{java.toColumnAnnotation(table, column)})
+    private #{java.toJavaType(column)} #{java.toJavaVariableName(column)}; 
+    
+    public #{java.toJavaType(column)} get#{java.toJavaName(column)}() {
+        return this.#{java.toJavaVariableName(column)};
+    }
+    public void set#{java.toJavaName(column)}(#{java.toJavaType(column)} #{java.toJavaVariableName(column)}) {
+        this.#{java.toJavaVariableName(column)} = #{java.toJavaVariableName(column)};
+    }
+    
+## }
+
+## for (var foreignKey : table.foreignKeys) {
+## if (foreignKey.unique) {
+
+    @javax.persistence.OneToOne(cascade={javax.persistence.CascadeType.ALL}, fetch=javax.persistence.FetchType.LAZY)
+    @javax.persistence.JoinColumn(name="#{foreignKey.foreignColumn}",referencedColumnName="#{foreignKey.localColumn}")
+    private #{java.toJavaName(foreignKey)} #{java.toJavaVariableName(foreignKey)};
+    public #{java.toJavaName(foreignKey)} get#{java.toJavaName(foreignKey)}() {
+        return this.#{java.toJavaVariableName(foreignKey)};
+    }    
+    public void set#{java.toJavaName(foreignKey)}(#{java.toJavaName(foreignKey)} #{java.toJavaVariableName(foreignKey)}) {
+        this.#{java.toJavaVariableName(foreignKey)} = #{java.toJavaVariableName(foreignKey)};
+    }
+## }
+## }
+ 
+## for (var foreignKey : table.foreignKeys) {
+## if (not foreignKey.unique) {
+    
+    private java.util.List<#{java.toJavaName(foreignKey)}> #{java.toJavaVariableName(foreignKey)}List;
+    @javax.persistence.OneToMany(cascade={javax.persistence.CascadeType.ALL}, fetch=javax.persistence.FetchType.LAZY)
+    @javax.persistence.JoinColumn(name="#{java.toJavaNameFromField(foreignKey.foreignKeyReference[0].foreignColumn)}",referencedColumnName="#{java.toJavaNameFromField(foreignKey.foreignKeyReference[0].localColumn)}",table="#{java.toJavaName(foreignKey)}")
+    public java.util.List<#{java.toJavaName(foreignKey)}> get#{java.toJavaName(foreignKey)}List() {
+        return this.#{java.toJavaVariableName(foreignKey)}List;
+    }   
+    public void set#{java.toJavaName(foreignKey)}List(java.util.List<#{java.toJavaName(foreignKey)}> #{java.toJavaVariableName(foreignKey)}List) {
+        this.#{java.toJavaVariableName(foreignKey)}List = #{java.toJavaVariableName(foreignKey)}List;
+    }
+## }
+## }
+
+}
+## util.write(filename, writer);
+## }

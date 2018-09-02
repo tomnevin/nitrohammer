@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/ndb_binlog_index.xml">
+    <table name="ndb_binlog_index" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" engine="myisam" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="Position" java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="File" java-type="String" data-type="varchar" extra-data-type="varchar(255)" size="255" order="1" persistent="true" required="true"/>
+        <column name="epoch" java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="inserts" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="updates" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="deletes" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="schemaops" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="orig_server_id" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="orig_epoch" java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="gci" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" persistent="true" required="true"/>
+        <column name="next_position" java-type="long" data-type="bigint" extra-data-type="bigint(20) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="next_file" java-type="String" data-type="varchar" extra-data-type="varchar(255)" size="255" order="1" persistent="true" required="true"/>
+    </table>
+</database>

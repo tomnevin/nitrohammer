@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test">
+	<table name="bean_generation">
+		<generator>com.viper.test.dao.TestGeneratorInterface</generator>
+		<column name='id' java-type='int' required='true' primary-key='true' id-method="autoincrement" />
+		<column name='A' java-type='int' required='true' />
+		<column name='B' java-type='int' required='true' />
+		<column name='C' java-type='int' required='true' persistent="false" />
+	</table>
+</database>

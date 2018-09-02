@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/INNODB_SYS_TABLESTATS.xml">
+    <table name="INNODB_SYS_TABLESTATS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="TABLE_ID" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="NAME" java-type="String" data-type="varchar" extra-data-type="varchar(193)" size="193" order="1" persistent="true" required="true"/>
+        <column name="STATS_INITIALIZED" java-type="String" data-type="varchar" extra-data-type="varchar(193)" size="193" order="1" persistent="true" required="true"/>
+        <column name="NUM_ROWS" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="CLUST_INDEX_SIZE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="OTHER_INDEX_SIZE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="MODIFIED_COUNTER" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="AUTOINC" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="REF_COUNT" java-type="int" data-type="int" extra-data-type="int(11)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+    </table>
+</database>

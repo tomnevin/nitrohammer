@@ -1,0 +1,5 @@
+teacher
+student
+guest
+admin
+sysadmin

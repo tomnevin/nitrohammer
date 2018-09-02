@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="Pair" table-type="bean">
+		<!-- application extension -->
+		<column name="key" java-type="String" />
+		<column name="value" java-type="String" />
+	</table>
+</database>

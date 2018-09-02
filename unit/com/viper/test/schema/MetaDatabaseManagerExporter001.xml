@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd">
+	<database charset-name="utf8" collation-name="unknown" default-java-naming-method="nochange" filename="build/src/com/viper/test.java"
+		name="test" version="3.2">
+		<trigger event="delete" name="trigger01" statement="insert table (a, b, c) values (0, 1, 2)" time="before" username="demo" />
+		<table is-abstract="true" is-default="true" name="basic_table" password="tnevin" table-type="table">
+			<column primary-key="true" java-type="int" name="ID" size="10" />
+			<column java-type="String" name="NAME" index-name="indexname" />
+			<foreign-key constraint-name="constrain0002" deferrability="deferrability" foreign-catalog="foreign-catalog"
+				foreign-table="foreign-table" unique="true" name="local-key-name" on-delete="restrict" on-update="cascade">
+				<foreign-key-reference foreign-column="foreign-column" local-column="local-column-name" />
+			</foreign-key>
+			<index index-class="unique" index-type="btree" name="indexname" />
+			<sql-select>select * from table</sql-select>
+			<sql-update>update a="1", b="2" into table where c="3"</sql-update>
+			<sql-insert>insert (a, b, c) values (1, 2, 4) from table</sql-insert>
+			<sql-delete>delete table</sql-delete>
+			<row>
+				<cell name="id">1</cell>
+				<cell name="name">Tom</cell>
+			</row>
+			<row>
+				<cell name="id">2</cell>
+				<cell name="name">Dana</cell>
+			</row>
+			<row>
+				<cell name="id">3</cell>
+				<cell name="name">Chrissy</cell>
+			</row>
+		</table>
+		<table name="assignments" table-type="view">
+			<column primary-key="true" java-type="String" name="id" />
+			<column java-type="int" name="lessonid" />
+			<column java-type="String" name="active" />
+			<column java-type="java.sql.Date" name="due_date" />
+			<sql-select> select concat(h.teacher, h.roomname, h.lessonid) as id, l.cube, l.grade, l.subject, l.skill, l.title, h.teacher,
+				h.roomname, h.lessonid, h.active, h.due_date from homework h left outer join lesson l on h.lessonid=l.id group by l.id order
+				by l.id
+			</sql-select>
+		</table>
+		<procedure description="sample procedure description" name="CalculatSums" vendor="oracle">
+			<source><![CDATA[procedure sum(int a, int b) { return a + b; } ]]></source>
+		</procedure>
+	</database>
+	<user name="demo" password="pass">
+	</user>
+	<privilege grantee="jenny" grantor="tom" is-grantable="true" privilege="create" />
+</databases>

@@ -1,0 +1,127 @@
+##   var filename = outdir + "/master.html";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<title>Master Demo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" type="text/css" href="lib/ag-grid-17.0.0/styles/ag-grid.css">
+<link rel="stylesheet" type="text/css" href="lib/ag-grid-17.0.0/styles/ag-theme-balham.css">
+<link rel="stylesheet" type="text/css" href="lib/ag-grid-17.0.0/styles/compiled-icons.css">
+<link rel="stylesheet" type="text/css" href="lib/gh-buttons/gh-buttons.css">
+<link rel="stylesheet" type="text/css" href="lib/c3-0.5.3/c3.css">
+<link rel="stylesheet" type="text/css" href="lib/jqtree-0.15/jqtree.css">
+<link rel="stylesheet" type="text/css" href="lib/bootstrap4.0/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="lib/bootstrap4.0/css/bootstrap.css.map">
+<link rel="stylesheet" type="text/css" href="lib/bootstrap-select-1.12.4/dist/css/bootstrap-select.css" />
+<link rel="stylesheet" type="text/css" href="lib/bootstrap0.0-multiselect/css/bootstrap-multiselect.css" />
+<link rel="stylesheet" type="text/css" href="lib/bootstrap4-tempusdominus/dist/css/tempusdominus-bootstrap-4.min.css" />
+<link rel="stylesheet" type="text/css" href="lib/vis-4.21.0/vis-network.min.css">
+<link rel="stylesheet" type="text/css" href="lib/gridstack-0.3.0/dist/gridstack.min.css" />
+<link rel="stylesheet" type="text/css" href="lib/gridstack-0.3.0/dist/gridstack-extra.min.css" />
+<link rel="stylesheet" type="text/css" href="lib/leaflet-1.3.1/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="lib/leaflet-search-0.0.0/dist/leaflet-search.min.css" />
+<link rel="stylesheet" type="text/css" href="lib/fontawesome-free-5.0.10/web-fonts-with-css/css/fontawesome-all.min.css" />
+<link rel="stylesheet" type="text/css" href="lib/MaterialDesign-2.2.43/css/materialdesignicons.min.css">
+<link rel="stylesheet" type="text/css" href="lib/pivottable-06.09.18/dist/pivot.min.css" />
+
+<script type="text/javascript" charset="utf-8" src="lib/jquery-3.3.1/jquery-3.3.1.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/jquery-ui-1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/ag-grid-17.0.0/ag-grid.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/d3-4.13.0/d3.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/c3-0.5.3/c3.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/jqtree-0.15/tree.jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/moment-2.21.0/moment-with-locales.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/moment-2.21.0/moment-timezone-with-data.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/bootstrap4.0/js/bootstrap.bundle.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/bootstrap4.0/js/bootstrap.bundle.js.map"></script>
+<script type="text/javascript" charset="utf-8" src="lib/bootstrap-select-1.12.4/dist/js/bootstrap-select.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/bootstrap0.0-multiselect/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/bootstrap4-tempusdominus/dist/js/tempusdominus-bootstrap-4.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/lodash-0.0.0/lodash.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/vis-4.21.0/vis.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/leaflet-1.3.1/leaflet.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/leaflet-search-0.0.0/dist/leaflet-search.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/split-1.3.5/split.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/gridstack-0.3.0/dist/gridstack.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/gridstack-0.3.0/dist/gridstack.jQueryUI.js"></script>
+<script type="text/javascript" charset="utf-8" src="lib/pivottable-06.09.18/dist/pivot.min.js"></script>
+
+<script>
+<!-- DO NOT HAVE BROWSERS CACHE FOR DEVELOPMENT, REMOVE COMMENT OUT FOR PRODUCTION -->
+    $.ajaxSetup({
+        cache : false,
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
+        headers: { 
+        //  "Cache-Control": "no-cache",
+        //  "Pragma": "no-cache",
+            "Connection": "keep-alive"
+        }, 
+//      beforeSend: function(jqXHR, settings) {
+//          jqXHR.url = settings.url;
+//          log(settings.url);
+//          $('#loader').show();
+//      },
+//      complete: function() {
+//          $('#loader').hide();
+//      },
+//      successe: function() {
+//          $('#loader').hide();
+//      },
+        error: function(xhr) {
+            // $('#loader').hide();
+            log("An error occured in connection: " + xhr.url + ","+ xhr.status + "," + xhr.statusText);
+        }
+    });
+    
+</script>
+</head>
+
+<body>
+  
+    <div class="loader" id="loader"></div>
+
+    <div id="mainTab" class="tab-section">
+        <div class="main-menu-button mdi mdi-menu mdi-24" onclick="toggle('main-tab-pane', 'main-tab-pane-open')"></div>
+        <ul class="main-tab-pane" id="main-tab-pane" onclick="toggle('main-tab-pane', 'main-tab-pane-open')">
+## for (var database : root.databases) {
+## for (var table : database.tables) {
+##   var classname = java.toJavaName(table);
+            <li class="main-tab-item health-button" onclick="openTab(event, 'mainTab', 'HealthTab', 'templates/health.html')">System
+                Health</li>
+## }
+## }
+        </ul>
+    </div>
+
+    <!-- Tab content -->
+    <div class="main-pane">
+## for (var database : root.databases) {
+## for (var table : database.tables) {
+        <div id="InterceptTab" class="tab-content"></div>
+## }
+## }
+    </div>
+
+    <div class="footer">
+        <div id="debugId"></div>
+    </div>
+
+</body>
+</html>
+

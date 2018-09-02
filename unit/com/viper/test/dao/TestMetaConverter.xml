@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<databases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd">
+	<database name="meta">
+		<!-- =================================================== -->
+		<!-- J D B C T Y P E T A B L E -->
+		<!-- =================================================== -->
+		<table name="TYPES">
+			<column name='id' java-type='int' id-method="autoincrement" required='true' primary-key='true' />
+			<column name="CHAR_TYPE" java-type="char" />
+			<column name="VARCHAR_TYPE" size="100" java-type="String" />
+			<column name="INTEGER_TYPE" java-type="Integer" default-value="12" />
+			<column name="DATE_TYPE" java-type="Date" />
+			<column name="TIME_TYPE" java-type="Time" />
+			<column name="TIMESTAMP_TYPE" java-type="Timestamp" />
+			<column name="BIT_TYPE" java-type="boolean" />
+			<column name="TINYINT_TYPE" java-type="byte" />
+			<column name="SMALLINT_TYPE" java-type="short" />
+			<column name="BIGINT_TYPE" java-type="java.math.BigInteger" />
+			<column name="FLOAT_TYPE" java-type="Float" />
+			<column name="DOUBLE_TYPE" java-type="Double" />
+			<column name="DECIMAL_TYPE" java-type="java.math.BigDecimal" />
+			<column name="BOOLEAN_TYPE" java-type="Boolean" />
+			<column name="ENUM_TYPE" java-type="ENUM">
+				<enum-value>RED</enum-value>
+				<enum-value>GREEN</enum-value>
+				<enum-value>BLUE</enum-value>
+			</column>
+			<!-- These types have been left out intentionally for now as I'm not -->
+			<!-- sure how they map and dealing with the types above will give the -->
+			<!-- testbed a thorough workout I'm sure :-) -->
+			<!-- <column name="BLOB_TYPE" java-type="BLOB" /> -->
+			<!-- <column name="CLOB_TYPE" java-type="CLOB" /> -->
+			<!-- <column name="OTHER_TYPE" java-type="OTHER"/> -->
+			<!-- <column name="JAVA_OBJECT_TYPE" java-type="JAVA_OBJECT"/> -->
+			<!-- <column name="DISTINCT_TYPE" java-type="DISTINCT"/> -->
+			<!-- <column name="STRUCT_TYPE" java-type="STRUCT"/> -->
+			<!-- <column name="ARRAY_TYPE" java-type="ARRAY"/> -->
+			<!-- <column name="REF_TYPE" java-type="REF"/> -->
+		</table>
+	</database>
+</databases>

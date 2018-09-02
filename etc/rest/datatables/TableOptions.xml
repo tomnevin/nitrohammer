@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="TableOptions" table-type="bean">
+		<!-- _fnCompatMap( init, 'order', 'aaSorting' ); -->
+		<!-- _fnCompatMap( init, 'orderFixed', 'aaSortingFixed' ); -->
+		<!-- _fnCompatMap( init, 'pagingType', 'sPaginationType' ); -->
+		<!-- _fnCompatMap( init, 'pageLength', 'iDisplayLength' ); -->
+		<column name="autoWidth" java-type="Boolean" default-value="false" />
+		<column name="orderable" java-type="Boolean" default-value="false" />
+		<column name="ordering" java-type="Boolean" default-value="false" />
+		<column name="orderMulti" java-type="Boolean" default-value="false" />
+		<column name="orderClasses" java-type="Boolean" default-value="false" />
+		<column name="orderCellsTop" java-type="Boolean" default-value="false" />
+		<column name="searching" java-type="Boolean" default-value="false" />
+		<column name="selectable" java-type="Boolean" default-value="false" />
+		<column name="sort" java-type="Boolean" default-value="false" />
+		<column name="paging" java-type="Boolean" default-value="false" />
+
+		<column name="primaryKey" java-type="String" />
+	</table>
+</database>

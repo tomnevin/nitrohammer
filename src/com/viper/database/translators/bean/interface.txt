@@ -1,0 +1,28 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName};
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public interface #{classname} {
+
+    ## for (column : table.getColumns()) {
+    public #{java.toJavaType(column)} get#{java.toJavaName(column)}();
+
+    public void set#{java.toJavaName(column)}(#{java.toJavaType(column)} #{java.toJavaVariableName(column)});
+    
+    ## }
+}
+## util.write(filename, writer);
+## }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/INNODB_FT_DELETED.xml">
+    <table name="INNODB_FT_DELETED" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="DOC_ID" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+    </table>
+</database>

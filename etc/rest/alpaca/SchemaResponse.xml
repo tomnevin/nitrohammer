@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="SchemaResponse" table-type="bean">
+		<column name="type" java-type="String" />
+		<column name="properties" java-type="java.util.Map" generic-type="String, Object" />
+	</table>
+</database>

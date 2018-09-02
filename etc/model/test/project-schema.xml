@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- ==================================================================== -->
+<!-- -->
+<!-- E X A M P L E T O R Q U E S C H E M A -->
+<!-- -->
+<!-- ==================================================================== -->
+<!-- Note: You must now specify a database name. -->
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test"  package-name="com.viper.unit.model">
+	<table name="CIVILIZATION" table-type="table" is-rest-service="true">
+		<column name="CIV_ID" required="true" id-method="autoincrement" primary-key="true" java-type="int" />
+		<column name="NAME" required="true" java-type="String" />
+	</table>
+	<table name="PEOPLE" table-type="table">
+		<column name="PEOPLE_ID" required="true" id-method="autoincrement" primary-key="true" java-type="int" />
+		<column name="PARENT_CIV_ID" required="true" java-type="int" />
+		<column name="NAME" required="true" size="255" java-type="String" />
+		<column name="SPECIES"  default-value="-2" java-type="int" />
+		<column name="PLANET" default-value="-1" java-type="int" />
+		<foreign-key foreign-catalog="test" foreign-table="CIVILIZATION" unique="true">
+			<foreign-key-reference local-column="PARENT_CIV_ID" foreign-column="CIV_ID" />
+		</foreign-key>
+	</table>
+</database>

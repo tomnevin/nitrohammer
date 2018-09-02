@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="bean" is-rest-service="true">
+		<column name='id' java-type='int' required='true' primary-key='true' />
+		<column name="charField" java-type="Character" />
+		<column name="intField" java-type="int" default-value="12" />
+		<column name="booleanField" java-type="boolean" />
+		<column name="byteField" java-type="byte" />
+		<column name="shortField" java-type="short" />
+		<column name="bigIntegerField" java-type="java.math.BigInteger" size="27" decimal-size="5" />
+		<column name="bigDecimalField" java-type="java.math.BigDecimal" size="27" decimal-size="5" />
+		<column name="floatField" java-type="Float" />
+		<column name="doubleField" java-type="Double" />
+		<column name="stringField" java-type="String" />
+		<column name="myColorField" java-type="com.viper.demo.beans.model.enums.MyColor">
+			<enum-value>RED</enum-value>
+			<enum-value>GREEN</enum-value>
+			<enum-value>BLUE</enum-value>
+		</column>
+		<column name="namingField" java-type="com.viper.demo.beans.model.enums.NamingField">
+			<enum-value name="A.1">A_1</enum-value>
+			<enum-value name="B.2">B_2</enum-value>
+			<enum-value name="C.3">C_3</enum-value>
+		</column>
+		<column name="stringList" java-type="java.util.List" generic-type="String" />
+	</table>
+</database>

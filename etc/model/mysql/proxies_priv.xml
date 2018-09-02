@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/proxies_priv.xml">
+    <table name="proxies_priv" database-name="mysql" table-type="base-table" collation-name="utf8_bin" description="User proxy privileges" engine="myisam" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="Host" java-type="String" data-type="char" extra-data-type="char(60)" size="60" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="User" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Proxied_host" java-type="String" data-type="char" extra-data-type="char(60)" size="60" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="Proxied_user" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="With_grant" java-type="int" data-type="tinyint" extra-data-type="tinyint(1)" default-value="0" size="3" order="1" persistent="true" required="true"/>
+        <column name="Grantor" index-name="Grantor" java-type="String" data-type="char" extra-data-type="char(93)" size="93" order="1" persistent="true" required="true"/>
+        <column name="Timestamp" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="CURRENT_TIMESTAMP" order="1" persistent="true" required="true"/>
+        <index name="Grantor" table-name="proxies_priv" database-name="mysql" column-name="Grantor" index-class="unique" index-type="btree"/>
+    </table>
+</database>

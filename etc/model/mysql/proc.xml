@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/proc.xml">
+    <table name="proc" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="Stored Procedures" engine="myisam" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="db" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="type" java-type="ProcTypeEnum" data-type="enum" extra-data-type="enum('FUNCTION','PROCEDURE')" size="9" order="1" primary-key="true" persistent="true" required="true">
+            <enum-value name="FUNCTION">FUNCTION</enum-value>
+            <enum-value name="PROCEDURE">PROCEDURE</enum-value>
+        </column>
+        <column name="specific_name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="language" java-type="ProcLanguageEnum" data-type="enum" extra-data-type="enum('SQL')" default-value="SQL" size="3" order="1" persistent="true" required="true">
+            <enum-value name="SQL">SQL</enum-value>
+        </column>
+        <column name="sql_data_access" java-type="ProcSqlDataAccessEnum" data-type="enum" extra-data-type="enum('CONTAINS_SQL','NO_SQL','READS_SQL_DATA','MODIFIES_SQL_DATA')" default-value="CONTAINS_SQL" size="17" order="1" persistent="true" required="true">
+            <enum-value name="CONTAINS_SQL">CONTAINS_SQL</enum-value>
+            <enum-value name="NO_SQL">NO_SQL</enum-value>
+            <enum-value name="READS_SQL_DATA">READS_SQL_DATA</enum-value>
+            <enum-value name="MODIFIES_SQL_DATA">MODIFIES_SQL_DATA</enum-value>
+        </column>
+        <column name="is_deterministic" java-type="ProcIsDeterministicEnum" data-type="enum" extra-data-type="enum('YES','NO')" default-value="NO" size="3" order="1" persistent="true" required="true">
+            <enum-value name="YES">YES</enum-value>
+            <enum-value name="NO">NO</enum-value>
+        </column>
+        <column name="security_type" java-type="ProcSecurityTypeEnum" data-type="enum" extra-data-type="enum('INVOKER','DEFINER')" default-value="DEFINER" size="7" order="1" persistent="true" required="true">
+            <enum-value name="INVOKER">INVOKER</enum-value>
+            <enum-value name="DEFINER">DEFINER</enum-value>
+        </column>
+        <column name="param_list" java-type="java.sql.Blob" data-type="blob" extra-data-type="blob" size="65535" order="1" persistent="true" required="true"/>
+        <column name="returns" java-type="byte[]" data-type="longblob" extra-data-type="longblob" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="body" java-type="byte[]" data-type="longblob" extra-data-type="longblob" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="definer" java-type="String" data-type="char" extra-data-type="char(93)" size="93" order="1" persistent="true" required="true"/>
+        <column name="created" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="CURRENT_TIMESTAMP" order="1" persistent="true" required="true"/>
+        <column name="modified" java-type="long" data-type="timestamp" extra-data-type="timestamp" default-value="0000-00-00 00:00:00" order="1" persistent="true" required="true"/>
+        <column name="sql_mode" java-type="Object" data-type="set" extra-data-type="set('REAL_AS_FLOAT','PIPES_AS_CONCAT','ANSI_QUOTES','IGNORE_SPACE','NOT_USED','ONLY_FULL_GROUP_BY','NO_UNSIGNED_SUBTRACTION','NO_DIR_IN_CREATE','POSTGRESQL','ORACLE','MSSQL','DB2','MAXDB','NO_KEY_OPTIONS','NO_TABLE_OPTIONS','NO_FIELD_OPTIONS','MYSQL323','MYSQL40','ANSI','NO_AUTO_VALUE_ON_ZERO','NO_BACKSLASH_ESCAPES','STRICT_TRANS_TABLES','STRICT_ALL_TABLES','NO_ZERO_IN_DATE','NO_ZERO_DATE','INVALID_DATES','ERROR_FOR_DIVISION_BY_ZERO','TRADITIONAL','NO_AUTO_CREATE_USER','HIGH_NOT_PRECEDENCE','NO_ENGINE_SUBSTITUTION','PAD_CHAR_TO_FULL_LENGTH')" size="478" order="1" persistent="true" required="true"/>
+        <column name="comment" java-type="String" data-type="text" extra-data-type="text" size="65535" order="1" persistent="true" required="true"/>
+        <column name="character_set_client" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="collation_connection" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="db_collation" java-type="String" data-type="char" extra-data-type="char(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="body_utf8" java-type="byte[]" data-type="longblob" extra-data-type="longblob" size="4294967295" order="1" persistent="true" required="true"/>
+    </table>
+</database>

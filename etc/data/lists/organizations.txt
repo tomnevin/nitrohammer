@@ -1,0 +1,285 @@
++-----------------+----------------------------+------------------------------------------+-------------------------+------------------------+
+| organization_id | parent                     | name                                     | contact                 | organization_type      | 
++-----------------+----------------------------+------------------------------------------+-------------------------+------------------------+
+|               1 | NULL                       | BlackArrow                               | NULL                    | BlackArrow             | 
+|               2 | NULL                       | BlackArrow Inc                           | Michael Lavoie          | Content Provider       | 
+|               3 | NULL                       | Client 1                                 | Client 1 Name           | Advertiser             | 
+|               4 | Client 1                   | Brand 1                                  | Brand 1 Name            | Brand                  | 
+|               5 | NULL                       | Content Provider 1                       | Content Provider 1 Name | Content Provider       | 
+|               6 | NULL                       | Distributor 1                            | Distributor 1 Name      | Distribution Partner   | 
+|               7 | NULL                       | Content Provider 2                       | Content Provider 2 Name | Content Provider       | 
+|               8 | NULL                       | InternetDJ                               | Contact Name Required   | Content Provider       | 
+|               9 | NULL                       | InternetDJ Content Provider              | Michael Bordash         | Content Provider       | 
+|              10 | NULL                       | InterneDJ Distributor                    | Michael Bordash         | Distribution Partner   | 
+|              11 | NULL                       | InternetDJ House                         | Michael Bordash         | Advertiser             | 
+|              12 | InternetDJ House           | House Brand                              | Michael Bordash         | Brand                  | 
+|              13 | NULL                       | World of Warcraft                        | Michael Bordash         | Advertiser             | 
+|              14 | World of Warcraft          | World of Warcraft Game                   | Michael Bordash         | Brand                  | 
+|              15 | NULL                       | ManiaTV                                  | Scott Cunningham        | Content Provider       | 
+|              16 | NULL                       | ManiaTV                                  | Scott                   | Content Provider       | 
+|              17 | NULL                       | ManiaTV                                  | Scott                   | Distribution Partner   | 
+|              18 | NULL                       | AOL                                      | AOL                     | Distribution Partner   | 
+|              19 | NULL                       | Dice                                     | john doe                | Advertiser             | 
+|              20 | Dice                       | Dice                                     | dice                    | Brand                  | 
+|              21 | NULL                       | Televisa Digital                         | Contact Name Required   | Content Provider       | 
+|              22 | NULL                       | Yellow Pages                             | yellow pages            | Advertiser             | 
+|              23 | Yellow Pages               | Yellow Pages                             | yellow pages            | Brand                  | 
+|              24 | NULL                       | Alltel                                   | Alltel                  | Advertiser             | 
+|              25 | Alltel                     | Alltel                                   | scott                   | Brand                  | 
+|              26 | NULL                       | XM                                       | NULL                    | Advertiser             | 
+|              27 | XM                         | XM                                       | NULL                    | Brand                  | 
+|              28 | NULL                       | misc-ROS                                 | NULL                    | Advertiser             | 
+|              29 | misc-ROS                   | misc-ROS                                 | NULL                    | Brand                  | 
+|              30 | NULL                       | Fox Broadcasting Company                 | Ann-Marie Chediak       | Content Provider       | 
+|              31 | NULL                       | Fox Broadcasting Company                 |                         | Content Provider       | 
+|              32 | NULL                       | National Geographic Channel              |                         | Content Provider       | 
+|              33 | NULL                       | Fox Reality Channel                      |                         | Content Provider       | 
+|              34 | NULL                       | ESPN                                     |                         | Content Provider       | 
+|              35 | NULL                       | Fox Broadcasting Company                 | NULL                    | Advertiser             | 
+|              36 | Fox Broadcasting Company   | 24                                       | NULL                    | Brand                  | 
+|              37 | Fox Broadcasting Company   | House                                    | NULL                    | Brand                  | 
+|              38 | NULL                       | FX                                       | NULL                    | Advertiser             | 
+|              39 | FX                         | Rescue Me                                | NULL                    | Brand                  | 
+|              40 | FX                         | The Riches                               | NULL                    | Brand                  | 
+|              41 | FX                         | Nip Tuck                                 | NULL                    | Brand                  | 
+|              42 | Fox Broadcasting Company   | Prison Break                             | NULL                    | Brand                  | 
+|              43 | NULL                       | National Geographic                      | NULL                    | Advertiser             | 
+|              44 | National Geographic        | Explorer                                 | NULL                    | Brand                  | 
+|              45 | National Geographic        | Dog Whisperer                            | NULL                    | Brand                  | 
+|              46 | NULL                       | fox.com                                  |                         | Distribution Partner   | 
+|              47 | NULL                       | old_1                                    |                         | Content Provider       | 
+|              48 | NULL                       | Esmas.com                                |                         | Distribution Partner   | 
+|              49 | NULL                       | Test Client                              | NULL                    | Advertiser             | 
+|              50 | Test Client                | Brand 1                                  | NULL                    | Brand                  | 
+|              51 | NULL                       | Testing                                  | NULL                    | Advertiser             | 
+|              52 | Testing                    | Brand 1                                  | NULL                    | Brand                  | 
+|              53 | NULL                       | wrigleys                                 | NULL                    | Advertiser             | 
+|              54 | wrigleys                   | 5Gum                                     | NULL                    | Brand                  | 
+|              55 | NULL                       | Axe                                      | NULL                    | Advertiser             | 
+|              56 | Axe                        | Axe                                      | NULL                    | Brand                  | 
+|              57 | NULL                       | ABS-CBN International                    | Contact Name Required   | Content Provider       | 
+|              58 | NULL                       | Chilis                                   | NULL                    | Advertiser             | 
+|              59 | Chilis                     | Chilis                                   | NULL                    | Brand                  | 
+|              60 | NULL                       | Motorola                                 | NULL                    | Advertiser             | 
+|              61 | Motorola                   | Razor                                    | NULL                    | Brand                  | 
+|              62 | NULL                       | Disney                                   | Contact Name Required   | Content Provider       | 
+|              63 | NULL                       | old_2                                    |                         | Content Provider       | 
+|              64 | Fox Broadcasting Company   | Fringe                                   | NULL                    | Brand                  | 
+|              65 | NULL                       | hulu                                     |                         | Distribution Partner   | 
+|              66 | NULL                       | State Farm                               | na                      | Advertiser             | 
+|              67 | State Farm                 | State Farm                               | NULL                    | Brand                  | 
+|              68 | NULL                       | Kabillion LLC                            | Contact Name Required   | Content Provider       | 
+|              69 | NULL                       | -Test Coca-Cola                          | Juan Perez              | Advertiser             | 
+|              70 | -Test Coca-Cola            | Coca Zero                                | NULL                    | Brand                  | 
+|              71 | NULL                       | Microsoft                                | Microsoft               | Advertiser             | 
+|              72 | Microsoft                  | Xbox                                     | NULL                    | Brand                  | 
+|              73 | NULL                       | Televisual_tvolucion                     |                         | Content Provider       | 
+|              74 | NULL                       | Televisual_deportes                      |                         | Content Provider       | 
+|              75 | NULL                       | Sabritas                                 | NULL                    | Advertiser             | 
+|              76 | Sabritas                   | Doritos                                  | NULL                    | Brand                  | 
+|              77 | NULL                       | Doble Vida                               | NULL                    | Advertiser             | 
+|              78 | Doble Vida                 | Coca-cola                                | NULL                    | Brand                  | 
+|              79 | Doble Vida                 | Loreal                                   | Olga Algarra            | Brand                  | 
+|              80 | NULL                       | -Test Doble Vida Gold                    | Doble Vida Gold         | Advertiser             | 
+|              81 | -Test Doble Vida Gold      | Coca.Cola                                | NULL                    | Brand                  | 
+|              82 | -Test Doble Vida Gold      | Loreal                                   | NULL                    | Brand                  | 
+|              83 | Doble Vida                 | Consejo de promoción turística de México | NULL                    | Brand                  | 
+|              84 | NULL                       | Televisa Deportes                        | (interna)               | Advertiser             | 
+|              85 | NULL                       | tvolucion                                | (interna)               | Advertiser             | 
+|              86 | Doble Vida                 | Microsoft - Xbox                         | NULL                    | Brand                  | 
+|              87 | Televisa Deportes          | Televisa Deportes                        | NULL                    | Brand                  | 
+|              88 | tvolucion                  | tvolucion                                | NULL                    | Brand                  | 
+|              89 | NULL                       | Chrysler                                 | NULL                    | Advertiser             | 
+|              90 | Chrysler                   | Chrysler                                 | NULL                    | Brand                  | 
+|              91 | NULL                       | Kabillion                                |                         | Content Provider       | 
+|              92 | NULL                       | Kabillion.com                            | Brad Schultz            | Distribution Partner   | 
+|              93 | NULL                       | Kabillion Promos                         | NULL                    | Advertiser             | 
+|              94 | NULL                       | Ad Networks                              | AG                      | Advertiser             | 
+|              95 | NULL                       | Program Exchange                         | Anita Persaud           | Advertiser             | 
+|              96 | Ad Networks                | AGi Admix                                | Michael Weaver          | Brand                  | 
+|              97 | Kabillion Promos           | Voting Contest                           | NULL                    | Brand                  | 
+|              98 | Program Exchange           | Lucky Charms                             | Anita Persaud           | Brand                  | 
+|              99 | Program Exchange           | Cinnamon Toast Crunch                    | Anita Persaud           | Brand                  | 
+|             100 | Kabillion Promos           | Howl-larious                             | NULL                    | Brand                  | 
+|             101 | Kabillion Promos           | Kabillion Shows                          | NULL                    | Brand                  | 
+|             102 | Kabillion Promos           | Swaps                                    | NULL                    | Brand                  | 
+|             103 | Fox Broadcasting Company   | American Idol                            | NULL                    | Brand                  | 
+|             104 | NULL                       | ESPN.com                                 |                         | Distribution Partner   | 
+|             105 | NULL                       | Comcast.net                              |                         | Distribution Partner   | 
+|             106 | NULL                       | Esquire                                  | NULL                    | Advertiser             | 
+|             107 | Esquire                    | Esquire                                  | NULL                    | Brand                  | 
+|             108 | Doble Vida                 | Esquire                                  | NULL                    | Brand                  | 
+|             109 | NULL                       | Pedro Domecq                             | NULL                    | Advertiser             | 
+|             110 | Pedro Domecq               | Caribe Cooler                            | NULL                    | Brand                  | 
+|             111 | Kabillion Promos           | Halloween                                | NULL                    | Brand                  | 
+|             112 | NULL                       | PokerXFactor                             | Scott Pendergrast       | Content Provider       | 
+|             113 | NULL                       | Cake Poker                               | NULL                    | Advertiser             | 
+|             114 | Cake Poker                 | Cake Poker (main)                        | NULL                    | Brand                  | 
+|             115 | NULL                       | PXF                                      |                         | Content Provider       | 
+|             116 | NULL                       | Cake Poker                               |                         | Content Provider       | 
+|             117 | NULL                       | PXF                                      |                         | Distribution Partner   | 
+|             118 | NULL                       | PokerXFactor.com                         | NULL                    | Advertiser             | 
+|             119 | PokerXFactor.com           | PXF (main)                               | NULL                    | Brand                  | 
+|             120 | Doble Vida                 | Mujeres Asesinas                         | NULL                    | Brand                  | 
+|             121 | NULL                       | Activision                               | Tyler Michaud           | Advertiser             | 
+|             122 | Activision                 | Transformers Animated WPW                | NULL                    | Brand                  | 
+|             123 | Microsoft                  | Mobile                                   | NULL                    | Brand                  | 
+|             124 | NULL                       | AGi                                      | Michael Weaver          | Advertiser             | 
+|             125 | AGi                        | Fruit Roll Up                            | NULL                    | Brand                  | 
+|             126 | Ad Networks                | Google Adsense                           | NULL                    | Brand                  | 
+|             127 | Doble Vida                 | Microsoft Mobile                         | NULL                    | Brand                  | 
+|             128 | NULL                       | Sony                                     | NULL                    | Advertiser             | 
+|             129 | Sony                       | Bravia                                   | NULL                    | Brand                  | 
+|             130 | Doble Vida                 | Colinas                                  | NULL                    | Brand                  | 
+|             131 | Ad Networks                | Yume                                     | NULL                    | Brand                  | 
+|             132 | Ad Networks                | Platform-A                               | NULL                    | Brand                  | 
+|             133 | NULL                       | Urbaniacs                                |                         | Distribution Partner   | 
+|             134 | NULL                       | Ultimate Arcade                          |                         | Distribution Partner   | 
+|             135 | Activision                 | Transformers Animated Holiday            | NULL                    | Brand                  | 
+|             136 | Ad Networks                | Value Click                              | NULL                    | Brand                  | 
+|             137 | Kabillion Promos           | Site Promotions                          | NULL                    | Brand                  | 
+|             138 | Ad Networks                | CPM STAR                                 | NULL                    | Brand                  | 
+|             139 | NULL                       | MyOutdoorTV                              | Contact Name Required   | Content Provider       | 
+|             140 | NULL                       | 21etv                                    | Chris Pickle            | Content Provider       | 
+|             141 | NULL                       | 21e Internal                             | Chris Pickle            | Advertiser             | 
+|             142 | 21e Internal               | 21e Sample Ad Group                      | Chris Pickle            | Brand                  | 
+|             143 | NULL                       | 21e Web Network Inc.                     | Chris Pickle            | Content Provider       | 
+|             144 | NULL                       | MyOutdoorTV.com                          | Chris Moise             | Distribution Partner   | 
+|             145 | NULL                       | Sprint                                   | David Britton           | Advertiser             | 
+|             146 | NULL                       | Cabelas                                  | Dave Britton            | Advertiser             | 
+|             147 | NULL                       | Gerber                                   | David Britton           | Advertiser             | 
+|             148 | Program Exchange           | Honey Nut Cheerios                       | NULL                    | Brand                  | 
+|             149 | NULL                       | MyOutdoorTV                              | Amy Sabol               | Advertiser             | 
+|             150 | MyOutdoorTV                | MyOutdoorTV CP1                          | NULL                    | Brand                  | 
+|             151 | NULL                       | Test 42                                  |                         | Distribution Partner   | 
+|             152 | NULL                       | Master Player                            |                         | Content Provider       | 
+|             153 | NULL                       | My Outdoor Tv                            |                         | Distribution Partner   | 
+|             154 | NULL                       | ABS-CBN                                  |                         | Content Provider       | 
+|             155 | NULL                       | MYX.TV                                   |                         | Distribution Partner   | 
+|             156 | NULL                       | BUILTFROMSKRATCH.COM                     |                         | Distribution Partner   | 
+|             157 | NULL                       | In-House                                 | NULL                    | Advertiser             | 
+|             158 | In-House                   | In-House                                 | NULL                    | Brand                  | 
+|             159 | NULL                       | Comcast Interactive Media                | Contact Name Required   | Content Provider       | 
+|             160 | NULL                       | Internal Ads                             | NULL                    | Advertiser             | 
+|             161 | Internal Ads               | Kabillion Promo Ads                      | NULL                    | Brand                  | 
+|             162 | Ad Networks                | Video Egg                                | NULL                    | Brand                  | 
+|             163 | Cabelas                    | Cabelas                                  | NULL                    | Brand                  | 
+|             164 | Gerber                     | Gerber                                   | NULL                    | Brand                  | 
+|             165 | Sprint                     | Sprint                                   | NULL                    | Brand                  | 
+|             166 | NULL                       | MyOutdoorTV                              |                         | Content Provider       | 
+|             167 | NULL                       | Big Ten Network                          |                         | Content Provider       | 
+|             168 | NULL                       | Big Ten Network Microsite                |                         | Distribution Partner   | 
+|             169 | NULL                       | CIM                                      | NULL                    | Advertiser             | 
+|             170 | CIM                        | Promo                                    | NULL                    | Brand                  | 
+|             171 | NULL                       | 21e Sample Ads                           | Chris Pickle            | Advertiser             | 
+|             172 | 21e Sample Ads             | ADT                                      | Chris Pickle            | Brand                  | 
+|             173 | 21e Sample Ads             | Aflac                                    | NULL                    | Brand                  | 
+|             174 | 21e Sample Ads             | Allstate                                 | NULL                    | Brand                  | 
+|             175 | 21e Sample Ads             | Apple                                    | NULL                    | Brand                  | 
+|             176 | 21e Sample Ads             | Applebees                                | NULL                    | Brand                  | 
+|             177 | 21e Sample Ads             | Capital One                              | NULL                    | Brand                  | 
+|             178 | 21e Sample Ads             | Chrysler                                 | NULL                    | Brand                  | 
+|             179 | 21e Sample Ads             | Cingular                                 | NULL                    | Brand                  | 
+|             180 | 21e Sample Ads             | Dr. Pepper                               | NULL                    | Brand                  | 
+|             181 | 21e Sample Ads             | FedEx                                    | NULL                    | Brand                  | 
+|             182 | 21e Sample Ads             | IBM                                      | NULL                    | Brand                  | 
+|             183 | 21e Sample Ads             | Miller                                   | NULL                    | Brand                  | 
+|             184 | 21e Sample Ads             | Nissan                                   | NULL                    | Brand                  | 
+|             185 | 21e Sample Ads             | Pacific Life                             | NULL                    | Brand                  | 
+|             186 | 21e Sample Ads             | Pepsi                                    | NULL                    | Brand                  | 
+|             187 | 21e Sample Ads             | Polaroid                                 | NULL                    | Brand                  | 
+|             188 | 21e Sample Ads             | Russell Athletic                         | NULL                    | Brand                  | 
+|             189 | 21e Sample Ads             | Samuel Adams                             | NULL                    | Brand                  | 
+|             190 | 21e Sample Ads             | Thrifty                                  | NULL                    | Brand                  | 
+|             191 | 21e Sample Ads             | Valvoline                                | NULL                    | Brand                  | 
+|             192 | 21e Sample Ads             | Xerox                                    | NULL                    | Brand                  | 
+|             193 | NULL                       | Generic 21e Distributor                  |                         | Distribution Partner   | 
+|             194 | NULL                       | Faith TV                                 |                         | Distribution Partner   | 
+|             195 | NULL                       | Collegiate Sports Network                |                         | Distribution Partner   | 
+|             196 | NULL                       | Demo                                     |                         | Distribution Partner   | 
+|             197 | Program Exchange           | Fruit By The Foot                        | Anita Persaud           | Brand                  | 
+|             198 | Program Exchange           | Reeses Puffs                             | NULL                    | Brand                  | 
+|             199 | Program Exchange           | Trix Cereal                              | NULL                    | Brand                  | 
+|             200 | Ad Networks                | ScanScout                                | NULL                    | Brand                  | 
+|             201 | NULL                       | Embedded Players                         |                         | Distribution Partner   | 
+|             202 | NULL                       | Varsity                                  |                         | Distribution Partner   | 
+|             203 | NULL                       | Varsity                                  |                         | Content Provider       | 
+|             204 | NULL                       | Varsity                                  | NULL                    | Advertiser             | 
+|             205 | Varsity                    | Varisty                                  | NULL                    | Brand                  | 
+|             206 | NULL                       | MOTV-House                               | NULL                    | Advertiser             | 
+|             207 | MOTV-House                 | MOTV-House                               | NULL                    | Brand                  | 
+|             208 | NULL                       | Signal Theory                            | Sallie Green            | Advertiser             | 
+|             209 | Signal Theory              | Pokemon                                  | Sallie Green            | Brand                  | 
+|             210 | Fox Broadcasting Company   | The Simpsons                             | NULL                    | Brand                  | 
+|             211 | NULL                       | The Daily Beast                          |                         | Content Provider       | 
+|             212 | NULL                       | Dailybeast.com                           |                         | Distribution Partner   | 
+|             213 | NULL                       | Marvel                                   | Javon Frasier           | Advertiser             | 
+|             214 | Marvel                     | Barter Ads                               | NULL                    | Brand                  | 
+|             215 | NULL                       | Evinrude                                 | NULL                    | Advertiser             | 
+|             216 | Evinrude                   | Evinrude                                 | NULL                    | Brand                  | 
+|             217 | NULL                       | 21etv                                    | 21etv Client            | Advertiser             | 
+|             218 | 21etv                      | 21etv Brand                              | 21etv Name              | Brand                  | 
+|             219 | NULL                       | ABS-CBN International                    | ABS-CBN Name            | Advertiser             | 
+|             220 | ABS-CBN International      | ABS-CBN Brand                            | ABS-CBN Name            | Brand                  | 
+|             221 | NULL                       | Comcast Interactive Media                | CIM Name                | Advertiser             | 
+|             222 | Comcast Interactive Media  | CIM Brand                                | CIM Name                | Brand                  | 
+|             223 | NULL                       | Disney                                   | Disney Name             | Advertiser             | 
+|             224 | Disney                     | Disney Brand                             | Disney Name             | Brand                  | 
+|             225 | NULL                       | Fox Broadcasting Company                 | FBC Name                | Advertiser             | 
+|             226 | Fox Broadcasting Company   | FBC Brand                                | FBC Name                | Brand                  | 
+|             227 | NULL                       | InternetDJ                               | InternetDJ Name         | Advertiser             | 
+|             228 | InternetDJ                 | InternetDJ Brand                         | InternetDJ Name         | Brand                  | 
+|             229 | NULL                       | PokerXFactor                             | PokerXFactor Name       | Advertiser             | 
+|             230 | PokerXFactor               | PokerXFactor Brand                       | PokerXFactor Name       | Brand                  | 
+|             231 | NULL                       | Kabillion LLC                            | Kabillion Name          | Advertiser             | 
+|             232 | Kabillion LLC              | Kabillion Brand                          | Kabillion Name          | Brand                  | 
+|             233 | NULL                       | Orvis                                    | NULL                    | Advertiser             | 
+|             234 | NULL                       | Delta Water Fowl                         | NULL                    | Advertiser             | 
+|             235 | Delta Water Fowl           | Delta Water Fowl                         | NULL                    | Brand                  | 
+|             236 | Orvis                      | Orvis                                    | NULL                    | Brand                  | 
+|             237 | NULL                       | TWC                                      | Bryan Santangelo        | Distributor Parent     | 
+|             238 | NULL                       | Time Warner Cable                        | Bryan Santangelo        | Content Provider       | 
+|             239 | NULL                       | Default Client                           | NULL                    | Advertiser             | 
+|             240 | Default Client             | Default Brand                            | NULL                    | Brand                  | 
+|             241 | NULL                       | TWC                                      | Bryan Santangelo        | Distribution Partner   | 
+|             242 | NULL                       | 20th Century Fox                         |                         | Content Provider       | 
+|             243 | NULL                       | Buena Vista                              |                         | Content Provider       | 
+|             244 | NULL                       | Lions Gate                               |                         | Content Provider       | 
+|             245 | NULL                       | Miramax                                  |                         | Content Provider       | 
+|             246 | NULL                       | New Line Cinema                          |                         | Content Provider       | 
+|             247 | NULL                       | Paramount                                |                         | Content Provider       | 
+|             248 | NULL                       | Sony                                     |                         | Content Provider       | 
+|             249 | NULL                       | Time Warner Cable                        |                         | Content Provider       | 
+|             250 | NULL                       | TW Cable                                 |                         | Content Provider       | 
+|             251 | NULL                       | Weinstein Company                        |                         | Content Provider       | 
+|             252 | NULL                       | Warner Bros.                             |                         | Content Provider       | 
+|             253 | NULL                       | Test Client                              | Test Client             | Advertiser             | 
+|             254 | Test Client                | Test Brand                               | NULL                    | Brand                  | 
+|             255 | NULL                       | Kates Test Advertiser 1                  | NULL                    | Advertiser             | 
+|             256 | Kates Test Advertiser 1    | Automotive                               | NULL                    | Brand                  | 
+|             257 | NULL                       | Bresnan                                  | Greg Rice               | Distributor Parent     | 
+|             258 | NULL                       | Bresnan Communications                   | NULL                    | Content Provider       | 
+|             259 | NULL                       | Default Client                           | NULL                    | Advertiser             | 
+|             260 | Default Client             | Default Brand                            | NULL                    | Brand                  | 
+|             261 | NULL                       | Bresnan                                  | Greg Rice               | Distribution Partner   | 
+|             262 | NULL                       | Fox Cable Networks                       | NULL                    | Content Provider       | 
+|             263 | NULL                       | Default Client                           | NULL                    | Advertiser             | 
+|             264 | Default Client             | Default Brand                            | NULL                    | Brand                  | 
+|             265 | NULL                       | FX Channel                               | Eric Schmidt            | Content Provider       | 
+|             266 | NULL                       | Speed Channel                            | Eric Schmidt            | Content Provider       | 
+|             267 | NULL                       | National Geographic Channel              | Eric Schmidt            | Content Provider       | 
+|             268 | NULL                       | Test Client                              | Michael Lavoie          | Advertiser             | 
+|             269 | Test Client                | Test Brand                               | Michael Lavoie          | Brand                  | 
+|             270 | NULL                       | Test Client                              | Michael Lavoie          | Advertiser             | 
+|             271 | Test Client                | Test Brand                               | Michael Lavoie          | Brand                  | 
+|             272 | NULL                       | FX Client                                | Eric Schmidt            | Advertiser             | 
+|             273 | FX Client                  | FX Brand                                 | Eric Schmidt            | Brand                  | 
+|             274 | NULL                       | National Geographic Client               | Eric Schmidt            | Advertiser             | 
+|             275 | National Geographic Client | National Geographic Brand                | Eric Schmidt            | Brand                  | 
+|             276 | NULL                       | Speed Client                             | Eric Schmidt            | Advertiser             | 
+|             277 | Speed Client               | Speed Brand                              | Eric Schmidt            | Brand                  | 
+|             278 | NULL                       | BlackArrow                               | Michael Lavoie          | Distributor Parent     | 
+|             279 | NULL                       | BlackArrow                               | Michael Lavoie          | Distribution Partner   | 
+|             280 | NULL                       | Bresnan Client                           | Greg Rice               | Advertiser             | 
+|             281 | Bresnan Client             | Bresnan Brand                            | Greg Rice               | Brand                  | 
++-----------------+----------------------------+------------------------------------------+-------------------------+------------------------+

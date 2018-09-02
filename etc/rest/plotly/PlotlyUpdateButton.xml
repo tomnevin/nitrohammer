@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyUpdateButton" table-type="bean">
+		<column name="method" java-type="String" />
+		<column name="label" java-type="String" />
+		<column name="name" java-type="String" />
+		<column name="templateitemname " java-type="String" />
+		<column name="visible" java-type="boolean" default-value="true" />
+		<column name="execute" java-type="boolean" default-value="true" />
+		<column name="args" java-type="java.util.List" generic-type="Object" />
+		<column name="clientData" java-type="Object" />
+	</table>
+</database>

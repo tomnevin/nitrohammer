@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test"  package-name="com.viper.unit.model">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="Employee"  is-rest-service="true">
+		<column name="id" java-type="int" primary-key="true" id-method="autoincrement" java-converter="com.viper.database.dao.converters.StringConverter" />
+		<column name="name" unique="true" size="100" java-type="String" index-name="employeeUniqueName" />
+		<column name="address" size="100" java-type="String" />
+		<column name="startDate" java-type="java.util.Date"  java-converter="com.viper.database.dao.converters.DateConverter" />
+		<column name="salary" java-type="double" java-converter="com.viper.database.dao.converters.DoubleConverter" />
+		<column name="ptoPerYear" java-type="java.math.BigDecimal" size="32" decimal-size="5"  java-converter="com.viper.database.dao.converters.BigDecimalConverter" />
+		<column name="organizationId" java-type="int"  java-converter="com.viper.database.dao.converters.IntegerConverter" />
+		<column name="zipcode" java-type="String" size="10" />
+		<column name="phone" java-type="String" size="15" />
+		<index name="employeeUniqueName" index-class="default" index-type="default" />
+		<row>
+			<cell>1</cell>
+			<cell>Christena Nevin</cell>
+			<cell>101 Penny Lane</cell>
+			<cell>2005-08-11</cell>
+			<cell>100000.01</cell>
+			<cell>16.5</cell>
+			<cell>1</cell>
+		</row>
+		<row>
+			<cell>2</cell>
+			<cell>Dana Nevin</cell>
+			<cell>Abbey Road</cell>
+			<cell>1999-11-10</cell>
+			<cell>4000.25</cell>
+			<cell>7.4</cell>
+			<cell>1</cell>
+		</row>
+		<row>
+			<cell>3</cell>
+			<cell>Billy Nevin</cell>
+			<cell>1245 First Street</cell>
+			<cell>2005-08-12</cell>
+			<cell>34500.45</cell>
+			<cell>16.5</cell>
+			<cell>1</cell>
+		</row>
+		<row>
+			<cell>4</cell>
+			<cell>Tom Nevin</cell>
+			<cell>12 Main Street</cell>
+			<cell>1975-06-04</cell>
+			<cell>5560.99</cell>
+			<cell>1.2345</cell>
+			<cell>1</cell>
+		</row>
+	</table>
+</database>

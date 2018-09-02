@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="LayoutResponse" table-type="bean">
+		<column name="template" java-type="String" />
+		<column name="bindings" java-type="java.util.Map" generic-type="String, String" />
+	</table>
+</database>

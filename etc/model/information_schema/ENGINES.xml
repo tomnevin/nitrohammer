@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/ENGINES.xml">
+    <table name="ENGINES" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="ENGINE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="SUPPORT" java-type="String" data-type="varchar" extra-data-type="varchar(8)" size="8" order="1" persistent="true" required="true"/>
+        <column name="COMMENT" java-type="String" data-type="varchar" extra-data-type="varchar(80)" size="80" order="1" persistent="true" required="true"/>
+        <column name="TRANSACTIONS" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="XA" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="SAVEPOINTS" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+    </table>
+</database>

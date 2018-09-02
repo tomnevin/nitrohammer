@@ -1,0 +1,46 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + "Property.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{packagename};
+
+import com.viper.jfx.UIUtil;
+
+import javafx.beans.property.*;
+import #{packagename}.*;
+
+@SuppressWarnings("serial")
+public class #{classname}Property implements java.io.Serializable {
+
+    private #{classname} bean = null;
+
+    public #{classname}Property(#{classname} bean) {
+        this.bean = bean;
+    }
+
+	## for (var column : table.columns) {
+	private #{java.toPropertyName(column)}Property #{column.name}Property;
+	
+    public #{java.toPropertyName(column)}Property #{column.name}Property() {
+        if (#{column.name}Property == null || #{column.name}Property.getBean() != bean) { 
+            #{column.name}Property = UIUtil.build#{java.toPropertyName(column)}Property(bean, "#{column.name}");
+        }
+        return #{column.name}Property;
+    }
+	## }
+	  
+    public void update(#{classname} bean) {
+    	## for (var column :  table.columns) {
+        #{column.name}Property().setValue(bean.#{java.toGetter(column)}());
+        ## }
+    }
+}
+## util.write(filename, writer);
+## }

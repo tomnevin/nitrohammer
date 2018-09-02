@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/SESSION_STATUS.xml">
+    <table name="SESSION_STATUS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="VARIABLE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="VARIABLE_VALUE" java-type="String" data-type="varchar" extra-data-type="varchar(1024)" size="1024" order="1" persistent="true" required="true"/>
+    </table>
+</database>

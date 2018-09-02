@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyUpdateMenu" table-type="bean">
+		<column name="x" java-type="double" />
+		<column name="y" java-type="double" />
+		<column name="xref" java-type="String" />
+		<column name="yref" java-type="String" />
+		<column name="xanchor" java-type="String" />
+		<column name="yanchor" java-type="String" />
+		<column name="direction" java-type="String" />
+		<column name="showactive" java-type="boolean" />
+		<column name="active" java-type="int" />
+		<column name="pad" java-type="com.viper.database.rest.model.PlotlyMargin" />
+		<column name="buttons" java-type="java.util.List" generic-type="com.viper.database.rest.model.PlotlyUpdateButton" />
+	</table>
+</database>

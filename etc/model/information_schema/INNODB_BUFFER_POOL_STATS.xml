@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/INNODB_BUFFER_POOL_STATS.xml">
+    <table name="INNODB_BUFFER_POOL_STATS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="POOL_ID" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="POOL_SIZE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="FREE_BUFFERS" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="DATABASE_PAGES" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="OLD_DATABASE_PAGES" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="MODIFIED_DATABASE_PAGES" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PENDING_DECOMPRESS" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PENDING_READS" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PENDING_FLUSH_LRU" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PENDING_FLUSH_LIST" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PAGES_MADE_YOUNG" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PAGES_NOT_MADE_YOUNG" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PAGES_MADE_YOUNG_RATE" java-type="double" data-type="double" extra-data-type="double" default-value="0" size="12" order="1" persistent="true" required="true"/>
+        <column name="PAGES_MADE_NOT_YOUNG_RATE" java-type="double" data-type="double" extra-data-type="double" default-value="0" size="12" order="1" persistent="true" required="true"/>
+        <column name="NUMBER_PAGES_READ" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="NUMBER_PAGES_CREATED" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="NUMBER_PAGES_WRITTEN" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="PAGES_READ_RATE" java-type="double" data-type="double" extra-data-type="double" default-value="0" size="12" order="1" persistent="true" required="true"/>
+        <column name="PAGES_CREATE_RATE" java-type="double" data-type="double" extra-data-type="double" default-value="0" size="12" order="1" persistent="true" required="true"/>
+        <column name="PAGES_WRITTEN_RATE" java-type="double" data-type="double" extra-data-type="double" default-value="0" size="12" order="1" persistent="true" required="true"/>
+        <column name="NUMBER_PAGES_GET" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="HIT_RATE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="YOUNG_MAKE_PER_THOUSAND_GETS" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="NOT_YOUNG_MAKE_PER_THOUSAND_GETS" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="NUMBER_PAGES_READ_AHEAD" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="NUMBER_READ_AHEAD_EVICTED" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="READ_AHEAD_RATE" java-type="double" data-type="double" extra-data-type="double" default-value="0" size="12" order="1" persistent="true" required="true"/>
+        <column name="READ_AHEAD_EVICTED_RATE" java-type="double" data-type="double" extra-data-type="double" default-value="0" size="12" order="1" persistent="true" required="true"/>
+        <column name="LRU_IO_TOTAL" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="LRU_IO_CURRENT" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="UNCOMPRESS_TOTAL" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="UNCOMPRESS_CURRENT" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+    </table>
+</database>

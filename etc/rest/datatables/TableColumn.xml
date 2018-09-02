@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database name="rest">
+	<table name="TableColumn" table-type="bean">
+		<column name="cellType" java-type="String" />
+		<column name="className" java-type="String" />
+		<column name="contentPadding" java-type="String" />
+		<column name="createdCell" java-type="String" />
+		<column name="data" java-type="Object" />
+		<column name="defaultContent" java-type="String" />
+		<column name="name" java-type="String" />
+		<column name="orderable" java-type="boolean"  default-value="false" />
+		<column name="orderData" java-type="java.util.List" generic-type="Integer" />
+		<column name="orderDataType" java-type="String" /> <!--  type of component dom-text, dom-select, dom-checkbox -->
+		<column name="render" java-type="String" />
+		<column name="searchable" java-type="boolean"  default-value="false" />
+		<column name="targets" java-type="java.util.List" generic-type="Integer" />
+		<column name="title" java-type="String" />
+		<column name="type" java-type="String" />
+		<column name="visible" java-type="boolean"  default-value="true" />
+		<column name="width" java-type="String" />
+	</table>
+</database>

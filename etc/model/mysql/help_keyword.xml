@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="mysql" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/mysql/help_keyword.xml">
+    <table name="help_keyword" database-name="mysql" table-type="base-table" collation-name="utf8_general_ci" description="help keywords" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="help_keyword_id" java-type="int" data-type="int" extra-data-type="int(10) unsigned" size="10" order="1" primary-key="true" persistent="true" required="true"/>
+        <column name="name" index-name="name" java-type="String" data-type="char" extra-data-type="char(64)" size="64" order="1" persistent="true" required="true"/>
+        <index name="name" table-name="help_keyword" database-name="mysql" column-name="name" index-class="unique" index-type="btree"/>
+    </table>
+</database>

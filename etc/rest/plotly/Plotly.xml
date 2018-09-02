@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="Plotly" table-type="bean">
+		<column name="data" java-type="java.util.List" generic-type="com.viper.database.rest.model.PlotlyData" />
+		<column name="layout" java-type="com.viper.database.rest.model.PlotlyLayout" />
+	</table>
+</database>

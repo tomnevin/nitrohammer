@@ -1,0 +1,7 @@
+#
+build
+benchmarks
+srcgen
+lib/libgen
+lib/drivers
+lib/libdev

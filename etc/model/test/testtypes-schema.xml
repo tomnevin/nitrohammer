@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test"  package-name="com.viper.unit.model">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="TYPES" is-rest-service="true">
+		<column name='id' java-type='int' id-method="autoincrement" required='true' primary-key='true' />
+		<column name="CHARACTER_TYPE" java-type="Character" />
+		<column name="CHAR_TYPE" java-type="char" />
+		<column name="VARCHAR_TYPE" size="100" java-type="String" data-type="varchar" />
+		<column name="int_TYPE" java-type="int" default-value="12" />
+		<column name="DATE_TYPE" java-type="java.sql.Date" />
+		<column name="TIME_TYPE" java-type="java.sql.Time" />
+		<column name="TIMESTAMP_TYPE" java-type="java.sql.Timestamp" />
+		<column name="BIT_TYPE" java-type="boolean" data-type="bit[1]"/>
+		<column name="TINYINT_TYPE" java-type="byte"  data-type="tinyint"/>
+		<column name="SMALLINT_TYPE" java-type="int"  data-type="smallint"/>
+		<column name="BIGINT_TYPE" java-type="java.math.BigInteger"  data-type="bigint"/>
+		<column name="FLOAT_TYPE" java-type="Float"  data-type="float"/>
+		<column name="REAL_TYPE" java-type="Float" />
+		<column name="DOUBLE_TYPE" java-type="Double"  data-type="double"/>
+		<column name="NUMERIC_TYPE" java-type="Integer" />
+		<column name="DECIMAL_TYPE" java-type="java.math.BigDecimal" />
+		<column name="LONGVARCHAR_TYPE" java-type="String"  data-type="longvarchar"/>
+		<column name="BINARY_TYPE" java-type="byte[]" />
+		<column name="VARBINARY_TYPE" java-type="int[]" size="123" data-type="varbinary"/>
+		<column name="LONGVARBINARY_TYPE" java-type="long[]" size="123" data-type="longvarbinary"/>
+		<column name="BOOLEAN_TYPE" java-type="Boolean" />
+		<column name="ENUM_TYPE" java-type="MyColor">
+			<enum-value>RED</enum-value>
+			<enum-value>GREEN</enum-value>
+			<enum-value>BLUE</enum-value>
+		</column>
+		<column name="BLOB_TYPE" java-type='byte[]' data-type='Blob' />
+		<column name="CLOB_TYPE" java-type="char[]" data-type="Clob" />
+		<!-- These types have been left out intentionally for now as I'm not -->
+		<!-- sure how they map and dealing with the types above will give the -->
+		<!-- testbed a thorough workout I'm sure :-) -->
+		<!-- <column name="OTHER_TYPE" java-type="OTHER"/> -->
+		<!-- <column name="JAVA_OBJECT_TYPE" java-type="JAVA_OBJECT"/> -->
+		<!-- <column name="DISTINCT_TYPE" java-type="DISTINCT"/> -->
+		<!-- <column name="STRUCT_TYPE" java-type="STRUCT"/> -->
+		<!-- <column name="ARRAY_TYPE" java-type="ARRAY"/> -->
+		<!-- <column name="REF_TYPE" java-type="REF"/> -->
+		
+        <column name="INT_ARRAY_TYPE" java-type="int[]" />
+        <column name="FLOAT_ARRAY_TYPE" java-type="float[]" />
+        <column name="DOUBLE_ARRAY_TYPE" java-type="double[]" />
+        <column name="SHORT_ARRAY_TYPE" java-type="short[]" />
+        <column name="ENUM_ARRAY_TYPE" java-type="MyColor[]" />
+	</table>
+</database>

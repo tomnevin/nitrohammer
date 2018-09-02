@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../schemas/database.xsd"
+	name='test' filename='etc/model/test/Activity.xml'  package-name="com.viper.unit.model">
+	<table name='Activity' table-type='table' is-rest-service="true">
+		<column name='id' java-type='int' size='10' required='true' primary-key='true' id-method='autoincrement' />
+		<column name='Name' java-type='String' size='50' required='true' />
+		<column name='OrganizationId' java-type='int' size='10' required='true' />
+		<column name='ActivityCategoryId' java-type='int' size='10' required='true' description='((-5001))' />
+		<column name='Description' java-type='String' size='200' required='false' />
+		<column name='isPaid' java-type='boolean' required='true' default-value='true' description='(0)' />
+		<column name='isDeleted' java-type='boolean' required='true' default-value='true' description='(0)' />
+		<column name='AdherenceTolerance' java-type='short' size='5' required='false' />
+		<column name='IsUsedInShift' java-type='boolean' required='true' default-value='true' description='(0)' />
+		<column name='Color' java-type='String' size='6' required='false' description='(&quot;DFEFAE&quot;)' />
+		<column name='ISUSEDINSHIFTEVENT' java-type='Boolean' required='true' default-value='true'
+			description='(0)' />
+		<column name='ISUSEDINCALENDAREVENT' java-type='boolean' required='true' default-value='true'
+			description='(0)' />
+		<column name='IsUnavailability' java-type='boolean' required='true' default-value='true'
+			description='(0)' />
+		<column name='isRequestable' java-type='boolean' required='true' default-value='true' description='(0)' />
+		<column name='isOut' java-type='boolean' required='true' default-value='true' description='(0)' />
+		<column name='IsTimeOff' java-type='boolean' required='true' default-value='true' description='(0)' />
+		<column name='ISTIMEOFFWITHALLOTMENT' java-type='boolean' required='true' default-value='true'
+			description='(0)' />
+		<column name='ColorCode' java-type='String' size='4' required='false' />
+		<column name='EarningTypeId' java-type='int' size='10' required='true' description='((-11007))' />
+		<column name='MaxDurationThreshold' java-type='int' size='10' required='true' description='(600)' />
+		<column name='ModifiedBy' java-type='String' size='50' required='false' />
+		<column name='LastModifiedAt' java-type='java.util.Date' size='23' decimal-size='3' required='false' />
+		<column name='SourceMeasureId' java-type='int' size='10' required='false' />
+		<column name='isvisibletotcmapping' java-type='boolean' required='true' default-value='true'
+			description='(1)' />
+		<column name='isQueueHopping' java-type='boolean' required='true' default-value='true' description='(0)' />
+	</table>
+</database>

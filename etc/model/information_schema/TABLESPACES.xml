@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/TABLESPACES.xml">
+    <table name="TABLESPACES" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="TABLESPACE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="ENGINE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TABLESPACE_TYPE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="LOGFILE_GROUP_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="EXTENT_SIZE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="AUTOEXTEND_SIZE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="MAXIMUM_SIZE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="NODEGROUP_ID" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="TABLESPACE_COMMENT" java-type="String" data-type="varchar" extra-data-type="varchar(2048)" size="2048" order="1" persistent="true" required="true"/>
+    </table>
+</database>

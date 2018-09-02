@@ -1,0 +1,33 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + ".html";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+<div class="content content-column">
+    <div class="content-header">
+        <p class="content-title">List of #{java.toJavaName(table).toUpperCase()}</p>
+        <div class="content-button-bar">
+            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown"
+                onclick="shareTable(event)">
+                <span class="mdi mdi-share"></span> Share<span class="caret"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="content-body content-row content-grow">
+        <div class="content-overlay overlay-border"></div>
+        <div class="content-table ag-theme-balham"
+            data-class-name="#{classname}"
+            data-overlay-url="templates/details.#{java.toJavaName(table).toLowerCase()}.html">
+            </div>
+    </div>
+</div>
+
+## util.write(filename, writer);
+## }

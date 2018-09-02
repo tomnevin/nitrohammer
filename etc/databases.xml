@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<databaseConnections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/databases.xsd">
+	<connection name="test">
+		<username>root</username>
+        <password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+        <create-database>true</create-database>
+        <model>etc/Education.xml</model>
+		<database-url>jdbc:mysql://localhost:3306</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+        <package-name>com.viper.demo.unit.model</package-name>
+	</connection>
+	<connection name="test-memory">
+		<model>etc/model/test/Employee.xml</model>
+		<database-url>mem:</database-url>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="test-mongo">
+		<model>etc/model/test/Employee.xml</model>
+		<database-url>mongodb://localhost:27017/test</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<vendor>mysql</vendor>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="test-hbase">
+		<username>root></username>
+		<password>ENC:w6hxM9gnKlD84JVNXOfxwQ==</password>
+		<model>etc/model/test/Employee.xml</model>
+		<database-url>hbase://localhost:60000/test</database-url>
+		<vendor>hbase</vendor>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="test-ssh">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>etc/model/test/Employee.xml</model>
+		<database-url>jdbc:mysql://localhost:3306?useInformationSchema=true&amp;CatalogMeansCurrent=false</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<vendor>mysql</vendor>
+		<package-name>com.viper.unit.model</package-name>
+		<ssh>
+			<ssh-username>root</ssh-username>
+			<ssh-password>ENC:w6hxM9gnKlD84JVNXOfxwQ==</ssh-password>
+			<ssh-host>localhost</ssh-host>
+			<ssh-port>22</ssh-port>
+			<remote-host>localhost</remote-host>
+			<remote-port>3306</remote-port>
+		</ssh>
+	</connection>
+	<connection name="test-jta">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>etc/model/test/Employee.xml</model>
+		<database-url>jta:jdbc:mysql://localhost:3306?useInformationSchema=true&amp;CatalogMeansCurrent=false</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<vendor>mysql</vendor>
+		<package-name>com.viper.persistence0.model</package-name>
+	</connection>
+	<connection name="test-beans">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>etc/model/beans/bean.xml</model>
+		<database-url>jdbc:mysql://localhost:3306?useInformationSchema=true&amp;CatalogMeansCurrent=false</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<package-name>com.viper.beans.model</package-name>
+	</connection>
+	<connection name="test-h2">
+		<database-url>jdbc:h2:file:./build/databasedb;MODE=MYSQL;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090;LOCK_MODE=0;</database-url>
+		<driver>org.h2.Driver</driver>
+		<package-name>com.symantec.viewer.model</package-name>
+		<username>sa</username>
+	</connection>
+	<connection name="local">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<database-url>jdbc:mysql://localhost:3306?useInformationSchema=true&amp;CatalogMeansCurrent=false</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<vendor>mysql</vendor>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="postgres">
+		<username>postgres</username>
+		<password>viper1soft</password>
+		<database-url>jdbc:postgresql://localhost:5432</database-url>
+		<driver>org.postgresql.Driver</driver>
+		<vendor>postgres</vendor>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="mysql">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>etc/model/test/Employee.xml</model>
+		<database-url>jdbc:mysql://localhost:3306</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="testtypes">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>etc/model/test/testtypes-schema.xml</model>
+		<database-url>jdbc:mysql://localhost:3306/testtypes</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="education">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>etc/Education.xml</model>
+		<database-url>jdbc:mysql://localhost:3306</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="dictionary">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>etc/model/test/word.xml</model>
+		<database-url>jdbc:mysql://localhost:3306</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="baseball">
+		<username>root</username>
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
+		<model>"../baseball/etc/model</model>
+		<database-url>jdbc:mysql://localhost:3306</database-url>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="TEST-oracle">
+		<username>root</username>
+		<database-url>jdbc:oracle:thin:@localhost:1521:XE</database-url>
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="JNDI Datasource">
+		<username>db2</username>
+		<password>db2</password>
+		<database-url></database-url>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="Oracle">
+		<username>ora</username>
+		<password>ora</password>
+		<database-url>jdbc:oracle:thin:@localhost:1521:test</database-url>
+		<driver>oracle.jdbc.driver.OracleDriver</driver>
+		<package-name>com.viper.unit.model</package-name>
+	</connection>
+	<connection name="edge">
+		<database-url>jdbc:h2:file:./database/industrialdb;MODE=MYSQL;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9090;LOCK_MODE=0;</database-url>
+		<driver>org.h2.Driver</driver>
+		<package-name>com.viper.unit.model</package-name>
+		<username>sa</username>
+	</connection>
+</databaseConnections>

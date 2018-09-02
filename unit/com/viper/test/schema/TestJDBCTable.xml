@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd">
+	<database name="test">
+		<table name="classroom" charset-name="latin1" table-type="table" description="classroom is for testing purposes">
+			<column name="id" java-type="int" required="true" primary-key="true" persistent="true" />
+			<column name="teacher" java-type="String" required="false" size="32" />
+			<column name="roomname" java-type="String" required="false" size="32" />
+			<column name="student" java-type="String" required="false" size="32" />
+		</table>
+	</database>
+</databases>

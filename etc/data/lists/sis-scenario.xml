@@ -1,0 +1,129 @@
+<scenario>
+	<field name="has_dvr" type="enumeration">
+		<list>
+			<value>true</value>
+			<value>false</value>
+		</list>
+	</field>
+	<field name="has_sports_package" type="enumeration">
+		<list>
+			<value>true</value>
+			<value>false</value>
+		</list>
+	</field>
+	<field name="intent_to_purchase_laptop" type="enumeration">
+		<list>
+			<value>n</value>
+			<value>y</value>
+		</list>
+	</field>
+	<field name="household_status" type="enumeration">
+		<list>
+			<value>family</value>
+			<value>single</value>
+		</list>
+	</field>
+	<field name="internet_plan" type="enumeration">
+		<list>
+			<value>Silver</value>
+			<value>None</value>
+			<value>Bronze</value>
+			<value>Gold</value>
+		</list>
+	</field>
+	<field name="has_spanish_package" type="enumeration">
+		<list>
+			<value>true</value>
+			<value>false</value>
+		</list>
+	</field>
+	<field name="genre1" type="enumeration">
+		<list>
+			<value>Classic Movies</value>
+		</list>
+	</field>
+	<field name="has_babytv_vod" type="enumeration">
+		<list>
+			<value>true</value>
+			<value>false</value>
+		</list>
+	</field>
+	<field name="genre2" type="enumeration">
+		<list>
+			<value>Documentary</value>
+		</list>
+	</field>
+	<field name="voice_usage" type="enumeration">
+		<list>
+			<value>medium</value>
+			<value>very_low</value>
+			<value>heavy</value>
+			<value>low</value>
+		</list>
+	</field>
+	<field name="support_tru2way" type="enumeration">
+		<list>
+			<value>True</value>
+			<value>False</value>
+		</list>
+	</field>
+	<field name="genre_preference" type="enumeration">
+		<list>
+			<value>Science Fiction</value>
+			<value>Kid Movies</value>
+			<value>NFL</value>
+			<value>Travel Shows</value>
+		</list>
+	</field>
+	<field name="internet_usage" type="enumeration">
+		<list>
+			<value>high</value>
+			<value>medium</value>
+			<value>low</value>
+		</list>
+	</field>
+	<field name="age_group" type="enumeration">
+		<list>
+			<value>senior</value>
+			<value>adult</value>
+			<value>young adult</value>
+		</list>
+	</field>
+	<field name="gaming_interest" type="enumeration">
+		<list>
+			<value>n</value>
+			<value>y</value>
+		</list>
+	</field>
+	<field name="genre3" type="enumeration">
+		<list>
+			<value>Horror Movies</value>
+		</list>
+	</field>
+	<field name="voice_plan" type="enumeration">
+		<list>
+			<value>Silver</value>
+			<value>None</value>
+			<value>Bronze</value>
+			<value>Gold</value>
+		</list>
+	</field>
+	<field name="email_count" type="enumeration">
+		<list>
+			<value>1</value>
+			<value>none</value>
+			<value>2</value>
+			<value>3 or more</value>
+		</list>
+	</field>
+	<field name="household_income" type="enumeration">
+		<list>
+			<value>Over $150,000</value>
+			<value>$50,000 to $150,000</value>
+			<value>Under $50,000</value>
+		</list>
+	</field>
+	<field name="zip_code" type="string">
+		<class name="test.tv.blackarrow.integration.database.randomZipCode" />
+	</field>
+</scenario>

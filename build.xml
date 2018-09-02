@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="database" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:jacoco="antlib:org.jacoco.ant">
+	<property environment="env" />
+	<property file="${basedir}/build.properties" />
+	<property name="name" value="database" />
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="data.source" value="mysql" />
+	<property name="version" value="1.0" />
+	<property name="tomcat.dir" value="tomcat" />
+	<property name="tomcat.root" value="/opt" />
+	<property name="tomcat.home" value="/opt/${tomcat.dir}" />
+	<property name="test.name" value="Test*" />
+	<property name="source" value="1.8" />
+	<property name="target" value="1.8" />
+	<property name="database.name" value="test" />
+	<property name="test.url" value="https://localhost:8443/rest" />
+	<property name="authorize.service.url" value="${test.url}/authorize/" />
+	<property name="rest.service.url" value="${test.url}/classes/" />
+	<property name="web.service.url" value="${test.url}/web/classes/" />
+	<property name="war.name" value="rest.war" />
+	<property name="DatabaseUrl" value="jdbc:mysql://localhost:3306?user=root&amp;password=root&amp;useInformationSchema=true&amp;CatalogMeansCurrent=false" />
+	<!-- ===================================================================== -->
+	<!-- Defines the classpath used for compilation and test. -->
+	<!-- ===================================================================== -->
+	<path id="classpath.main">
+		<pathelement path="${build.dir}/classes" />
+		<pathelement path="${basedir}/src" />
+		<fileset dir="${basedir}/lib" includes="**/*.jar" excludes="jsf/**" />
+	</path>
+	<path id="classpath.schematool">
+		<pathelement path="${build.dir}/${name}.jar" />
+		<fileset dir="${basedir}/lib" includes="**/*.jar" excludes="jsf/**,jersey-2.0.1/**" />
+	</path>
+	<path id="classpath.tools">
+		<fileset dir="${basedir}/lib/libgen" includes="*.jar" />
+		<fileset dir="${basedir}/lib/local" includes="*.jar" />
+		<fileset dir="${basedir}/lib/libdev" includes="*.jar" />
+	</path>
+	<path id="classpath.test">
+		<pathelement path="${build.dir}/classes" />
+		<pathelement path="${basedir}/src" />
+		<pathelement path="${build.dir}/${name}-all.jar" />
+		<fileset dir="${basedir}/lib" includes="**/*.jar" />
+	</path>
+	<!-- =================================================================== -->
+	<!-- Cleans up generated stuff -->
+	<!-- =================================================================== -->
+	<target name="clean">
+		<delete quiet="true" dir="${build.dir}" />
+		<delete quiet="true" dir="${basedir}/srcgen" />
+		<delete quiet="true" dir="${basedir}/lib/libgen" />
+		<delete quiet="true" dir="${basedir}/lib/libdev" />
+		<delete quiet="true" dir="${basedir}/lib/drivers" />
+		<delete quiet="true" dir="/tmp/JNDI" />
+	</target>
+	<target name="very.clean" depends="clean">
+		<delete quiet="true" dir="${basedir}/benchmarks" />
+		<delete quiet="true" file="${basedir}/jacoco.exe" />
+	</target>
+	<!-- =================================================================== -->
+	<!-- Prepares the build directory -->
+	<!-- ${build.dir}/${name} is the root directory for the war file -->
+	<!-- =================================================================== -->
+	<target name="prepare">
+		<tstamp />
+		<mkdir dir="/tmp/JNDI" />
+		<mkdir dir="${build.dir}/classes" />
+		<mkdir dir="${build.dir}/out" />
+		<mkdir dir="${build.dir}/reports/raw" />
+		<mkdir dir="${build.dir}/doc/api" />
+		<mkdir dir="${basedir}/srcgen" />
+		<mkdir dir="${basedir}/lib/libgen" />
+		<mkdir dir="${basedir}/lib/libdev" />
+		<mkdir dir="${basedir}/lib/drivers" />
+		<copy todir="${build.dir}/classes">
+			<fileset dir="${basedir}/etc" includes="databases.xml" />
+			<fileset dir="${basedir}/etc" includes="schemas/**" />
+		</copy>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Update the junit in the ant directory -->
+	<!-- =================================================================== -->
+	<target name="resolve" depends="prepare">
+		<ivy:retrieve pattern="${basedir}/lib/[conf]/[artifact]-[revision].[ext]" conf="*" />
+		<ivy:report conf="*" todir="${build.dir}" />
+	</target>
+	<!-- =================================================================== -->
+	<!-- Task Definitions -->
+	<!-- =================================================================== -->
+	<target name="taskdefs" depends="resolve">
+		<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="classpath.tools" />
+		<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="classpath.tools" />
+		<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties" classpathref="classpath.tools" />
+	</target>
+	<!-- =================================================================== -->
+	<!-- Fix the crlf to lf -->
+	<!-- =================================================================== -->
+	<target name="fixcrlf" depends="taskdefs">
+		<fixcrlf srcdir="${basedir}/etc/tomcat" includes="**/*.sh,**/*.csv,**/*.proprerties,**/tomcat" eol="lf" />
+		<fixcrlf srcdir="${basedir}/etc/tomcat" includes="*.xml,*.properties,README" eol="lf" />
+	</target>
+	<!-- =================================================================== -->
+	<!-- Generate -->
+	<!-- =================================================================== -->
+	<target name="srcgen" depends="taskdefs">
+		<xjc schema="${basedir}/etc/schemas/database.xsd" destdir="${basedir}/srcgen" package="com.viper.database.model">
+			<arg line="-npa -extension -Xinject-code" />
+			<binding dir="${basedir}/etc/schemas" includes="toString.xjb" />
+			<binding dir="${basedir}/etc/schemas" includes="simple-database.xjb" />
+		</xjc>
+		<xjc schema="${basedir}/etc/schemas/layout.xsd" destdir="${basedir}/srcgen" package="com.viper.database.layout.model">
+			<arg line="-npa -extension -Xinject-code" />
+			<binding dir="${basedir}/etc/schemas" includes="simple-layout.xjb" />
+		</xjc>
+		<xjc schema="${basedir}/etc/schemas/params.xsd" destdir="${basedir}/srcgen" package="com.viper.database.params.model">
+			<arg line="-npa -extension -Xinject-code" />
+			<binding dir="${basedir}/etc/schemas" includes="simple-params.xjb" />
+		</xjc>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Compiles the source code -->
+	<!-- =================================================================== -->
+	<target name="schematool" depends="srcgen">
+		<javac destdir="${build.dir}/classes" srcdir="srcgen" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
+			<include name="**/*.java" />
+			<classpath refid="classpath.test" />
+		</javac>
+		<javac destdir="${build.dir}/classes" srcdir="src" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
+			<include name="**/*.java" />
+			<exclude name="com/viper/rest/**/*.java" />
+			<classpath refid="classpath.test" />
+		</javac>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Pre-compiles the need schematool built -->
+	<!-- =================================================================== -->
+	<target name="pre.compile" depends="schematool">
+		<javac destdir="${build.dir}/classes" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
+			<src path="src" />
+			<include name="com/viper/database/**/*.java" />
+			<classpath refid="classpath.main" />
+		</javac>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Database Generation -->
+	<!-- =================================================================== -->
+	<target name="model" depends="pre.compile">
+		<java fork="true" classname="com.viper.database.tools.Schematool" dir="${basedir}">
+			<!-- <arg line="-annotation etc/schemas/database.xsd Column src res:/com/viper/database/translators/annotations/annotation.txt" 
+				/> <arg line="-annotation etc/schemas/database.xsd Table src res:/com/viper/database/translators/annotations/annotation.txt" 
+				/> <arg line="-annotation etc/schemas/database.xsd ForeignKey src res:/com/viper/database/translators/annotations/annotation.txt" 
+				/> <arg line="-annotation etc/schemas/database.xsd Index src res:/com/viper/database/translators/annotations/annotation.txt" 
+				/> -->
+			<arg line="-pojo etc/rest srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.database.rest.model" />
+			<arg line="-pojo etc/model/beans srcgen  res:/com/viper/database/translators/web/details.bootstrap.grid.txt com.viper.demo.html.details" />
+			<arg line="-pojo etc/model/test srcgen  res:/com/viper/database/translators/web/details.bootstrap.grid.txt com.viper.demo.html.details" />
+			<arg line="-pojo etc/model/beans srcgen  res:/com/viper/database/translators/web/details.bootstrap.vertical.grid.txt com.viper.demo.html.details.vertical" />
+			<arg line="-pojo etc/model/test srcgen  res:/com/viper/database/translators/web/details.bootstrap.vertical.grid.txt com.viper.demo.html.details.vertical" />
+			<arg line="-pojo etc/model/beans srcgen  res:/com/viper/database/translators/web/table.txt com.viper.demo.html.tables" />
+			<arg line="-pojo etc/model/test srcgen  res:/com/viper/database/translators/web/table.txt com.viper.demo.html.tables" />
+			<arg line="-pojos etc/model/beans srcgen  res:/com/viper/database/translators/web/master.txt com.viper.demo.html.tables" />
+			<arg line="-pojos etc/model/test srcgen  res:/com/viper/database/translators/web/master.txt com.viper.demo.html.tables" />
+			<arg line="-pojo etc/model/information_schema srcgen res:/com/viper/database/translators/bean/enum.txt com.viper.demo.mysql.information_schema.model" />
+			<arg line="-pojo etc/model/information_schema srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.mysql.information_schema.model" />
+			<arg line="-pojo etc/model/information_schema srcgen res:/com/viper/database/translators/bean/testbean.txt com.viper.demo.mysql.information_schema.model" />
+			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/bean/enum.txt com.viper.demo.beans.model" />
+			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.beans.model" />
+			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/hadoop/dbwritable.txt com.viper.demo.beans.model.writable" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/hibernate.2/enum.txt com.viper.demo.hibernate2.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/hibernate.2/bean.txt com.viper.demo.hibernate2.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/persistence.0/enum.txt com.viper.demo.persistence0.test.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/persistence.0/bean.txt com.viper.demo.persistence0.test.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/enum.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/restservice.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/daoservice.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testbean.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testdaobean.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testrestclient.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testrestserver.txt com.viper.demo.unit.model" />
+			<arg line="-resources etc/model/test ${basedir}/etc/lang-gen/resources.man.properties ${build.dir}/resource.properties" />
+			<arg line="-print etc/model/test ${build.dir}/out com.viper.demo.unit.model" />
+			<!-- NEW <arg line="-test src/com/viper/database/tools srcgen/com/viper/database/tools res:/com/viper/database/translators/tests/junit-test.txt 
+				com.viper.database.tools" /> -->
+			<arg line="-model2sql etc/model/test test mysql ${build.dir}/create.test.sql" />
+			<jvmarg line="${jvm.args}" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Compiles the source code -->
+	<!-- =================================================================== -->
+	<target name="compile" depends="model">
+		<javac destdir="${build.dir}/classes" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
+			<src path="src:srcgen:unit" />
+			<classpath refid="classpath.main" />
+		</javac>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Creates the jar archive -->
+	<!-- =================================================================== -->
+	<target name="jar" depends="compile">
+		<manifest file="${build.dir}/info.txt">
+			<attribute name="Manifest-Version" value="1.0" />
+			<attribute name="Sealed" value="false" />
+			<attribute name="MainTest-Version" value="${version}" />
+			<attribute name="Build-Date" value="${TODAY}" />
+			<attribute name="Build-Time" value="${TSTAMP}" />
+			<attribute name="Main-Class" value="com.viper.database.tools.Schematool" />
+		</manifest>
+		<jar jarfile="${build.dir}/${name}.jar" manifest="${build.dir}/info.txt">
+			<fileset dir="${basedir}/etc" includes="META-INF/**" />
+			<fileset dir="${basedir}" includes="etc/data/lists/*.*" />
+			<fileset dir="${build.dir}/classes" includes="com/viper/database/**/*.*" />
+			<fileset dir="${basedir}/src" excludes="**/*.java" />
+		</jar>
+		<jar jarfile="${build.dir}/${name}-all.jar" manifest="${build.dir}/info.txt">
+			<fileset dir="${basedir}/etc" includes="META-INF/**" />
+			<fileset dir="${basedir}" includes="etc/data/lists/*.*" />
+			<fileset dir="${build.dir}/classes" />
+			<fileset dir="${basedir}/src" excludes="**/*.java" />
+			<fileset dir="${basedir}/srcgen" excludes="**/*.java" />
+			<fileset dir="${basedir}/unit" excludes="**/*.java" />
+		</jar>
+	</target>
+	<target name="war" depends="jar">
+		<war destfile="${build.dir}/${war.name}" needxmlfile="false" webxml="${basedir}/etc/web/web.xml">
+			<classes dir="${basedir}/etc" includes="databases.xml" />
+			<lib dir="${build.dir}" includes="${name}-all.jar" />
+			<mappedresources>
+				<fileset dir="${basedir}/lib" includes="**/*.jar" excludes="jersey-2.0.1/**/*.jar,dev/**/*.jar" />
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*.jar" to="WEB-INF/lib/*.jar" />
+				</chainedmapper>
+			</mappedresources>
+		</war>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Creates the source archive -->
+	<!-- =================================================================== -->
+	<target name="src.jar">
+		<jar jarfile="${build.dir}/${name}-src.jar">
+			<fileset dir="${basedir}/.." includes="${name}/etc/**" />
+			<fileset dir="${basedir}/.." includes="${name}/lib/**" />
+			<fileset dir="${basedir}/.." includes="${name}/src/**" />
+			<fileset dir="${basedir}/.." includes="${name}/srcgen/**" />
+			<fileset dir="${basedir}/.." includes="${name}/unit/**" />
+			<fileset dir="${basedir}/.." includes="${name}/*" />
+			<fileset dir="${basedir}/.." includes="${name}/*.*" />
+		</jar>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Check the style of sources (Java). -->
+	<!-- =================================================================== -->
+	<target name="checkstyle">
+		<checkstyle config="${basedir}/etc/checkstyle/xlims_checks.xml" failureProperty="checkstyle.failure" failOnViolation="false">
+			<formatter type="xml" tofile="${build.dir}/checkstyle_report.xml" />
+			<fileset dir="${basedir}/src" includes="**/*.java" />
+			<fileset dir="${basedir}/srcgen" includes="**/*.java" />
+		</checkstyle>
+		<style in="${build.dir}/checkstyle_report.xml" out="${build.dir}/checkstyle_report.html" style="checkstyle.xsl" />
+	</target>
+	<!-- =================================================================== -->
+	<!-- Jar dependencies. -->
+	<!-- =================================================================== -->
+	<target name="schematool.exe">
+		<jar destfile="${build.dir}/external.jar">
+			<zipgroupfileset dir="${basedir}/lib/jersey-2.0.1" includes="**/*.jar" />
+			<zipgroupfileset dir="${basedir}/lib/libgen" includes="*.jar" />
+			<zipgroupfileset dir="${basedir}/lib/libdev" includes="*.jar" />
+			<zipgroupfileset dir="${basedir}/lib/drivers" includes="*.jar" />
+			<zipgroupfileset dir="${basedir}/lib/local" includes="*.jar" />
+		</jar>
+		<jar destfile="${build.dir}/schematool.jar" filesetmanifest="skip">
+			<fileset dir="${basedir}/etc" includes="databases.xml" />
+			<zipfileset src="${build.dir}/${name}.jar" />
+			<zipfileset src="${build.dir}/external.jar" excludes="META-INF/**/*" />
+			<manifest>
+				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Main-Class" value="com.viper.database.tools.Schematool" />
+			</manifest>
+		</jar>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Jar Dependencies. -->
+	<!-- =================================================================== -->
+	<target name="jdeps">
+		<exec executable="jdeps">
+			<arg line="-v -recursive -classpath='${basedir}/lib' ${build.dir}/${name}.jar" />
+		</exec>
+	</target>
+	<!-- =================================================================== -->
+	<target name="info">
+		<java fork="true" classname="com.viper.database.tools.Schematool" dir="${basedir}">
+			<arg line="-grab ${DatabaseUrl} information_schema etc/model" />
+			<arg line="-grab ${DatabaseUrl} mysql etc/model" />
+			<jvmarg line="${jvm.args}" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target>
+	<target name="dbgen">
+		<java fork="true" classname="com.viper.database.tools.Schematool" dir="${basedir}">
+			<arg line="-meta2database ${DatabaseUrl} mysql com.viper.database.model build/import.sql etc/model/beans etc/model/test" />
+			<jvmarg line="${jvm.args}" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target>
+	<target name="seed">
+		<java classname="com.viper.database.tools.Schematool">
+			<arg line="-seed ${DatabaseUrl} com.viper.primefaces.model etc/model/beans etc/model/test" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target>
+	<target name="password">
+		<java classname="com.viper.database.tools.Schematool">
+			<arg line="-password p@ssw0rd9" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target>
+	<target name="decrypt.old">
+		<java classname="com.viper.database.tools.Schematool">
+			<arg line="-decrypt ssateL1 DES ../../tools/XMS_20171130-151820.sql.encrypt XMS_20171130-151820.sql" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target>
+	<target name="decrypt">
+		<exec executable="bash">
+			<arg line="-c 'openssl enc -base64 -d -in ../../tools/XMS_20171130-151820.sql.encrypt | openssl aes-256-cbc -k ssateL1 -d -salt  -out ../../tools/XMS_20171130-151820.sql'" />
+		</exec>
+	</target>
+	<target name="formatter" depends="compile">
+		<jalopy fileformat="unix" convention="http://www.tnevin.com/formats/java-eclipse-format.xml" history="file" historymethod="adler32" loglevel="info" threads="2" classpathref="classpath.main">
+			<fileset dir="${basedir}/srcgen" includes="**/*.java" />
+		</jalopy>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Runs the test -->
+	<!-- =================================================================== -->
+	<target name="deploy.all">
+		<!-- <unzip src="${basedir}/external/${tomcat.dir}.zip" dest="${tomcat.root}" /> -->
+		<mkdir dir="${tomcat.home}/logs" />
+		<!-- Copy rest services war to tomcat directory -->
+		<copy todir="${tomcat.home}/webapps">
+			<fileset dir="${build.dir}" includes="${war.name}" />
+		</copy>
+		<!-- Copy bin extensions to tomcat directory -->
+		<copy todir="${tomcat.home}/bin">
+			<fileset dir="${basedir}/etc/tomcat" includes="**" />
+		</copy>
+		<!-- Copy lib extensions to tomcat directory -->
+		<copy todir="${tomcat.home}/lib">
+			<fileset dir="${basedir}/lib/libgen" includes="mysql-connector*.jar" />
+		</copy>
+		<!-- set permissions -->
+		<chmod perm="755">
+			<fileset dir="${tomcat.home}">
+				<include name="**/*" />
+				<include name="**/*.*" />
+			</fileset>
+		</chmod>
+		<chown owner="Tom">
+			<fileset dir="${tomcat.home}">
+				<include name="**/*" />
+				<include name="**/*.*" />
+			</fileset>
+		</chown>
+		<chmod perm="755" type="file">
+			<fileset dir="${tomcat.home}/bin">
+				<include name="*.sh" />
+				<include name="*.bat" />
+			</fileset>
+		</chmod>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Runs the test -->
+	<!-- =================================================================== -->
+	<target name="deploy">
+		<delete quiet="true" dir="${tomcat.home}/webapps/${war.name}" />
+		<!-- Copy rest services war to tomcat directory -->
+		<copy todir="${tomcat.home}/webapps">
+			<fileset dir="${build.dir}" includes="${war.name}" />
+		</copy>
+		<chmod file="${tomcat.home}/webapps/${war.name}" perm="775" />
+		<!-- Copy lib extensions to tomcat directory -->
+		<copy todir="${tomcat.home}/lib">
+			<fileset dir="${basedir}/lib/libgen" includes="mysql-connector*.jar" />
+		</copy>
+		<!-- Copy tomcat/conf extensions to tomcat directory -->
+		<copy todir="${tomcat.home}">
+			<fileset dir="${basedir}/etc/tomcat" includes="**" />
+		</copy>
+		<!-- set permissions -->
+		<chmod perm="755">
+			<fileset dir="${tomcat.home}">
+				<include name="**/*" />
+				<include name="**/*.*" />
+			</fileset>
+		</chmod>
+		<chown owner="Tom">
+			<fileset dir="${tomcat.home}">
+				<include name="**/*" />
+				<include name="**/*.*" />
+			</fileset>
+		</chown>
+		<chmod perm="755" type="file">
+			<fileset dir="${tomcat.home}/bin">
+				<include name="*.sh" />
+				<include name="*.bat" />
+			</fileset>
+		</chmod>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Runs the test -->
+	<!-- =================================================================== -->
+	<target name="start.tomcat">
+		<exec executable="bash" dir="${tomcat.home}/bin" osfamily="windows">
+			<arg line="-c ./startup.bat" />
+		</exec>
+		<exec executable="bash" dir="${tomcat.home}/bin" osfamily="unix">
+			<arg line="-c ./startup.sh" />
+		</exec>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Runs the test -->
+	<!-- =================================================================== -->
+	<target name="stop.tomcat">
+		<exec executable="bash" dir="${tomcat.home}/bin" osfamily="windows">
+			<arg line="-c ./shutdown.bat" />
+		</exec>
+		<exec executable="bash" dir="${tomcat.home}/bin" osfamily="unix">
+			<arg line="-c ./shutdown.sh" />
+		</exec>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Runs the test -->
+	<!-- =================================================================== -->
+	<target name="junit">
+		<jacoco:coverage destfile="${build.dir}/jacoco.exe">
+			<junit fork="true" forkmode="once" printsummary="yes" tempdir="${build.dir}" haltonfailure="no" showoutput="yes" timeout="6000000" outputtoformatters="yes">
+				<sysproperty key="jub.consumers" value="H2" />
+				<sysproperty key="jub.charts.dir" value="${basedir}/benchmarks" />
+				<sysproperty key="jub.db.file" value="${basedir}/benchmarks/.benchmarks" />
+				<sysproperty key="basedir" value="${basedir}" />
+				<classpath>
+					<path refid="classpath.test" />
+				</classpath>
+				<formatter type="xml" />
+				<batchtest haltonfailure="no" fork="true" todir="${build.dir}/reports/raw">
+					<fileset dir="${basedir}/srcgen" includes="**/${test.name}.java" />
+					<fileset dir="${basedir}/unit" includes="**/${test.name}.java" />
+					<formatter type="xml" />
+				</batchtest>
+				<jvmarg value="-Drest.service.url=${rest.service.url}" />
+				<jvmarg value="-Dweb.service.url=${web.service.url}" />
+				<jvmarg value="-Dauthorize.service.url=${authorize.service.url}" />
+				<jvmarg value="-DDATABASE_LOCATOR=${database.name}" />
+				<jvmarg line="${jvm.args}" />
+				<jvmarg value="-XX:-UseSplitVerifier" />
+			</junit>
+		</jacoco:coverage>
+	</target>
+	<target name="junit-report">
+		<junitreport todir="${build.dir}/reports/raw">
+			<fileset dir="${build.dir}/reports/raw" includes="TEST-*.xml" />
+			<report format="frames" todir="${build.dir}/reports" />
+		</junitreport>
+	</target>
+	<target name="jacoco-report">
+		<jacoco:report>
+			<executiondata>
+				<file file="${build.dir}/jacoco.exe" />
+			</executiondata>
+			<structure name="Database Project">
+				<classfiles>
+					<fileset dir="${build.dir}/classes" />
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${basedir}/src" />
+					<fileset dir="${basedir}/srcgen" />
+					<fileset dir="${basedir}/unit" />
+				</sourcefiles>
+			</structure>
+			<html destdir="${build.dir}/jacoco/" />
+		</jacoco:report>
+	</target>
+	<!-- =================================================================== -->
+	<!-- Creates the API documentation -->
+	<!-- =================================================================== -->
+	<target name="javadoc">
+		<javadoc packagenames="*" sourcepath="${basedir}/src" destdir="${basedir}/build/doc/api" author="true" version="true" windowtitle="${Name} ${version} API" doctitle="${Name}" footer="Copyright &amp;copy; 1997-2015 Viper Software. See &lt;a target=&quot;_top&quot; href=&quot;../license.html&quot;&gt;license agreement&lt;/A&gt; for rights granted.">
+			<classpath refid="classpath.main" />
+		</javadoc>
+	</target>
+	<!-- =================================================================== -->
+	<target name="test-all" depends="taskdefs,deploy,start.tomcat,junit,stop.tomcat,junit-report,jacoco-report" />
+	<target name="test" depends="taskdefs,deploy,junit,junit-report,jacoco-report" />
+	<target name="cruise-control" depends="clean,war,deploy,junit,junit-report,jacoco-report,javadoc" />
+	<target name="all" depends="clean,war,src.jar" />
+</project>

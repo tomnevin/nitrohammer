@@ -1,0 +1,59 @@
+## for (var table : root.tables) {
+## if (table.tableType.value() == 'table' || table.tableType.value() == 'view' || table.tableType.value() == 'base-table') {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/test/Test" + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.test;
+
+import org.junit.Test;
+
+import com.viper.database.annotations.Column;
+import com.viper.database.annotations.Table;
+import com.viper.database.dao.DatabaseUtil;
+import #{database.packageName}.*;
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+public class Test#{classname} extends AbstractTestCase {
+
+    private static final int Iterations = 100;
+
+    ## for (column : table.getColumns()) {
+   
+    @Test
+    public void test#{java.toJavaName(column)}() throws Exception {
+        Table table = DatabaseUtil.getTableAnnotation(#{classname}.class);
+        assertNotNull(getCallerMethodName() + ", " + table, table);
+        
+        Column column = DatabaseUtil.getColumnAnnotation(#{classname}.class, "#{java.toJavaVariableName(column)}");
+        assertNotNull(getCallerMethodName() + ", " + column, column);
+        
+        #{classname} bean = new #{classname}();
+        #{java.toJavaType(column)} expected =  (#{java.toJavaType(column)})RandomBean.randomValue(bean, table, column, #{java.toClass(column)}, #{java.toGenericClass(column)}, 1);
+        bean.set#{java.toJavaName(column)}(expected);
+        #{java.toJavaType(column)} actual = bean.get#{java.toJavaName(column)}();
+ 
+        ## if (!java.isDecimal(column)) {
+        assertEquals(getCallerMethodName() + ",#{java.toJavaName(column)}", expected, actual);
+        ## }
+        ## if (java.isDecimal(column)) {
+        assertEquals(getCallerMethodName() + ",#{java.toJavaName(column)}", expected, actual, 0.0000000001);
+        ## }
+    }
+    ## }
+
+}
+## util.write(filename, writer);
+## }
+## }

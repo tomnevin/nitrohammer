@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:ci="http://jaxb.dev.java.net/plugin/code-injector" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	jxb:extensionBindingPrefixes="ci" jxb:version="2.1">
+	<jxb:bindings schemaLocation="database.xsd">
+		<jxb:bindings node="/xs:schema/xs:complexType[@name='DatabaseConnections']">
+			<ci:code> 
+		@Override 
+		public String toString() { 
+		     return this.getFilename();
+		}
+			</ci:code>
+		</jxb:bindings>
+		<jxb:bindings node="/xs:schema/xs:complexType[@name='DatabaseConnection']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getName();
+        }
+            </ci:code>
+        </jxb:bindings>
+        <jxb:bindings node="/xs:schema/xs:complexType[@name='Database']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getName();
+        }
+            </ci:code>
+        </jxb:bindings>
+        <jxb:bindings node="/xs:schema/xs:complexType[@name='Table']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getName();
+        }
+            </ci:code>
+        </jxb:bindings>
+        <jxb:bindings node="/xs:schema/xs:complexType[@name='Column']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getName();
+        }
+            </ci:code>
+        </jxb:bindings>
+        <jxb:bindings node="/xs:schema/xs:complexType[@name='User']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getName();
+        }
+            </ci:code>
+        </jxb:bindings>
+        <jxb:bindings node="/xs:schema/xs:complexType[@name='Procedure']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getName();
+        }
+            </ci:code>
+        </jxb:bindings>
+        <jxb:bindings node="/xs:schema/xs:complexType[@name='EnumItem']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getName() + ":" + this.getValue();
+        }
+            </ci:code>
+        </jxb:bindings>
+	</jxb:bindings>
+</jxb:bindings>

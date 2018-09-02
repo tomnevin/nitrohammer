@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test">
+	<table name="bean4" is-rest-service="true">
+		<column name='id' java-type='int' required='true' primary-key='true' id-method="autoincrement" />
+		<column name="beans" java-type="java.util.List" generic-type="com.viper.demo.beans.model.Bean" />
+		<column name="enumColumn4A" java-type="com.viper.demo.beans.model.enums.MyColor4A" data-type="enum">
+			<enum-value>RED</enum-value>
+			<enum-value>GREEN</enum-value>
+			<enum-value>BLUE</enum-value>
+		</column>
+		<column name="enumColumn4B" java-type="com.viper.demo.beans.model.enums.MyColor4B">
+			<enum-value>RED</enum-value>
+			<enum-value>GREEN</enum-value>
+			<enum-value>BLUE</enum-value>
+		</column>
+	</table>
+</database>

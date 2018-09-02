@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/OPTIMIZER_TRACE.xml">
+    <table name="OPTIMIZER_TRACE" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="innodb" is-rest-service="false" row-format="dynamic" iterations="0">
+        <column name="QUERY" java-type="String" data-type="longtext" extra-data-type="longtext" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="TRACE" java-type="String" data-type="longtext" extra-data-type="longtext" size="4294967295" order="1" persistent="true" required="true"/>
+        <column name="MISSING_BYTES_BEYOND_MAX_MEM_SIZE" java-type="int" data-type="int" extra-data-type="int(20)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="INSUFFICIENT_PRIVILEGES" java-type="int" data-type="tinyint" extra-data-type="tinyint(1)" default-value="0" size="3" order="1" persistent="true" required="true"/>
+    </table>
+</database>

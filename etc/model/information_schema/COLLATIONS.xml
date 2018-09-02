@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/COLLATIONS.xml">
+    <table name="COLLATIONS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="COLLATION_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="CHARACTER_SET_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="ID" java-type="long" data-type="bigint" extra-data-type="bigint(11)" default-value="0" size="19" order="1" persistent="true" required="true"/>
+        <column name="IS_DEFAULT" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="IS_COMPILED" java-type="String" data-type="varchar" extra-data-type="varchar(3)" size="3" order="1" persistent="true" required="true"/>
+        <column name="SORTLEN" java-type="long" data-type="bigint" extra-data-type="bigint(3)" default-value="0" size="19" order="1" persistent="true" required="true"/>
+    </table>
+</database>

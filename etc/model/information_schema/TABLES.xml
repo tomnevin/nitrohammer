@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/TABLES.xml">
+    <table name="TABLES" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="TABLE_CATALOG" java-type="String" data-type="varchar" extra-data-type="varchar(512)" size="512" order="1" persistent="true" required="true"/>
+        <column name="TABLE_SCHEMA" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TABLE_NAME" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="TABLE_TYPE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="ENGINE" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="VERSION" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="ROW_FORMAT" java-type="String" data-type="varchar" extra-data-type="varchar(10)" size="10" order="1" persistent="true" required="true"/>
+        <column name="TABLE_ROWS" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="AVG_ROW_LENGTH" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="DATA_LENGTH" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="MAX_DATA_LENGTH" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="INDEX_LENGTH" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="DATA_FREE" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="AUTO_INCREMENT" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="CREATE_TIME" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="UPDATE_TIME" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="CHECK_TIME" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="TABLE_COLLATION" java-type="String" data-type="varchar" extra-data-type="varchar(32)" size="32" order="1" persistent="true" required="true"/>
+        <column name="CHECKSUM" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" size="20" order="1" persistent="true" required="true"/>
+        <column name="CREATE_OPTIONS" java-type="String" data-type="varchar" extra-data-type="varchar(255)" size="255" order="1" persistent="true" required="true"/>
+        <column name="TABLE_COMMENT" java-type="String" data-type="varchar" extra-data-type="varchar(2048)" size="2048" order="1" persistent="true" required="true"/>
+    </table>
+</database>

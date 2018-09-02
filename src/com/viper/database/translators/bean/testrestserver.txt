@@ -1,0 +1,126 @@
+## for (var table : root.tables) {
+## if (table.isRestService) {
+## if (table.tableType.value() == 'table' || table.tableType.value() == 'view' || table.tableType.value() == 'base-table') {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/rs/server/test/Test" + classname + "RestServer.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.rs.server.test;
+
+import java.util.List;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.viper.database.dao.DatabaseInterface;
+import com.viper.database.dao.DatabaseFactory;
+import com.viper.database.dao.DatabaseUtil;
+import #{database.packageName}.#{classname};
+import #{database.packageName}.rs.#{classname}Service;
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+import com.viper.database.rest.model.*;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+
+public class Test#{classname}RestServer extends AbstractTestCase {
+
+    private static DatabaseInterface database = null;
+
+    @BeforeClass
+    public static void initializeClass() throws Exception {
+
+		String DatabaseInstanceName = com.viper.database.utils.ResourceUtil.getResource("DATABASE_LOCATOR", "test");
+		System.err.println("Test#{classname}RestServer: database : " + DatabaseInstanceName);
+        database = DatabaseFactory.getInstance(DatabaseInstanceName);
+    }
+
+    @Test
+    public void testQueryOne() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        #{classname} result = database.insert(expected);
+        assertNotNull(getCallerMethodName() + ", result= ", result);
+        
+        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result);
+        
+        java.util.List<String> items = new java.util.ArrayList<String>();
+        items.add(name);
+        items.add(value.toString());
+        
+        #{classname} actual = new #{classname}Service().query(items);
+
+        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+    }
+
+    @Test
+    public void testQueryList() throws Exception {
+
+        java.util.List<#{classname}> result = new #{classname}Service().query();
+
+        System.err.println(getCallerMethodName() + ": " + result);
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+    
+    @Test
+    public void testQueryPage() throws Exception {
+
+        java.util.List<#{classname}> result = new #{classname}Service().queryList("start", "0" /*, "size", 4 */);
+
+        System.err.println(getCallerMethodName() + ": " + result);
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
+
+        #{classname} result = new #{classname}Service().update(bean);
+
+        System.err.println(getCallerMethodName() + ": " + result);
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+
+    @Test
+    public void testCreate() throws Exception {
+
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
+
+        #{classname} result = new #{classname}Service().createItem(bean);
+
+        System.err.println(getCallerMethodName() + ": " + result);
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
+        
+        #{classname} result1 = new #{classname}Service().createItem(bean);
+        assertNotNull(getCallerMethodName() + ", failed:", result1);
+
+        String result = new #{classname}Service().deleteItem(bean);
+
+        System.err.println(getCallerMethodName() + ": " + result);
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+}
+## util.write(filename, writer);
+## }
+## }
+## }

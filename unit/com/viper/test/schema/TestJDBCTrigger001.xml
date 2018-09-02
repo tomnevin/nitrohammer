@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	charset-name="utf8" name="test" version="3.2">
+	<table engine="myisam" name="TriggerTableInsert" table-type="table">
+		<column java-type="int" name="A" />
+		<column java-type="int" name="B" />
+		<column java-type="int" name="C" />
+	</table>
+	<table engine="myisam" name="TriggerTable" table-type="table">
+		<column java-type="int" name="id" />
+		<column java-type="String" name="name" />
+		<trigger event="delete" name="trigger01" statement="begin insert triggertableinsert (a, b, c) values (0, 1, 2); end"
+			time="before" username="demo" />
+		<row>
+			<cell name="id">1</cell>
+			<cell name="name">Tom</cell>
+		</row>
+		<row>
+			<cell name="id">2</cell>
+			<cell name="name">Dana</cell>
+		</row>
+		<row>
+			<cell name="id">3</cell>
+			<cell name="name">Chrissy</cell>
+		</row>
+	</table>
+</database>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/PROFILING.xml">
+    <table name="PROFILING" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="QUERY_ID" java-type="int" data-type="int" extra-data-type="int(20)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="SEQ" java-type="int" data-type="int" extra-data-type="int(20)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="STATE" java-type="String" data-type="varchar" extra-data-type="varchar(30)" size="30" order="1" persistent="true" required="true"/>
+        <column name="DURATION" java-type="double" data-type="decimal" extra-data-type="decimal(9,6)" decimal-size="6" default-value="0.000000" size="9" order="1" persistent="true" required="true"/>
+        <column name="CPU_USER" java-type="double" data-type="decimal" extra-data-type="decimal(9,6)" decimal-size="6" size="9" order="1" persistent="true" required="true"/>
+        <column name="CPU_SYSTEM" java-type="double" data-type="decimal" extra-data-type="decimal(9,6)" decimal-size="6" size="9" order="1" persistent="true" required="true"/>
+        <column name="CONTEXT_VOLUNTARY" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="CONTEXT_INVOLUNTARY" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="BLOCK_OPS_IN" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="BLOCK_OPS_OUT" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="MESSAGES_SENT" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="MESSAGES_RECEIVED" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="PAGE_FAULTS_MAJOR" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="PAGE_FAULTS_MINOR" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="SWAPS" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+        <column name="SOURCE_FUNCTION" java-type="String" data-type="varchar" extra-data-type="varchar(30)" size="30" order="1" persistent="true" required="true"/>
+        <column name="SOURCE_FILE" java-type="String" data-type="varchar" extra-data-type="varchar(20)" size="20" order="1" persistent="true" required="true"/>
+        <column name="SOURCE_LINE" java-type="int" data-type="int" extra-data-type="int(20)" size="10" order="1" persistent="true" required="true"/>
+    </table>
+</database>

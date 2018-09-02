@@ -1,0 +1,65 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + '/' + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// ============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{packagename};
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+@SuppressWarnings("serial")
+public class #{classname} implements java.io.Serializable {
+
+## for (var column : table.columns) {
+
+    private #{java.toJavaType(column)} #{java.toJavaVariableName(column)};
+    public #{java.toJavaType(column)} get#{java.toJavaName(column)}() {
+        return this.#{java.toJavaVariableName(column)};
+    }
+    public void set#{java.toJavaName(column)}(#{java.toJavaType(column)} #{java.toJavaVariableName(column)}) {
+        this.#{java.toJavaVariableName(column)} = #{java.toJavaVariableName(column)};
+    }  
+## }
+
+## for (var foreignKey : table.foreignKeys) {
+## if (foreignKey.unique) {
+##     var className = java.toJavaNameFromField(foreignKey.foreignTable)
+##     var variableName = java.toJavaVariableNameFromField(foreignKey.foreignTable)
+    private #{className} #{variableName};
+
+    public #{className} get#{className}() {
+        return this.#{variableName};
+    }    
+
+    public void set#{className}(#{className} #{variableName}) {
+        this.#{variableName} = #{variableName};
+    } 
+## }
+## }
+
+## for (var foreignKey : table.foreignKeys) {
+## if (not foreignKey.unique) {
+##     var className = java.toJavaNameFromField(foreignKey.foreignTable)
+##     var variableName = java.toJavaVariableNameFromField(foreignKey.foreignTable)
+    private java.util.List<#{className}> #{variableName}s;
+
+    public java.util.List<#{className}> get#{className}s() {
+        return this.#{variableName}s;
+    }   
+
+    public void set#{className}s(java.util.List<#{className}> #{variableName}s) {
+        this.#{variableName}s = #{variableName}s;
+    }
+## }
+## }
+}
+## util.write(filename, writer);
+## }

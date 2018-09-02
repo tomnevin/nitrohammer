@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/INNODB_TRX.xml">
+    <table name="INNODB_TRX" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="trx_id" java-type="String" data-type="varchar" extra-data-type="varchar(18)" size="18" order="1" persistent="true" required="true"/>
+        <column name="trx_state" java-type="String" data-type="varchar" extra-data-type="varchar(13)" size="13" order="1" persistent="true" required="true"/>
+        <column name="trx_started" java-type="long" data-type="datetime" extra-data-type="datetime" default-value="0000-00-00 00:00:00" order="1" persistent="true" required="true"/>
+        <column name="trx_requested_lock_id" java-type="String" data-type="varchar" extra-data-type="varchar(81)" size="81" order="1" persistent="true" required="true"/>
+        <column name="trx_wait_started" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="trx_weight" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_mysql_thread_id" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_query" java-type="String" data-type="varchar" extra-data-type="varchar(1024)" size="1024" order="1" persistent="true" required="true"/>
+        <column name="trx_operation_state" java-type="String" data-type="varchar" extra-data-type="varchar(64)" size="64" order="1" persistent="true" required="true"/>
+        <column name="trx_tables_in_use" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_tables_locked" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_lock_structs" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_lock_memory_bytes" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_rows_locked" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_rows_modified" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_concurrency_tickets" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_isolation_level" java-type="String" data-type="varchar" extra-data-type="varchar(16)" size="16" order="1" persistent="true" required="true"/>
+        <column name="trx_unique_checks" java-type="int" data-type="int" extra-data-type="int(1)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="trx_foreign_key_checks" java-type="int" data-type="int" extra-data-type="int(1)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="trx_last_foreign_key_error" java-type="String" data-type="varchar" extra-data-type="varchar(256)" size="256" order="1" persistent="true" required="true"/>
+        <column name="trx_adaptive_hash_latched" java-type="int" data-type="int" extra-data-type="int(1)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="trx_adaptive_hash_timeout" java-type="long" data-type="bigint" extra-data-type="bigint(21) unsigned" default-value="0" size="20" order="1" persistent="true" required="true"/>
+        <column name="trx_is_read_only" java-type="int" data-type="int" extra-data-type="int(1)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+        <column name="trx_autocommit_non_locking" java-type="int" data-type="int" extra-data-type="int(1)" default-value="0" size="10" order="1" persistent="true" required="true"/>
+    </table>
+</database>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="information_schema" catalog="def" charset-name="utf8" collation-name="utf8_general_ci" filename="etc/model/information_schema/INNODB_METRICS.xml">
+    <table name="INNODB_METRICS" database-name="information_schema" table-type="system-view" collation-name="utf8_general_ci" engine="memory" is-rest-service="false" row-format="fixed" iterations="0">
+        <column name="NAME" java-type="String" data-type="varchar" extra-data-type="varchar(193)" size="193" order="1" persistent="true" required="true"/>
+        <column name="SUBSYSTEM" java-type="String" data-type="varchar" extra-data-type="varchar(193)" size="193" order="1" persistent="true" required="true"/>
+        <column name="COUNT" java-type="long" data-type="bigint" extra-data-type="bigint(21)" default-value="0" size="19" order="1" persistent="true" required="true"/>
+        <column name="MAX_COUNT" java-type="long" data-type="bigint" extra-data-type="bigint(21)" size="19" order="1" persistent="true" required="true"/>
+        <column name="MIN_COUNT" java-type="long" data-type="bigint" extra-data-type="bigint(21)" size="19" order="1" persistent="true" required="true"/>
+        <column name="AVG_COUNT" java-type="double" data-type="double" extra-data-type="double" size="12" order="1" persistent="true" required="true"/>
+        <column name="COUNT_RESET" java-type="long" data-type="bigint" extra-data-type="bigint(21)" default-value="0" size="19" order="1" persistent="true" required="true"/>
+        <column name="MAX_COUNT_RESET" java-type="long" data-type="bigint" extra-data-type="bigint(21)" size="19" order="1" persistent="true" required="true"/>
+        <column name="MIN_COUNT_RESET" java-type="long" data-type="bigint" extra-data-type="bigint(21)" size="19" order="1" persistent="true" required="true"/>
+        <column name="AVG_COUNT_RESET" java-type="double" data-type="double" extra-data-type="double" size="12" order="1" persistent="true" required="true"/>
+        <column name="TIME_ENABLED" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="TIME_DISABLED" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="TIME_ELAPSED" java-type="long" data-type="bigint" extra-data-type="bigint(21)" size="19" order="1" persistent="true" required="true"/>
+        <column name="TIME_RESET" java-type="long" data-type="datetime" extra-data-type="datetime" order="1" persistent="true" required="true"/>
+        <column name="STATUS" java-type="String" data-type="varchar" extra-data-type="varchar(193)" size="193" order="1" persistent="true" required="true"/>
+        <column name="TYPE" java-type="String" data-type="varchar" extra-data-type="varchar(193)" size="193" order="1" persistent="true" required="true"/>
+        <column name="COMMENT" java-type="String" data-type="varchar" extra-data-type="varchar(193)" size="193" order="1" persistent="true" required="true"/>
+    </table>
+</database>

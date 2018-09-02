@@ -1,0 +1,49 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + ".html";
+##   var numItems = table.getColumns().size();
+##   var numCols = 6; 
+##   var numRows = (numItems + numCols - (numItems % numCols)) / numCols;
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+<div class="overlay content content-column readonly"
+	data-url="database/js/form?classname=#{packagename}.#{classname}&key=#{java.toPrimaryKeyVariableName(table)}&value={#{java.toJavaName(table)}.#{java.toPrimaryKeyVariableName(table)}}">
+	<div class="content-header separator">
+		<div class="content-title">
+			#{java.toJavaName(table).toUpperCase()} Details - <span class="content-title-value #{java.toJavaName(table)}.#{java.toPrimaryKeyVariableName(table)}" data-type="inline"></span>
+		</div>
+
+		<div class="content-button-bar">
+			<button type="button" class="btn btn-outline-secondary btn-sm" onclick="closeDetails(this)">
+				<span class="mdi mdi-close"></span> Cancel
+			</button>
+		</div>
+	</div>
+	<div class="content-body content-grow content-scroll">
+		<div class="row">
+## var i = 0;
+## for (column : table.getColumns()) {
+##		if ((i % numRows) == 0) {
+		<div class="col-sm-2">
+##      }
+  			<div class="#{java.toJavaName(table)}.#{java.toJavaVariableName(column)}" #{java.toDisplayDataType(column)}></div>
+##		i = i + 1;
+##		if ((i % numRows) == 0) {
+		</div>
+##   	}
+## }
+##		if ((i % numRows) != 0) {
+		</div>
+##   	}
+		</div>
+	</div>
+</div>
+
+## util.write(filename, writer);
+## }

@@ -1,0 +1,52 @@
+## for (var table : root.tables) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/" + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{packagename};
+
+import java.util.List;
+
+import javafx.beans.property.*;
+import #{packagename}.*;
+
+@SuppressWarnings("serial")
+public class #{classname} implements java.io.Serializable {
+
+    private #{classname} bean = null;
+
+    public #{classname}(#{classname} bean) {
+        this.bean = bean;
+    }
+    
+	## for (var column : table.columns) {
+	## if (java.isJavaFX(column)) {
+	private #{java.toJavaVariableName(column)}Property #{java.toJavaVariableName(column)};
+	
+	public #{java.toJavaType(column)} get#{java.toJavaName(column)}() {
+	    return this.#{java.toJavaVariableName(column)}.get();
+	}
+	    
+	public void set#{java.toJavaName(column)}(#{java.toJavaType(column)} #{java.toJavaVariableName(column)}) {
+	    this.#{java.toJavaVariableName(column)}.set(#{java.toJavaVariableName(column)});
+	}
+
+    public #{java.toJavaVariableName(column)}Property #{java.toJavaVariableName(column)}Property() {
+        if (#{java.toJavaVariableName(column)}Property == null) { 
+            #{java.toJavaVariableName(column)}Property = new Simple#{java.toJavaVariableName(column)}Property(bean, "#{java.toJavaVariableName(column)}");
+        } else if (#{java.toJavaVariableName(column)}Property.getBean() != bean) { 
+            #{java.toJavaVariableName(column)}Property = new Simple#{java.toJavaVariableName(column)}Property(bean, "#{java.toJavaVariableName(column)}");
+        }
+        return #{java.toJavaVariableName(column)}Property;
+    }
+	## }
+	## }
+} 
+## util.write(filename, writer);
+## }
