@@ -19,7 +19,7 @@ The NitroHanmmer command line tool has the following features:
 
 ## Additional Documentation
 
-* [NitroHammer User Manual](http://www.tnevin.com/nitrohammer.html)
+* [NitroHammer User Manual](http://www.tnevin.com/nitrohammer.html) Not yet implemented.
 
 ## Getting Started
 
@@ -34,6 +34,8 @@ What things you need to install the software and how to install them
 * ant 1.9 or better (optional).
 * For Windows, install CygWin, latest.
 ```
+
+Note: ant commands have been run and tested using cygwin bash shell, dos shell, and other linux shells will probably work.
 
 ### Installing
 

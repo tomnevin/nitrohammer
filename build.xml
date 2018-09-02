@@ -236,6 +236,11 @@
 			</mappedresources>
 		</war>
 	</target>
+	<target name="dist" depends="war">
+        <copy todir="${basedir}/dist">
+            <fileset dir="${build.dir}" includes="database.jar" />
+        </copy>
+	</target>
 	<!-- =================================================================== -->
 	<!-- Creates the source archive -->
 	<!-- =================================================================== -->
@@ -496,5 +501,5 @@
 	<target name="test-all" depends="taskdefs,deploy,start.tomcat,junit,stop.tomcat,junit-report,jacoco-report" />
 	<target name="test" depends="taskdefs,deploy,junit,junit-report,jacoco-report" />
 	<target name="cruise-control" depends="clean,war,deploy,junit,junit-report,jacoco-report,javadoc" />
-	<target name="all" depends="clean,war,src.jar" />
+	<target name="all" depends="clean,dist,src.jar" />
 </project>
