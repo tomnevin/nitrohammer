@@ -30,16 +30,18 @@
 
 package com.viper.database.filters;
 
+import java.util.Date;
+
 import com.viper.database.dao.DatabaseUtil;
 import com.viper.database.dao.Predicate;
 
-public class StringPredicate<T> implements Predicate<T> {
+public class DatePredicate<T> implements Predicate<T> {
 
     private String fieldname = null;
-    private StringOperator operator = null;
-    private String filterValue = null;
+    private DateOperator operator = null;
+    private Date filterValue = null;
 
-    public StringPredicate(String fieldname, StringOperator operator, String filterValue) {
+    public DatePredicate(String fieldname, DateOperator operator, Date filterValue) {
         this.fieldname = fieldname;
         this.operator = operator;
         this.filterValue = filterValue;
@@ -47,41 +49,34 @@ public class StringPredicate<T> implements Predicate<T> {
 
     @Override
     public boolean apply(T bean) {
+        Object o = DatabaseUtil.get(bean, fieldname);
         
-        if (operator == null) {
-            return true;
-        }
-        if (fieldname == null) {
-            return true;
-        }
-        if (operator == null) {
-            return true;
-        }
-        if (filterValue == null) {
-            return true;
-        }
-        if (bean == null) {
-            return false;
+        Date date = null;
+        if (o instanceof Date) {
+            date = (Date)o;
+        } else if (o instanceof String) {
+
+        } else if (o instanceof Long) {
+            
         }
         
-        String value = DatabaseUtil.getString(bean, fieldname);
-        String valueLC = value.toLowerCase();
-        String filterValueLC = filterValue.toLowerCase();
+        if (date == null) {
+            return true;
+        }
 
         switch (operator) {
         case EQUALS:
-            return filterValueLC.equals(valueLC);
+            return date.equals(filterValue);
         case NOT_EQUALS:
-            return !filterValueLC.equals(valueLC);
-        case STARTS_WITH:
-            return valueLC.startsWith(filterValueLC);
-        case END_WITH:
-            return valueLC.endsWith(filterValueLC);
-        case CONTAINS:
-            return valueLC.contains(filterValueLC);
-        case NOT_CONTAINS:
-            return !valueLC.contains(filterValueLC);
+            return !date.equals(filterValue);
+        case LESS:
+            return date.before(filterValue);
+        case GREATER:
+            return date.after(filterValue);
+        case IN_RANGE:
+            return false; // TODO
         }
-        return false;
+
+        return true;
     }
 }

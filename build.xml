@@ -19,6 +19,9 @@
 	<property name="web.service.url" value="${test.url}/web/classes/" />
 	<property name="war.name" value="rest.war" />
 	<property name="DatabaseUrl" value="jdbc:mysql://localhost:3306?user=root&amp;password=root&amp;useInformationSchema=true&amp;CatalogMeansCurrent=false" />
+	<!-- Dictionary location -->
+	<!-- http://download.wikimedia.org/enwiktionary/latest/enwiktionary-latest-pages-articles.xml.bz2  -->
+
 	<!-- ===================================================================== -->
 	<!-- Defines the classpath used for compilation and test. -->
 	<!-- ===================================================================== -->
@@ -237,9 +240,9 @@
 		</war>
 	</target>
 	<target name="dist" depends="war">
-        <copy todir="${basedir}/dist">
-            <fileset dir="${build.dir}" includes="database.jar" />
-        </copy>
+		<copy todir="${basedir}/dist">
+			<fileset dir="${build.dir}" includes="database.jar" />
+		</copy>
 	</target>
 	<!-- =================================================================== -->
 	<!-- Creates the source archive -->
@@ -339,6 +342,19 @@
 			<fileset dir="${basedir}/srcgen" includes="**/*.java" />
 		</jalopy>
 	</target>
+	<target name="wiki">
+		<java fork="true" classname="com.viper.database.tools.Schematool" dir="${basedir}">
+			<arg line="-wiki ${basedir}/../../tools/wiktionary/enwiktionary-latest-pages-articles.xml ${build.dir}/dictionary.txt" />
+			<jvmarg line="${jvm.args}" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target>
+	<target name="doc.schemas"> 
+		<xslt in="${basedir}/etc/schemas/database.xsd" out="${build.dir}/database.xsd.html" style="${basedir}/etc/schemas/xs3p.xsl">
+			
+		</xslt>
+	</target>
+
 	<!-- =================================================================== -->
 	<!-- Runs the test -->
 	<!-- =================================================================== -->

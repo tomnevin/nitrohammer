@@ -125,6 +125,7 @@
 		<dependency org="org.xmlunit" name="xmlunit-matchers" rev="2.6.1" conf="libgen->master" />
 
 		<!-- DEVELOPMENT (DONT USE PRODUCTION -->
+		<dependency org="javax.servlet" name="javax.servlet-api" rev="4.0.1" conf="libdev->master" />
 		<dependency org="tomcat" name="catalina-ant" rev="5.5.23" conf="libdev->master" />
 		<dependency org="org.apache.maven.shared" name="maven-dependency-analyzer" rev="1.10" conf="libdev->master" />
 

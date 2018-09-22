@@ -1061,6 +1061,8 @@ public class SQLDriver {
 		writeColumnType(column);
 		writeConditional(column.isRequired(), "NOT NULL");
 		String defaultValue = column.getDefaultValue();
+		
+		// Note: the default value should be converted to the actual data type
 		if (!isEmpty(defaultValue)) {
 			write(" default ");
 			writeColumnValue(column, defaultValue);
@@ -1692,6 +1694,12 @@ public class SQLDriver {
 			}
 			if ("pri".equalsIgnoreCase(getValue(row, "column_key"))) {
 				item.setPrimaryKey(true);
+			}
+			if ("uni".equalsIgnoreCase(getValue(row, "column_key"))) {
+				item.setUnique(true);
+			}
+			if ("mul".equalsIgnoreCase(getValue(row, "column_key"))) {
+				item.setNaturalKey(true);
 			}
 			if (toBoolean(getValue(row, "IS_AUTOINCREMENT"))) {
 				item.setIdMethod(IdMethodType.AUTOINCREMENT);

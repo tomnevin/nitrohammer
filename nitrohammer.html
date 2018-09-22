@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>NitroHammer</title>
+</head>
+<body>
+	<div id="toc_container">
+		<p class="toc_title">Contents</p>
+		<ul class="toc_list">
+			<li><a href="#schematool">Schematool command line</a>
+			<li><a href="#database.xsd">Database Schema XML format</a></li>
+			<li><a href="#dao.api.layer">DAO Layer API</a></li>
+		</ul>
+	</div>
+	
+	<h1 id="database.xsd">
+	
+	<h2>Table</h2>
+       <p><em>column</em>
+            <xs:element name="column" type="Column" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="import-table" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="foreign-key" type="ForeignKey" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <jaxb:property name="foreignKeys" />
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="validator" type="xs:string" />
+            <xs:element name="converter" type="xs:string" />
+            <xs:element name="generator" type="xs:string" />
+            <xs:element name="filter" type="xs:string" />
+            <xs:element name="seed-filename" type="xs:string" />
+            <xs:element name="index" type="Index" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="sql-select" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="sql-update" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="sql-insert" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="sql-delete" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="query-class-name" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="row" type="Row" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="table-name" type="xs:string" />
+        <xs:attribute name="java-name" type="xs:string" />
+        <xs:attribute name="database-name" type="xs:string" />
+        <xs:attribute name="table-type" type="TableType" default="table" />
+        <xs:attribute name="base-class" type="xs:string" />
+        <xs:attribute name="charset-name" type="xs:string" />
+        <xs:attribute name="collation-name" type="xs:string" />
+        <xs:attribute name="data-directory" type="xs:string" />
+        <xs:attribute name="description" type="xs:string" />
+        <xs:attribute name="delay-key-write" type="xs:boolean" default="false" />
+        <xs:attribute name="engine" type="EngineType" />
+        <xs:attribute name="has-checksum" type="xs:boolean" default="false" />
+        <xs:attribute name="index-directory" type="xs:string" />
+        <xs:attribute name="interface" type="xs:string" />
+        <xs:attribute name="is-schema-updatable" type="xs:boolean" default="false" />
+        <xs:attribute name="is-rest-service" type="xs:boolean" default="false" />
+        <xs:attribute name="is-report-table" type="xs:boolean" default="false" />
+        <xs:attribute name="is-abstract" type="xs:boolean" default="false" />
+        <xs:attribute name="is-default" type="xs:boolean" default="false" />
+        <xs:attribute name="is-final" type="xs:boolean" default="true" />
+        <xs:attribute name="is-large-table" type="xs:boolean" default="false" />
+        <xs:attribute name="is-monitor-changes" type="xs:boolean" default="false" />
+        <xs:attribute name="fields-all-nullable" type="xs:boolean" default="false" />
+        <xs:attribute name="maximum-rows" type="xs:int" />
+        <xs:attribute name="minimum-rows" type="xs:int" />
+        <xs:attribute name="pack-keys" type="PackKeysType" />
+        <xs:attribute name="password" type="xs:string" />
+        <xs:attribute name="raid-type" type="RaidType" />
+        <xs:attribute name="raid-chunks" type="xs:string" />
+        <xs:attribute name="raid-chunk-size" type="xs:int" />
+        <xs:attribute name="row-format" type="RowFormatType" />
+        <xs:attribute name="skip-sql" type="xs:boolean" default="false" />
+        <xs:attribute name="union" type="xs:string" />
+        <xs:attribute name="iterations" type="xs:int" default="0" />
+    </xs:complexType>
+    
+	</h1>
+
+</body>
+</html>

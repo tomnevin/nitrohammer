@@ -30,57 +30,30 @@
 
 package com.viper.database.filters;
 
-import com.viper.database.dao.DatabaseUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.viper.database.dao.Predicate;
 
-public class StringPredicate<T> implements Predicate<T> {
+public class OrPredicate<T> implements Predicate<T> {
 
-    private String fieldname = null;
-    private StringOperator operator = null;
-    private String filterValue = null;
+    private List<Predicate<T>> predicates = new ArrayList<Predicate<T>>();
 
-    public StringPredicate(String fieldname, StringOperator operator, String filterValue) {
-        this.fieldname = fieldname;
-        this.operator = operator;
-        this.filterValue = filterValue;
+    public OrPredicate(Predicate<T> predicates) {
+        this.predicates.addAll(Arrays.asList(predicates));
+    }
+
+    public void addPredicate(Predicate<T> predicate) {
+        predicates.add(predicate);
     }
 
     @Override
-    public boolean apply(T bean) {
-        
-        if (operator == null) {
-            return true;
-        }
-        if (fieldname == null) {
-            return true;
-        }
-        if (operator == null) {
-            return true;
-        }
-        if (filterValue == null) {
-            return true;
-        }
-        if (bean == null) {
-            return false;
-        }
-        
-        String value = DatabaseUtil.getString(bean, fieldname);
-        String valueLC = value.toLowerCase();
-        String filterValueLC = filterValue.toLowerCase();
-
-        switch (operator) {
-        case EQUALS:
-            return filterValueLC.equals(valueLC);
-        case NOT_EQUALS:
-            return !filterValueLC.equals(valueLC);
-        case STARTS_WITH:
-            return valueLC.startsWith(filterValueLC);
-        case END_WITH:
-            return valueLC.endsWith(filterValueLC);
-        case CONTAINS:
-            return valueLC.contains(filterValueLC);
-        case NOT_CONTAINS:
-            return !valueLC.contains(filterValueLC);
+    public boolean apply(T item) {
+        for (Predicate predicate : predicates) {
+            if (predicate.apply(item)) {
+                return true;
+            }
         }
         return false;
     }

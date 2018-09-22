@@ -100,6 +100,8 @@ public @interface Table {
         boolean isSchemaUpdatable() default false;
 
         boolean isRestService() default false;
+        
+        boolean isReportTable() default false;
 
         boolean isAbstract() default false;
 
@@ -132,5 +134,6 @@ public @interface Table {
         String union() default "";
 
         int iterations() default 0;
-
+        
+        String seedFilename() default "";
 }

@@ -30,58 +30,24 @@
 
 package com.viper.database.filters;
 
-import com.viper.database.dao.DatabaseUtil;
 import com.viper.database.dao.Predicate;
 
-public class StringPredicate<T> implements Predicate<T> {
+public class LimitPredicate<T> implements Predicate<T> {
 
-    private String fieldname = null;
-    private StringOperator operator = null;
-    private String filterValue = null;
+    private long limit;
 
-    public StringPredicate(String fieldname, StringOperator operator, String filterValue) {
-        this.fieldname = fieldname;
-        this.operator = operator;
-        this.filterValue = filterValue;
+    public LimitPredicate(long limit) {
+        this.limit = limit;
+    }
+    
+    public void reset(long limit) {
+        this.limit = limit;
     }
 
     @Override
     public boolean apply(T bean) {
-        
-        if (operator == null) {
-            return true;
-        }
-        if (fieldname == null) {
-            return true;
-        }
-        if (operator == null) {
-            return true;
-        }
-        if (filterValue == null) {
-            return true;
-        }
-        if (bean == null) {
-            return false;
-        }
-        
-        String value = DatabaseUtil.getString(bean, fieldname);
-        String valueLC = value.toLowerCase();
-        String filterValueLC = filterValue.toLowerCase();
-
-        switch (operator) {
-        case EQUALS:
-            return filterValueLC.equals(valueLC);
-        case NOT_EQUALS:
-            return !filterValueLC.equals(valueLC);
-        case STARTS_WITH:
-            return valueLC.startsWith(filterValueLC);
-        case END_WITH:
-            return valueLC.endsWith(filterValueLC);
-        case CONTAINS:
-            return valueLC.contains(filterValueLC);
-        case NOT_CONTAINS:
-            return !valueLC.contains(filterValueLC);
-        }
-        return false;
+        boolean isValid = (limit > 0);
+        limit = limit - 1;
+        return isValid;
     }
 }

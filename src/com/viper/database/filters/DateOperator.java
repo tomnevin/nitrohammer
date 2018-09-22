@@ -30,34 +30,8 @@
 
 package com.viper.database.filters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+public enum DateOperator {
 
-import com.viper.database.dao.Predicate;
+    EQUALS, NOT_EQUALS, LESS, GREATER, IN_RANGE
 
-public class AndPredicate<T> implements Predicate<T> {
-
-    private List<Predicate<T>> predicates = new ArrayList<Predicate<T>>();
-
-    public AndPredicate() {
-    }
-
-    public AndPredicate(Predicate<T>[] predicates) {
-        this.predicates.addAll(Arrays.asList(predicates));
-    }
-
-    public void addPredicate(Predicate<T> predicate) {
-        predicates.add(predicate);
-    }
-
-    @Override
-    public boolean apply(T item) {
-        for (Predicate predicate : predicates) {
-            if (!predicate.apply(item)) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

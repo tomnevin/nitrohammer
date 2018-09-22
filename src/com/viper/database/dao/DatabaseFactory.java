@@ -62,8 +62,11 @@ public class DatabaseFactory {
 		// TODO use ResourceUtil.getResource
 		String filename = System.getenv(CONNECTION_FILENAME_PROPERTY);
 		if (filename == null || filename.length() == 0) {
-			filename = DEFAULT_CONNECTION_FILENAME;
+			filename = System.getProperty(CONNECTION_FILENAME_PROPERTY);
 		}
+		if (filename == null || filename.length() == 0) {
+            filename = DEFAULT_CONNECTION_FILENAME;
+        }
 		return filename;
 	}
 

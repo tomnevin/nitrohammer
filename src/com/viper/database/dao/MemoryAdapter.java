@@ -389,7 +389,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
 	private final <T> boolean isCacheInvalid(Class<T> clazz, boolean force) {
 		boolean invalid = (force || isTimedOut(clazz) || dao.hasChanged(clazz));
 		if (invalid) {
-			log.info("Cache is invalid: " + clazz.getName() + "," + force + ":" + isTimedOut(clazz));
+			log.info("CACHE RELOADING: " + clazz.getName() + "," + force + ":" + isTimedOut(clazz));
 		}
 		return invalid;
 	}
@@ -404,7 +404,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
 
 		boolean timedOut = (last == null || (TIMEOUT > 0 && (toe - last) > TIMEOUT));
 		if (timedOut) {
-			log.info("TimedOut: " + last + "," + toe + "," + TIMEOUT + "," + dao);
+			log.fine("TimedOut: " + last + "," + toe + "," + TIMEOUT + "," + dao);
 		}
 		return timedOut;
 	}
@@ -450,13 +450,8 @@ public class MemoryAdapter implements DatabaseSQLInterface {
 		return table.isLargeTable();
 	}
 
-	private <T> boolean isNonTable(Class<T> clazz) {
-		Table table = DatabaseUtil.getTableAnnotation(clazz);
-		return "viewapp".equalsIgnoreCase(table.tableType());
-	}
-
 	private <T> boolean isNotCached(Class<T> clazz) {
-		return isLargeTable(clazz) || isNonTable(clazz);
+		return isLargeTable(clazz);
 	}
 
 	private <T> List<T> getCache(Class<T> clazz) {

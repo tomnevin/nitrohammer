@@ -127,6 +127,7 @@
 			<xs:element name="converter" type="xs:string" />
 			<xs:element name="generator" type="xs:string" />
 			<xs:element name="filter" type="xs:string" />
+			<xs:element name="seed-filename" type="xs:string" />
 			<xs:element name="index" type="Index" minOccurs="0" maxOccurs="unbounded" />
 			<xs:element name="sql-select" type="xs:string" minOccurs="0" maxOccurs="1" />
 			<xs:element name="sql-update" type="xs:string" minOccurs="0" maxOccurs="1" />
@@ -152,6 +153,7 @@
 		<xs:attribute name="interface" type="xs:string" />
 		<xs:attribute name="is-schema-updatable" type="xs:boolean" default="false" />
 		<xs:attribute name="is-rest-service" type="xs:boolean" default="false" />
+		<xs:attribute name="is-report-table" type="xs:boolean" default="false" />
 		<xs:attribute name="is-abstract" type="xs:boolean" default="false" />
 		<xs:attribute name="is-default" type="xs:boolean" default="false" />
 		<xs:attribute name="is-final" type="xs:boolean" default="true" />

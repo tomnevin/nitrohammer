@@ -1,0 +1,130 @@
+## for (var table : root.tables) {
+## if (table.isReportTable) {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/reports/" + classname + ".jrxml";
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+	name="#{classname} Report" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20"
+	bottomMargin="20">
+	
+    ## for (column : table.getColumns()) {
+    ## if (!java.isArray(database, table, column)) {
+	<field name="#{java.toJavaVariableName(column)}" class="#{java.toJavaClass(database, table, column)}">
+	<!-- 
+		<fieldDescription><![CDATA[]]>
+		</fieldDescription>
+		 -->
+	</field>
+	## }
+	## }
+
+	<background>
+		<band />
+	</background>
+	<title>
+		<band height="58">
+			<line>
+				<reportElement x="0" y="8" width="555" height="1" />
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="51" width="555" height="1" />
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band />
+	</pageHeader>
+	<columnHeader>
+		<band height="18">
+			## var x = 0;
+    		## for (column : table.getColumns()) {
+   			## if (!java.isArray(database, table, column)) {
+   			## var width = 100;
+			<staticText>
+				<reportElement mode="Opaque" x="#{x}" y="0" width="#{width}" height="18" forecolor="#FFFFFF" backcolor="#999999" />
+				<textElement>
+					<font size="12" />
+				</textElement>
+				<text><![CDATA[#{java.toJavaVariableName(column)}]]></text>
+			</staticText>
+			## x = x + width;
+			## }
+			## }
+		</band>
+	</columnHeader>
+
+	<detail>
+		<band height="20">	
+			## var x = 0;
+    		## for (column : table.getColumns()) {
+   			## if (!java.isArray(database, table, column)) {
+   			## var width = 100;
+			<textField hyperlinkType="None">
+				<reportElement x="#{x}" y="0" width="#{width}" height="20" />
+				<textElement>
+					<font size="12" />
+				</textElement>
+				<textFieldExpression class="#{java.toJavaClass(database, table, column)}"><![CDATA[$F{#{java.toJavaVariableName(column)}}]]>
+				</textFieldExpression>
+			</textField>
+			## x = x + width;
+			## }
+			## }
+		</band>
+	</detail>
+
+	<columnFooter>
+		<band />
+	</columnFooter>
+	<pageFooter>
+		<band height="26">
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false" hyperlinkType="None">
+				<reportElement key="textField" x="516" y="6" width="36" height="19" forecolor="#000000" backcolor="#FFFFFF" />
+				<textElement>
+					<font size="10" />
+				</textElement>
+
+				<textFieldExpression class="java.lang.String"><![CDATA["" + 
+        $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+				<reportElement key="textField" x="342" y="6" width="170" height="19" forecolor="#000000" backcolor="#FFFFFF" />
+				<box>
+					<topPen lineWidth="0.0"  lineColor="#000000" />
+					<leftPen lineWidth="0.0"  lineColor="#000000" />
+					<bottomPen lineWidth="0.0"  lineColor="#000000" />
+					<rightPen lineWidth="0.0"  lineColor="#000000" />
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10" />
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + 
+        $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+			</textField>
+
+			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+				<reportElement key="textField" x="1" y="6" width="209" height="19" forecolor="#000000" backcolor="#FFFFFF" />
+				<box>
+					<topPen lineWidth="0.0" lineColor="#000000" />
+					<leftPen lineWidth="0.0"  lineColor="#000000" />
+					<bottomPen lineWidth="0.0"  lineColor="#000000" />
+					<rightPen lineWidth="0.0"  lineColor="#000000" />
+				</box>
+				<textElement>
+					<font size="10" />
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]>
+				</textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band />
+	</summary>
+</jasperReport>
+## util.write(filename, writer);
+## }
+## }

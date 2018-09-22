@@ -33,13 +33,13 @@ package com.viper.database.filters;
 import com.viper.database.dao.DatabaseUtil;
 import com.viper.database.dao.Predicate;
 
-public class StringPredicate<T> implements Predicate<T> {
+public class NumberPredicate<T> implements Predicate<T> {
 
     private String fieldname = null;
-    private StringOperator operator = null;
-    private String filterValue = null;
+    private NumberOperator operator = null;
+    private Number filterValue = null;
 
-    public StringPredicate(String fieldname, StringOperator operator, String filterValue) {
+    public NumberPredicate(String fieldname, NumberOperator operator, Number filterValue) {
         this.fieldname = fieldname;
         this.operator = operator;
         this.filterValue = filterValue;
@@ -47,40 +47,26 @@ public class StringPredicate<T> implements Predicate<T> {
 
     @Override
     public boolean apply(T bean) {
-        
-        if (operator == null) {
-            return true;
-        }
-        if (fieldname == null) {
-            return true;
-        }
-        if (operator == null) {
-            return true;
-        }
-        if (filterValue == null) {
-            return true;
-        }
-        if (bean == null) {
+
+        Object v = DatabaseUtil.get(bean, fieldname);
+        if (!(v instanceof Number)) {
             return false;
         }
-        
-        String value = DatabaseUtil.getString(bean, fieldname);
-        String valueLC = value.toLowerCase();
-        String filterValueLC = filterValue.toLowerCase();
+        Number value = (Number) v;
 
         switch (operator) {
         case EQUALS:
-            return filterValueLC.equals(valueLC);
+            return filterValue.doubleValue() == value.doubleValue();
         case NOT_EQUALS:
-            return !filterValueLC.equals(valueLC);
-        case STARTS_WITH:
-            return valueLC.startsWith(filterValueLC);
-        case END_WITH:
-            return valueLC.endsWith(filterValueLC);
-        case CONTAINS:
-            return valueLC.contains(filterValueLC);
-        case NOT_CONTAINS:
-            return !valueLC.contains(filterValueLC);
+            return filterValue.doubleValue() != value.doubleValue();
+        case LESS:
+            return value.doubleValue() < filterValue.doubleValue();
+        case GREATER:
+            return value.doubleValue() > filterValue.doubleValue();
+        case GREATER_EQUAL:
+            return value.doubleValue() >= filterValue.doubleValue();
+        case LESS_EQUAL:
+            return value.doubleValue() <= filterValue.doubleValue();
         }
         return false;
     }
