@@ -22,7 +22,7 @@ The NitroHanmmer command line tool has the following features:
 ## Additional Documentation
 
 * [NitroHammer User Manual - Local](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/nitrohammer.html) In progress
-* [NitroHammer Data Model Schema](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/database.csd.html) In progress
+* [NitroHammer Data Model Schema](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/database.xsd.html) In progress
 * [NitroHammer Database Model XSD](http://www.tnevin.com/doc/nitrohammer.html)
 * [Authors Home Page](http://www.tnevin.com)
 
