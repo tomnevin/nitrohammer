@@ -2485,7 +2485,7 @@ pre {
      -->
    <xsl:template match="text()" mode="hiddendoc"/>
 
-   <xsl:template match="xsd:element | xsd:attribute | xsd:simpleType" mode="hiddendoc">
+   <xsl:template match="xsd:element | xsd:attribute | xsd:simpleType | xsd:complexType" mode="hiddendoc">
       <xsl:if test="./xsd:annotation/xsd:documentation">
          <xsl:variable name="documentation">
             <xsl:for-each select="./xsd:annotation/xsd:documentation">

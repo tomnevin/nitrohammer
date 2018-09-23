@@ -1,105 +1,105 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
 	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" jaxb:extensionBindingPrefixes="xjc" elementFormDefault="qualified">
 
-	<xs:element name="form" type="FormType" />
-	<xs:complexType name="FormType">
-		<xs:sequence>
-			<xs:element name="template" type="xs:string" />
-			<xs:element name="schema" type="SchemaType" minOccurs="1" maxOccurs="1" />
-			<xs:element name="view" type="ViewType" minOccurs="1" maxOccurs="1" />
-			<xs:element name="options" type="OptionsType" minOccurs="1" maxOccurs="1" />
-		</xs:sequence>
-		<xs:attribute name="layout-name" type="xs:string" />
-		<xs:attribute name="parent" type="xs:string" />
-	</xs:complexType>
+	<xsd:element name="form" type="FormType" />
+	<xsd:complexType name="FormType">
+		<xsd:sequence>
+			<xsd:element name="template" type="xsd:string" />
+			<xsd:element name="schema" type="SchemaType" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="view" type="ViewType" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="options" type="OptionsType" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="layout-name" type="xsd:string" />
+		<xsd:attribute name="parent" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:complexType name="SchemaType">
-		<xs:sequence>
-			<xs:element name="table" type="TableType" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="column" type="ColumnType" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="type" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="SchemaType">
+		<xsd:sequence>
+			<xsd:element name="table" type="TableType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="column" type="ColumnType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="type" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:complexType name="TableType">
-		<xs:sequence>
-			<xs:element name="validators" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="package-name" type="xs:string" />
-		<xs:attribute name="database-name" type="xs:string" />
-		<xs:attribute name="table-name" type="xs:string" />
-		<xs:attribute name="class-name" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="TableType">
+		<xsd:sequence>
+			<xsd:element name="validators" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="package-name" type="xsd:string" />
+		<xsd:attribute name="database-name" type="xsd:string" />
+		<xsd:attribute name="table-name" type="xsd:string" />
+		<xsd:attribute name="class-name" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:complexType name="ColumnType">
-		<xs:sequence>
-			<xs:element name="converter" type="xs:string" />
-			<xs:element name="description" type="xs:string" />
-			<xs:element name="prompt" type="xs:string" />
-			<xs:element name="format" type="xs:string" />
-			<xs:element name="validators" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="helper" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" />
-		<xs:attribute name="field-name" type="xs:string" />
-		<xs:attribute name="group-name" type="xs:string" />
-		<xs:attribute name="is-required" type="xs:boolean" default="false" />
-		<xs:attribute name="component-type" type="xs:string" />
-		<xs:attribute name="display-size" type="xs:int" />
-		<xs:attribute name="fieldClass" type="xs:string" />
-		<xs:attribute name="inputType" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="ColumnType">
+		<xsd:sequence>
+			<xsd:element name="converter" type="xsd:string" />
+			<xsd:element name="description" type="xsd:string" />
+			<xsd:element name="prompt" type="xsd:string" />
+			<xsd:element name="format" type="xsd:string" />
+			<xsd:element name="validators" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="helper" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="field-name" type="xsd:string" />
+		<xsd:attribute name="group-name" type="xsd:string" />
+		<xsd:attribute name="is-required" type="xsd:boolean" default="false" />
+		<xsd:attribute name="component-type" type="xsd:string" />
+		<xsd:attribute name="display-size" type="xsd:int" />
+		<xsd:attribute name="fieldClass" type="xsd:string" />
+		<xsd:attribute name="inputType" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:complexType name="ViewType">
-		<xs:sequence>
-			<xs:element name="layout" type="LayoutType" minOccurs="1" maxOccurs="1" />
-		</xs:sequence>
-		<xs:attribute name="parent" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="ViewType">
+		<xsd:sequence>
+			<xsd:element name="layout" type="LayoutType" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="parent" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:complexType name="LayoutType">
-		<xs:sequence>
-			<xs:element name="template" type="xs:string" />
-			<xs:element name="binding" type="BindingType" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-	</xs:complexType>
+	<xsd:complexType name="LayoutType">
+		<xsd:sequence>
+			<xsd:element name="template" type="xsd:string" />
+			<xsd:element name="binding" type="BindingType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
 
-	<xs:complexType name="OptionsType">
-		<xs:sequence>
-			<xs:element name="fields" type="FieldType" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="grid" type="GridType" minOccurs="1" maxOccurs="1" />
-		</xs:sequence>
-		<xs:attribute name="type" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="OptionsType">
+		<xsd:sequence>
+			<xsd:element name="fields" type="FieldType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="grid" type="GridType" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="type" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:simpleType name="DisplayType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="ignore" />
-			<xs:enumeration value="hidden" />
-			<xs:enumeration value="disabled" />
-			<xs:enumeration value="enabled" />
-		</xs:restriction>
-	</xs:simpleType>
+	<xsd:simpleType name="DisplayType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ignore" />
+			<xsd:enumeration value="hidden" />
+			<xsd:enumeration value="disabled" />
+			<xsd:enumeration value="enabled" />
+		</xsd:restriction>
+	</xsd:simpleType>
 
-	<xs:complexType name="FieldType">
-		<xs:sequence>
-			<xs:element name="fields" type="FieldType" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" />
-		<xs:attribute name="label" type="xs:string" />
-		<xs:attribute name="right-label" type="xs:string" />
-		<xs:attribute name="left-label" type="xs:string" />
-		<xs:attribute name="type" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="FieldType">
+		<xsd:sequence>
+			<xsd:element name="fields" type="FieldType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="label" type="xsd:string" />
+		<xsd:attribute name="right-label" type="xsd:string" />
+		<xsd:attribute name="left-label" type="xsd:string" />
+		<xsd:attribute name="type" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:complexType name="BindingType">
-		<xs:attribute name="binding-name" type="xs:string" />
-		<xs:attribute name="group-name" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="BindingType">
+		<xsd:attribute name="binding-name" type="xsd:string" />
+		<xsd:attribute name="group-name" type="xsd:string" />
+	</xsd:complexType>
 
-	<xs:complexType name="GridType">
-		<xs:attribute name="row-headers" type="xs:boolean" default="true" />
-		<xs:attribute name="col-headers" type="xs:boolean" default="true" />
-	</xs:complexType>
-</xs:schema>
+	<xsd:complexType name="GridType">
+		<xsd:attribute name="row-headers" type="xsd:boolean" default="true" />
+		<xsd:attribute name="col-headers" type="xsd:boolean" default="true" />
+	</xsd:complexType>
+</xsd:schema>

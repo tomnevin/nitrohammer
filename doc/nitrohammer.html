@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<title>NitroHammer Software Generation Tool</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+	font-family: "Roboto", sans-serif
+}
+
+h1 {
+    font-weight: bold
+}
+
+.w3-bar-block .w3-bar-item {
+	padding: 16px;
+	font-weight: bold
+}
+</style>
+<body>
+
+	<nav class="w3-sidebar w3-bar-block w3-collapse w3-animate-left w3-card"
+		style="z-index: 3; width: 250px;" id="mySidebar">
+		<a class="w3-bar-item w3-button w3-border-bottom w3-large" href="http://www.tnevin.com/"><img
+			src="images/viper-logo.gif" style="width: 100%; height: 100%; background-size: cover"></a> <br />
+		<a class="w3-bar-item w3-button w3-hide-large w3-large" href="javascript:void(0)"
+			onclick="w3_close()">Close <i class="fa fa-remove"></i></a> <a
+			class="w3-bar-item w3-button w3-teal" href="#">Home</a> <a class="w3-bar-item w3-button"
+			href="#Introduction">Introduction</a> <br /> <a class="w3-bar-item w3-button" href="#">Download</a>
+		<a class="w3-bar-item w3-button" href="#">Setup</a> <a class="w3-bar-item w3-button" href="#">Database
+			Model</a> <a class="w3-bar-item w3-button" href="#">Nitrohammer tool</a> <br /> <a
+			class="w3-bar-item w3-button" href="#">DAO</a> <a class="w3-bar-item w3-button" href="#">Example</a>
+		<br />
+	</nav>
+
+	<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()"
+		style="cursor: pointer" id="myOverlay"></div>
+
+	<div class="w3-main" style="margin-left: 250px;">
+
+		<div id="Introduction" class="w3-container w3-top w3-theme w3-large">
+			<p>
+				<i class="fa fa-bars w3-button w3-teal w3-hide-large w3-xlarge" onclick="w3_open()"></i> <span
+					id="myIntro" class="w3-hide">Nitrohammer: Introduction</span>
+			</p>
+		</div>
+
+		<header class="w3-container w3-theme" style="padding: 45px 32px">
+			<h1 class="w3-xxxlarge">Nitrohammer</h1>
+		</header>
+
+		<div class="w3-container" style="padding: 32px">
+
+			<h2>What is Nitrohammer?</h2>
+
+			<p>Nitrohammer is a command line tool and a collection of Java classes which facillate the
+				development of the full stack development of Software Applications.</p>
+
+			<ul class="w3-leftbar w3-theme-border" style="list-style: none">
+				<li>Generates a database model from existing schemas, or can create database model
+					manually.
+				<li>From database model, generates java source for database beans, DAO layer, Rest
+					services, test cases.</li>
+				<li>Generates rest services for CRUD in JSON/XML</li>
+				<li>Generates rest services in JSON compitable with AGGrid, Alpaca, DataTables, C3 and
+					Plotly.</li>
+				<li>Gennerates Junit test cases</li>
+				<li>Generates resource files for human language translations</li>
+				<li>Allows for custom templates, which will tailor your code generation.</li>
+				<li>Easy and productive to use in new applications</li>
+				<li>Compatiable with existing databases</li>
+			</ul>
+			<br>
+
+			<hr>
+			<h2>Nitrohammer is Open Source</h2>
+			<p>Nitrohammer is under the MIT license.</p>
+
+			<hr>
+			<h2>Nitro-Hammer (Command Line Arguments)</h2>
+			<p>Nitrohammer is a command line tool which has the following main arguments.</p>
+
+			<ul class="w3-leftbar w3-theme-border" style="list-style: none">
+				<li><b>-model2database</b> Given the database model, generate the database schema into the
+					database.<br> <code>schematool -model2database &lt;database-url&gt;
+						&lt;packagename&gt; &lt;vendor&gt; &lt;outfile&gt; &lt;model filename/directory&gt; ...</code>
+					<ol>
+						<li>&lt;database-url&gt; The database url, see the database provider, MySql, Oracle, etc.
+							Typically starts with jdbc:</li>
+						<li>&lt;packagename&gt; The full name of the java package inwhich the database was built.</li>
+						<li>&lt;vendor&gt; Vendor such as mysql, oracle, h2, etc.</li>
+						<li>&lt;outfile&gt; Filename where the SQL output can be written which is what is used to
+							build the database.</li>
+						<li>&lt;model filename/directory&gt; filename(s) and/or directory name(s) where the model
+							files exist, use all xml files, in directory and subdirectories.</li>
+					</ol> <br></li>
+				<li><b>-sql2database</b> Read SQL files and write them to database instance, similiar to
+					using the mysql &lt; input.sql command.<br /> <code>schematool -sql &lt;source&gt;
+						&lt;directory/filename&gt;</code>
+					<ol>
+						<li>&lt;source&gt; Either the name of the source database located in the databases.xml
+							file or the database url, see the database provider, MySql, Oracle, etc. Typically starts
+							with jdbc:</li>
+						<li>&lt;filename/directory&gt; filename(s) and/or directory name(s) where the sql files
+							exist, use all sql files, in directory and subdirectories.</li>
+					</ol> <br /></li>
+				<li><b>-database2sql</b> Access the database and generate SQL files, similiar to <i>mysqldump</i><br />
+					<code>schematool -database2sql &lt;source&gt; &lt;schema&gt; &lt;filename&gt;</code>
+					<ol>
+						<li>&lt;source&gt; Either the name of the source database located in the databases.xml
+							file or the database url, see the database provider, MySql, Oracle, etc. Typically starts
+							with jdbc:</li>
+						<li>&lt;schema&gt; the name of the schema in the database from which the SQL is to be
+							generated.</li>
+						<li>&lt;filename&gt; filename where the sql commands are to be written.</li>
+					</ol> <br /></li>
+
+				<li><b>-database2model</b> Read the database and generate the model into a single mode file
+					.xml<br /> <code>schematool -database2model &lt;source&gt; &lt;schema&gt;
+						&lt;filename&gt;</code>
+					<ol>
+						<li>&lt;source&gt; Either the name of the source database located in the databases.xml
+							file or the database url, see the database provider, MySql, Oracle, etc. Typically starts
+							with jdbc:</li>
+						<li>&lt;schema&gt; the name of the schema in the database for which the model is to be
+							generated.</li>
+						<li>&lt;filename&gt; filename where the model file is to be written.</li>
+					</ol> <br /></li>
+
+				<li><b>-model2sql</b> Read the database model and generate sqlfile to build the database<br />
+					<code>schematool -model2sql &lt;model directory&gt; &lt;schema&gt; &lt;vendor&gt;
+						&lt;outfile&gt;</code>
+					<ol>
+						<li>&lt;model directory&gt; The directory where the model files exists, ending im .xml.</li>
+						<li>&lt;schema&gt; the name of the schema in the database for which the sql is to be
+							generated.</li>
+						<li>&lt;vendor&gt; Vendor such as mysql, oracle, h2, etc.</li>
+						<li>&lt;outfile&gt; Filename where the SQL output can be written which can be used to
+							build the database.</li>
+					</ol> <br /></li>
+
+				<li><b>-generate</b> Given the model directory and the translation template, generate
+					source coce<br /> <code>schematool -generate &lt;model directory&gt; &lt;output
+						directory&gt; &lt;templagte&gt; &lt;packageName&gt;</code>
+					<ol>
+						<li>&lt;model directory&gt; The directory where the model files exists, ending im .xml.</li>
+						<li>&lt;output directory&gt; directory where the resulant files are to be placed</li>
+						<li>&lt;template&gt; the filename of the template fileto be used for the resulting file
+							generation.</li>
+						<li>&lt;packageNam&gt; java package name to be used for the results, (to be removed).</li>
+					</ol> <br /></li>
+
+			</ul>
+
+			<hr>
+			<h2>Sample Code</h2>
+			<div class="w3-container w3-sand w3-leftbar">
+				<p>
+					<i>Make it as simple as possible, but not simpler.</i><br> Albert Einstein
+				</p>
+			</div>
+		</div>
+
+		<footer class="w3-container w3-theme" style="padding: 32px">
+			<h2>Nitrohammer</h2>
+		</footer>
+
+	</div>
+
+	<script>
+		// Open and close the sidebar on medium and small screens
+		function w3_open() {
+			document.getElementById("mySidebar").style.display = "block";
+			document.getElementById("myOverlay").style.display = "block";
+		}
+		function w3_close() {
+			document.getElementById("mySidebar").style.display = "none";
+			document.getElementById("myOverlay").style.display = "none";
+		}
+
+		// Change style of top container on scroll
+		window.onscroll = function() {
+			myFunction()
+		};
+		function myFunction() {
+			if (document.body.scrollTop > 80
+					|| document.documentElement.scrollTop > 80) {
+				document.getElementById("myTop").classList.add("w3-card-4",
+						"w3-animate-opacity");
+				document.getElementById("myIntro").classList
+						.add("w3-show-inline-block");
+			} else {
+				document.getElementById("myIntro").classList
+						.remove("w3-show-inline-block");
+				document.getElementById("myTop").classList.remove("w3-card-4",
+						"w3-animate-opacity");
+			}
+		}
+	</script>
+
+</body>
+</html>

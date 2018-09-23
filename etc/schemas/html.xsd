@@ -1,55 +1,55 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-    <xs:element name="html" type="Html" />
-    <xs:complexType name="Html">
-        <xs:sequence>
-            <xs:element name="body" type="HtmlBody" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="HtmlBody">
-        <xs:sequence>
-            <xs:element name="table" type="HtmlTable" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-        <xs:attribute name="rules" type="xs:string" default="all" />
-        <xs:attribute name="border" type="xs:string" default="3px" />
-    </xs:complexType>
-    <xs:complexType name="HtmlTable">
-        <xs:sequence>
-            <xs:element name="thead" type="THead" />
-            <xs:element name="tbody" type="TBody"  />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="THead">
-        <xs:sequence>
-            <xs:element name="tr" type="TRHead" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="TBody">
-        <xs:sequence>
-            <xs:element name="tr" type="TR" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="TRHead">
-        <xs:sequence>
-            <xs:element name="th" type="TH" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="TR">
-        <xs:sequence>
-            <xs:element name="td" type="TD" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="TD">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="name" type="xs:string" />
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-    <xs:complexType name="TH">
-        <xs:simpleContent>
-            <xs:extension base="xs:string">
-                <xs:attribute name="name" type="xs:string" />
-            </xs:extension>
-        </xs:simpleContent>
-    </xs:complexType>
-</xs:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xsd:element name="html" type="Html" />
+    <xsd:complexType name="Html">
+        <xsd:sequence>
+            <xsd:element name="body" type="HtmlBody" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="HtmlBody">
+        <xsd:sequence>
+            <xsd:element name="table" type="HtmlTable" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attribute name="rules" type="xsd:string" default="all" />
+        <xsd:attribute name="border" type="xsd:string" default="3px" />
+    </xsd:complexType>
+    <xsd:complexType name="HtmlTable">
+        <xsd:sequence>
+            <xsd:element name="thead" type="THead" />
+            <xsd:element name="tbody" type="TBody" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="THead">
+        <xsd:sequence>
+            <xsd:element name="tr" type="TRHead" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TBody">
+        <xsd:sequence>
+            <xsd:element name="tr" type="TR" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TRHead">
+        <xsd:sequence>
+            <xsd:element name="th" type="TH" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TR">
+        <xsd:sequence>
+            <xsd:element name="td" type="TD" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="TD">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="TH">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+<xsd:schema></xsd:schema>

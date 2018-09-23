@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jxb:bindings xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:ci="http://jaxb.dev.java.net/plugin/code-injector" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<jxb:bindings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:ci="http://jaxb.dev.java.net/plugin/code-injector" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	jxb:extensionBindingPrefixes="ci" jxb:version="2.1">
 	<jxb:bindings schemaLocation="database.xsd">
-		<jxb:bindings node="/xs:schema/xs:complexType[@name='DatabaseConnections']">
+		<jxb:bindings node="/xsd:schema/xsd:complexType[@name='DatabaseConnections']">
 			<ci:code> 
 		@Override 
 		public String toString() { 
@@ -11,7 +12,7 @@
 		}
 			</ci:code>
 		</jxb:bindings>
-		<jxb:bindings node="/xs:schema/xs:complexType[@name='DatabaseConnection']">
+		<jxb:bindings node="/xsd:schema/xsd:complexType[@name='DatabaseConnection']">
             <ci:code> 
         @Override 
         public String toString() { 
@@ -19,7 +20,7 @@
         }
             </ci:code>
         </jxb:bindings>
-        <jxb:bindings node="/xs:schema/xs:complexType[@name='Database']">
+        <jxb:bindings node="/xsd:schema/xsd:complexType[@name='Database']">
             <ci:code> 
         @Override 
         public String toString() { 
@@ -27,7 +28,7 @@
         }
             </ci:code>
         </jxb:bindings>
-        <jxb:bindings node="/xs:schema/xs:complexType[@name='Table']">
+        <jxb:bindings node="/xsd:schema/xsd:complexType[@name='Table']">
             <ci:code> 
         @Override 
         public String toString() { 
@@ -35,7 +36,7 @@
         }
             </ci:code>
         </jxb:bindings>
-        <jxb:bindings node="/xs:schema/xs:complexType[@name='Column']">
+        <jxb:bindings node="/xsd:schema/xsd:complexType[@name='Column']">
             <ci:code> 
         @Override 
         public String toString() { 
@@ -43,7 +44,7 @@
         }
             </ci:code>
         </jxb:bindings>
-        <jxb:bindings node="/xs:schema/xs:complexType[@name='User']">
+        <jxb:bindings node="/xsd:schema/xsd:complexType[@name='User']">
             <ci:code> 
         @Override 
         public String toString() { 
@@ -51,7 +52,7 @@
         }
             </ci:code>
         </jxb:bindings>
-        <jxb:bindings node="/xs:schema/xs:complexType[@name='Procedure']">
+        <jxb:bindings node="/xsd:schema/xsd:complexType[@name='Procedure']">
             <ci:code> 
         @Override 
         public String toString() { 
@@ -59,7 +60,7 @@
         }
             </ci:code>
         </jxb:bindings>
-        <jxb:bindings node="/xs:schema/xs:complexType[@name='EnumItem']">
+        <jxb:bindings node="/xsd:schema/xsd:complexType[@name='EnumItem']">
             <ci:code> 
         @Override 
         public String toString() { 

@@ -19,7 +19,9 @@ The NitroHanmmer command line tool has the following features:
 
 ## Additional Documentation
 
-* [NitroHammer User Manual](http://www.tnevin.com/nitrohammer.html) Not yet implemented.
+* [NitroHammer User Manual - Local](doc/nitrohammer.html) In progress
+* [NitroHammer Database Model XSD](http://www.tnevin.com/doc/nitrohammer.html)
+* [Authors Home Page](http://www.tnevin.com)
 
 ## Getting Started
 

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bindings xmlns="http://java.sun.com/xml/ns/jaxb" xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb" xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	version="2.1">
 	 <bindings schemaLocation="http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd" version="1.0">
         <!-- rename the value element -->
-        <bindings node="//xs:attributeGroup[@name='i18n']">
-            <bindings node=".//xs:attribute[@name='lang']">
+        <bindings node="//xsd:attributeGroup[@name='i18n']">
+            <bindings node=".//xsd:attribute[@name='lang']">
                 <property name="I18nLangAttribute"/>
             </bindings>
         </bindings>
-        <bindings node="//xs:element[@name='bdo']//xs:complexType">
-             <bindings node=".//xs:attribute[@name='lang']">
+        <bindings node="//xsd:element[@name='bdo']//xs:complexType">
+             <bindings node=".//xsd:attribute[@name='lang']">
                  <property name="BdoLangAttribute"/>
              </bindings>
         </bindings>

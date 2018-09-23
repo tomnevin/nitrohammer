@@ -1,20 +1,20 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:version="2.0"
 	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" jaxb:extensionBindingPrefixes="xjc" elementFormDefault="qualified">
 
-	<xs:element name="params" type="ParamList" />
-	<xs:complexType name="ParamList">
-		<xs:sequence>
-			<xs:element name="attrs" type="ParamType" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="fields" type="ParamType" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="tables" type="ParamType" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-	</xs:complexType>
+	<xsd:element name="params" type="ParamList" />
+	<xsd:complexType name="ParamList">
+		<xsd:sequence>
+			<xsd:element name="attrs" type="ParamType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="fields" type="ParamType" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="tables" type="ParamType" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
 
-	<xs:complexType name="ParamType">
-		<xs:attribute name="name" type="xs:string" />
-		<xs:attribute name="attribute" type="xs:string" />
-		<xs:attribute name="value" type="xs:string" />
-	</xs:complexType>
+	<xsd:complexType name="ParamType">
+		<xsd:attribute name="name" type="xsd:string" />
+		<xsd:attribute name="attribute" type="xsd:string" />
+		<xsd:attribute name="value" type="xsd:string" />
+	</xsd:complexType>
 
-</xs:schema>
+</xsd:schema>

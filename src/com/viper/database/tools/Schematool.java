@@ -134,7 +134,7 @@ public class Schematool {
                 String value = args[++i];
                 parameters.put(key, value);
 
-            } else if ("-meta2database".equals(args[i]) || "-import".equals(args[i])) {
+            } else if ("-meta2database".equals(args[i]) || "-import".equals(args[i]) || "-model2database".equals(args[i])) {
 
                 String sourceUrl = args[++i];
                 String packageName = args[++i];
@@ -165,7 +165,7 @@ public class Schematool {
                 SqlConverter.write(new SQLWriter(outfile), vendor, databases);
                 SqlConverter.write(new DatabaseWriter(dao), vendor, databases);
 
-            } else if ("-database2meta".equals(args[i])) {
+            } else if ("-database2meta".equals(args[i]) || "-database2model".equals(args[i])) {
                 String source = args[++i];
                 String databaseName = args[++i];
                 String outfile = args[++i];
@@ -227,7 +227,7 @@ public class Schematool {
                 /**
                  * Create the model as POJO beans from the schema.
                  */
-            } else if ("-pojo".equalsIgnoreCase(args[i])) {
+            } else if ("-pojo".equalsIgnoreCase(args[i]) || "-generate".equalsIgnoreCase(args[i])) {
                 final String indir = args[++i];
                 final String outdir = args[++i];
                 final String template = args[++i];
