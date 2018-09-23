@@ -243,20 +243,15 @@
 		<copy todir="${basedir}/dist">
 			<fileset dir="${build.dir}" includes="database.jar" />
 		</copy>
-	</target>
-	<!-- =================================================================== -->
-	<!-- Creates the source archive -->
-	<!-- =================================================================== -->
-	<target name="src.jar">
-		<jar jarfile="${build.dir}/${name}-src.jar">
-			<fileset dir="${basedir}/.." includes="${name}/etc/**" />
-			<fileset dir="${basedir}/.." includes="${name}/lib/**" />
-			<fileset dir="${basedir}/.." includes="${name}/src/**" />
-			<fileset dir="${basedir}/.." includes="${name}/srcgen/**" />
-			<fileset dir="${basedir}/.." includes="${name}/unit/**" />
-			<fileset dir="${basedir}/.." includes="${name}/*" />
-			<fileset dir="${basedir}/.." includes="${name}/*.*" />
-		</jar>
+        <jar jarfile="${basedir}/dist/${name}-src.jar">
+            <fileset dir="${basedir}/.." includes="${name}/etc/**" />
+            <fileset dir="${basedir}/.." includes="${name}/lib/**" />
+            <fileset dir="${basedir}/.." includes="${name}/src/**" />
+            <fileset dir="${basedir}/.." includes="${name}/srcgen/**" />
+            <fileset dir="${basedir}/.." includes="${name}/unit/**" />
+            <fileset dir="${basedir}/.." includes="${name}/*" />
+            <fileset dir="${basedir}/.." includes="${name}/*.*" />
+        </jar>
 	</target>
 	<!-- =================================================================== -->
 	<!-- Check the style of sources (Java). -->
@@ -517,5 +512,5 @@
 	<target name="test-all" depends="taskdefs,deploy,start.tomcat,junit,stop.tomcat,junit-report,jacoco-report" />
 	<target name="test" depends="taskdefs,deploy,junit,junit-report,jacoco-report" />
 	<target name="cruise-control" depends="clean,war,deploy,junit,junit-report,jacoco-report,javadoc" />
-	<target name="all" depends="clean,dist,src.jar" />
+	<target name="all" depends="clean,dist" />
 </project>
