@@ -1,4 +1,6 @@
-# NitroHammer (In Progress)
+![alt Nitrohammer banner](doc/images/viper-wide-banner.jpg)
+
+# Nitrohammer (In Progress)
 
 [NitroHammer](http://www.tnevin.com)
 
@@ -19,7 +21,8 @@ The NitroHanmmer command line tool has the following features:
 
 ## Additional Documentation
 
-* [NitroHammer User Manual - Local](doc/nitrohammer.html) In progress
+* [NitroHammer User Manual - Local](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/nitrohammer.html) In progress
+* [NitroHammer Data Model Schema](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/database.csd.html) In progress
 * [NitroHammer Database Model XSD](http://www.tnevin.com/doc/nitrohammer.html)
 * [Authors Home Page](http://www.tnevin.com)
 
@@ -94,10 +97,11 @@ ant checkstyle
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+In progress
 
 ## Built With
 
+In progress
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
@@ -108,7 +112,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/vipersoftwareservices/nitr
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+In progress
 
 ## Authors
 
@@ -122,7 +126,5 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+In progress
 
