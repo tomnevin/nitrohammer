@@ -31,13 +31,13 @@
 package com.viper.database.filters;
 
 import com.viper.database.dao.DatabaseUtil;
-import com.viper.database.dao.Predicate;
 
 public class NumberPredicate<T> implements Predicate<T> {
 
     private String fieldname = null;
     private NumberOperator operator = null;
     private Number filterValue = null;
+    private Number filterValue2 = null;
 
     public NumberPredicate(String fieldname, NumberOperator operator, Number filterValue) {
         this.fieldname = fieldname;
@@ -45,10 +45,18 @@ public class NumberPredicate<T> implements Predicate<T> {
         this.filterValue = filterValue;
     }
 
+    public NumberPredicate(String fieldname, NumberOperator operator, Number filterValue, Number filterValue2) {
+        this.fieldname = fieldname;
+        this.operator = operator;
+        this.filterValue = filterValue;
+        this.filterValue2 = filterValue2;
+    }
+
     @Override
     public boolean apply(T bean) {
 
-        Object v = DatabaseUtil.get(bean, fieldname);
+        String name = fieldname.substring(fieldname.lastIndexOf('.') + 1);
+        Object v = DatabaseUtil.getValue(bean, name);
         if (!(v instanceof Number)) {
             return false;
         }
@@ -67,7 +75,33 @@ public class NumberPredicate<T> implements Predicate<T> {
             return value.doubleValue() >= filterValue.doubleValue();
         case LESS_EQUAL:
             return value.doubleValue() <= filterValue.doubleValue();
+        case IN_RANGE:
+            return value.doubleValue() >= filterValue.doubleValue()
+                    && value.doubleValue() <= filterValue2.doubleValue();
         }
         return false;
+    }
+
+    @Override
+    public String toSQL() {
+        StringBuilder buf = new StringBuilder();
+
+        switch (operator) {
+        case EQUALS:
+            return fieldname + " = " + filterValue;
+        case NOT_EQUALS:
+            return fieldname + " <> " + filterValue;
+        case LESS:
+            return fieldname + " < " + filterValue;
+        case GREATER:
+            return fieldname + " > " + filterValue;
+        case GREATER_EQUAL:
+            return fieldname + " >= " + filterValue;
+        case LESS_EQUAL:
+            return fieldname + " <= " + filterValue;
+        case IN_RANGE:
+            return fieldname + " between " + filterValue + " " + filterValue2;
+        }
+        return buf.toString();
     }
 }

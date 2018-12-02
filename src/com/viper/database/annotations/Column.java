@@ -61,6 +61,8 @@ public @interface Column {
 
         String validationMessage() default "";
 
+        String pattern() default "";
+
         String tooltipMessage() default "";
 
         String name() default "";

@@ -57,6 +57,8 @@ public @interface Table {
 
         String sqlDelete() default "";
 
+        String sqlSize() default "";
+
         String queryClassName() default "";
 
         String[] row() default "";
@@ -87,7 +89,9 @@ public @interface Table {
 
         String validator() default "";
         
-        String generator() default "";
+        String beanGenerator() default "";
+        
+        String sqlGenerator() default "";
 
         String converter() default "";
 
@@ -136,4 +140,6 @@ public @interface Table {
         int iterations() default 0;
         
         String seedFilename() default "";
+        
+        String params() default "";
 }

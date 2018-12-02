@@ -19,10 +19,6 @@ import com.viper.database.dao.DatabaseFactory;
 import com.viper.database.dao.DatabaseInterface;
 import #{database.packageName}.#{classname};
 
-## if (java.hasEnums(table)) {
-import #{database.packageName}.enums.*;
-## }
-
 public class #{classname}DaoService {
 
     private static final Logger log = Logger.getLogger(#{classname}DaoService.class.getName());

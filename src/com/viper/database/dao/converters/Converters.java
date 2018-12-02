@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.viper.database.dao.DynamicEnum;
+
 /**
  * The converter class is the central conversion class which will support converting a value of one
  * type to a value of another type.
@@ -96,6 +98,7 @@ public class Converters {
             register(new ShortConverter(Short.class));
             register(new ShortConverter(short.class));
             register(new StringConverter(String.class));
+            register(new DynamicEnumConverter(DynamicEnum.class));
 
             register(new ClobConverter(org.h2.jdbc.JdbcClob.class));
             register(new BlobConverter(org.h2.jdbc.JdbcBlob.class));
@@ -213,7 +216,7 @@ public class Converters {
 
         } catch (Throwable ex) {
             String name = ((target == null) ? "target is null" : target.getName());
-            log.severe("ERROR: convert: " + name + "," + converter + "," + ex);
+            log.throwing("ERROR: convert: " + name + "," + converter, "", ex);
             throw ex;
         }
     }

@@ -153,7 +153,8 @@ public class SQLDriver {
 	}
 
 	private final static String getValue(Row row, String name) {
-		return DatabaseUtil.findValue(row.getCells(), name);
+		Object value = DatabaseUtil.findValue(row.getCells(), name);
+		return (value == null) ? null : value.toString();
 	}
 
 	public boolean isIgnore() {
@@ -1558,6 +1559,9 @@ public class SQLDriver {
 			Table item = new Table();
 			item.setName(getValue(row, "table_name"));
 			item.setDatabaseName(getDatabaseName(row));
+            item.setDatabaseName(databaseName); // TEMPORARY mysql case sensitivity reade table_schema values as lower case always
+			
+			System.err.println("**** TABLE_NAME= " + item.getName() + "," + item.getDatabaseName() + "," + getValue(row, "table_schema"));
 
 			item.setTableType(toTableType(getValue(row, "table_type")));
 			item.setDescription(getDescription(row));
@@ -1677,6 +1681,7 @@ public class SQLDriver {
 			Column item = new Column();
 			item.setName(getValue(row, "column_name"));
 			item.setDatabaseName(getDatabaseName(row));
+            item.setDatabaseName(databaseName);
 			item.setTableName(getValue(row, "table_name"));
 
 			// if (getValue(row, "ordinal_position") != null) {
@@ -1704,6 +1709,10 @@ public class SQLDriver {
 			if (toBoolean(getValue(row, "IS_AUTOINCREMENT"))) {
 				item.setIdMethod(IdMethodType.AUTOINCREMENT);
 			}
+            if (getValue(row, "extra").contains("auto_increment")) {
+                item.setIdMethod(IdMethodType.AUTOINCREMENT);
+            }
+			 
 			if (getValue(row, "character_maximum_length") != null) {
 				item.setSize(toLong(getValue(row, "character_maximum_length")));
 			} else {

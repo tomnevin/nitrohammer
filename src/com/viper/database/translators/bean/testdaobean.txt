@@ -23,6 +23,7 @@ import com.viper.database.dao.DatabaseUtil;
 import #{database.packageName}.#{classname};
 import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.RandomBean;
+import com.viper.database.dao.DynamicEnum;
 
 ## if (java.hasEnums(table)) {
 import #{database.packageName}.enums.*;

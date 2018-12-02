@@ -1,0 +1,84 @@
+## for (var table : root.tables) {
+##
+##   for (column : table.getColumns()) {
+##   if (java.isEnum(column)) {
+##       var filename = outdir + "/enums/" + java.toEnumType(column) + ".java";
+##
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.enums;
+
+import com.viper.database.dao.DynamicEnum;
+import org.apache.johnzon.mapper.JohnzonIgnore;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class #{java.toEnumType(column)} extends DynamicEnum {
+
+	#{java.toDynamicEnumDefinition(column)}
+	 
+    private String value; 
+    
+    @JohnzonIgnore
+    private static List<#{java.toEnumType(column)}> values;      
+
+    public #{java.toEnumType(column)}(String s) {
+        this.value = s;
+        if (valueOf(s) == null) {
+        	values.add(this);
+        }
+    }
+    
+    @Override
+    public String value() {
+        return value;
+    }
+    
+    public String getValue() {
+        return value;
+    }
+       
+    public void setValue(String value) {
+        this.value = value;
+    }
+      
+    public static final #{java.toEnumType(column)} valueOf(String s) {
+    	for (#{java.toEnumType(column)} value : values()) {
+            if (value.value().equalsIgnoreCase(s)) {
+                return value;
+       		}
+    	}
+    	return null;
+    }
+    
+    public static final List<#{java.toEnumType(column)}> values() {
+        if (values == null) {
+            values = new ArrayList<#{java.toEnumType(column)}>();
+        }
+        return values;
+    }
+      
+    public static final List<String> listOf() {
+        List<String> items = new ArrayList<String>();
+        for (#{java.toEnumType(column)} enumValue : values()) {
+        	items.add(enumValue.value());
+        }
+        return items;
+    }
+ 
+    public String toString() {
+        return value;
+    }
+}
+
+## util.write(filename, writer);
+## }
+## }
+## }

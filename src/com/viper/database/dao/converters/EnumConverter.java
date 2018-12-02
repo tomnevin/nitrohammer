@@ -65,7 +65,7 @@ public class EnumConverter implements ConverterInterface {
 			return ((Enum) fromValue).toString();
 		}
 
-		throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+		throw new Exception("EnumConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class EnumConverter implements ConverterInterface {
 			return null;
 		}
 
-		throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+		throw new Exception("EnumConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
 	}
 
 	@Override

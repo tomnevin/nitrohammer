@@ -53,6 +53,10 @@ public final class DateConverter implements ConverterInterface {
         patterns.add(TimestampPattern);
         patterns.add("yyyy-MM-dd HH:mm:ss.S");
         patterns.add("yyyy-MM-dd hh:mm:ss");
+        patterns.add("MM-dd-yyyy HH:mm:ss");
+        patterns.add("MM/dd/yyyy HH:mm:ss");
+        patterns.add("MM-dd-yyyy HH:mm");
+        patterns.add("MM/dd/yyyy HH:mm");
         patterns.add(TimePattern);
         patterns.add("HH:mm:ss");
         patterns.add(DatePattern);

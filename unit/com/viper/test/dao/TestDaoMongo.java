@@ -32,7 +32,6 @@ package com.viper.test.dao;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -40,7 +39,7 @@ import org.junit.Test;
 
 import com.viper.database.dao.DatabaseFactory;
 import com.viper.database.dao.DatabaseInterface;
-import com.viper.database.dao.Predicate;
+import com.viper.database.filters.Predicate;
 import com.viper.database.utils.DatabaseRegistry;
 import com.viper.database.utils.RandomBean;
 import com.viper.database.utils.junit.AbstractTestCase;
@@ -49,7 +48,6 @@ import com.viper.demo.unit.model.User;
 
 public class TestDaoMongo extends AbstractTestCase {
 
-	private final static Logger log = Logger.getLogger(TestDaoMongo.class.getName());
 	private final static String DATABASE_NAME = "test-mongo";
 
 	@BeforeClass
@@ -176,7 +174,12 @@ public class TestDaoMongo extends AbstractTestCase {
 			public boolean apply(Organization e) {
 				return e.getId() == expected.get(0).getId();
 			}
-		});
+
+            @Override
+            public String toSQL() {
+                return null;
+            }
+		}, null, null);
 		Assert.assertNotNull("testQueryExpression null - could not find Organization", organizations);
 		Assert.assertTrue("testQueryExpression size - could not find Organization: " + organizations.size(), organizations.size() == 1);
 	}
@@ -226,7 +229,7 @@ public class TestDaoMongo extends AbstractTestCase {
 		List<String> items = database.listDatabases();
 
 		for (String item : items) {
-			log.info(getCallerMethodName() + " database Name=" + item);
+			System.out.println(getCallerMethodName() + " database Name=" + item);
 		}
 
 		Assert.assertTrue(getCallerMethodName() + " - number of database must be > 0: " + items.size(), items.size() > 0);
@@ -240,7 +243,7 @@ public class TestDaoMongo extends AbstractTestCase {
 		List<String> items = database.listTables(DATABASE_NAME);
 
 		for (String item : items) {
-			log.info(getCallerMethodName() + ": table Name=" + item);
+		    System.out.println(getCallerMethodName() + ": table Name=" + item);
 		}
 
 		Assert.assertTrue(getCallerMethodName() + " - number of tables must be > 0: " + items.size(), items.size() > 0);

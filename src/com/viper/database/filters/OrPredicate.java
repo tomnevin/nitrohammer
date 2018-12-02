@@ -34,27 +34,39 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.viper.database.dao.Predicate;
-
 public class OrPredicate<T> implements Predicate<T> {
 
-    private List<Predicate<T>> predicates = new ArrayList<Predicate<T>>();
+    private List<Predicate> predicates = new ArrayList<Predicate>();
 
-    public OrPredicate(Predicate<T> predicates) {
+    public OrPredicate(Predicate predicates) {
         this.predicates.addAll(Arrays.asList(predicates));
     }
 
-    public void addPredicate(Predicate<T> predicate) {
+    public void addPredicate(Predicate predicate) {
         predicates.add(predicate);
     }
 
     @Override
     public boolean apply(T item) {
         for (Predicate predicate : predicates) {
-            if (predicate.apply(item)) {
+            if (predicate != null && predicate.apply(item)) {
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public String toSQL() {
+        StringBuilder buf = new StringBuilder();
+        for (Predicate predicate : predicates) {
+            if (predicate != null) {
+                if (buf.length() > 0) {
+                    buf.append(" OR ");
+                }
+                buf.append(predicate.toSQL());
+            }
+        }
+        return buf.toString();
     }
 }

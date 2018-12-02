@@ -26,11 +26,11 @@ import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.RandomBean;
 import com.viper.database.dao.DatabaseUtil;
 import com.viper.rest.client.RestClient;
+import com.viper.database.dao.DynamicEnum;
 
 ## if (java.hasEnums(table)) {
 import #{database.packageName}.enums.*;
 ## }
-
 
 public class Test#{classname}RestClient extends AbstractTestCase {
 

@@ -28,9 +28,56 @@
  * -----------------------------------------------------------------------------
  */
 
-package com.viper.database.interfaces;
+package com.viper.test.dao;
 
-public interface GeneratorInterface {
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-	public <T> void generate(T bean);
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.viper.database.dao.DatabaseFactory;
+import com.viper.database.dao.DatabaseInterface;
+import com.viper.database.utils.DatabaseRegistry;
+import com.viper.database.utils.junit.AbstractTestCase;
+
+public class TestDatabaseFactory extends AbstractTestCase {
+
+    @BeforeClass
+    public static void initializeClass() throws Exception {
+
+        Logger.getGlobal().setLevel(Level.INFO);
+
+        DatabaseRegistry.getInstance();
+    }
+
+    @Test
+    public void testOpenFactory1() throws Exception {
+
+        utilOpenFactory(getCallerMethodName(), 1);
+    }
+
+    @Test
+    public void testOpenFactory1000() throws Exception {
+
+        utilOpenFactory(getCallerMethodName(), 1000);
+    }
+
+    @Test
+    public void testOpenFactory10000() throws Exception {
+
+        utilOpenFactory(getCallerMethodName(), 10000);
+    }
+
+    private void utilOpenFactory(String msg, int iterations) throws Exception {
+
+        DatabaseFactory.releaseAll();
+
+        for (int i = 0; i < iterations; i++) {
+            DatabaseInterface dao = DatabaseFactory.getInstance("test");
+
+            Assert.assertNotNull(msg, dao);
+        }
+    }
 }

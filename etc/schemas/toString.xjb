@@ -68,5 +68,13 @@
         }
             </ci:code>
         </jxb:bindings>
+        <jxb:bindings node="/xsd:schema/xsd:complexType[@name='LimitParam']">
+            <ci:code> 
+        @Override 
+        public String toString() { 
+             return this.getPageno() + "," + this.getPagesize();
+        }
+            </ci:code>
+        </jxb:bindings>
 	</jxb:bindings>
 </jxb:bindings>

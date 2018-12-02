@@ -163,17 +163,17 @@
 			<arg line="-pojo etc/model/test srcgen  res:/com/viper/database/translators/web/table.txt com.viper.demo.html.tables" />
 			<arg line="-pojos etc/model/beans srcgen  res:/com/viper/database/translators/web/master.txt com.viper.demo.html.tables" />
 			<arg line="-pojos etc/model/test srcgen  res:/com/viper/database/translators/web/master.txt com.viper.demo.html.tables" />
-			<arg line="-pojo etc/model/information_schema srcgen res:/com/viper/database/translators/bean/enum.txt com.viper.demo.mysql.information_schema.model" />
+			<arg line="-pojo etc/model/information_schema srcgen res:/com/viper/database/translators/bean/dynamic.enum.txt com.viper.demo.mysql.information_schema.model" />
 			<arg line="-pojo etc/model/information_schema srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.mysql.information_schema.model" />
 			<arg line="-pojo etc/model/information_schema srcgen res:/com/viper/database/translators/bean/testbean.txt com.viper.demo.mysql.information_schema.model" />
-			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/bean/enum.txt com.viper.demo.beans.model" />
+			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/bean/dynamic.enum.txt com.viper.demo.beans.model" />
 			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.beans.model" />
 			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/hadoop/dbwritable.txt com.viper.demo.beans.model.writable" />
-			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/hibernate.2/enum.txt com.viper.demo.hibernate2.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/hibernate.2/dynamic.enum.txt com.viper.demo.hibernate2.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/hibernate.2/bean.txt com.viper.demo.hibernate2.model" />
-			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/persistence.0/enum.txt com.viper.demo.persistence0.test.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/persistence.0/dynamic.enum.txt com.viper.demo.persistence0.test.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/persistence.0/bean.txt com.viper.demo.persistence0.test.model" />
-			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/enum.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/dynamic.enum.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/restservice.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/daoservice.txt com.viper.demo.unit.model" />
@@ -345,8 +345,7 @@
 		</java>
 	</target>
 	<target name="doc.schemas"> 
-		<xslt in="${basedir}/etc/schemas/database.xsd" out="${build.dir}/database.xsd.html" style="${basedir}/etc/schemas/xs3p.xsl">
-			
+		<xslt in="${basedir}/etc/schemas/database.xsd" out="${build.dir}/database.xsd.html" style="${basedir}/etc/schemas/database.xsl">
 		</xslt>
 	</target>
 
@@ -509,8 +508,8 @@
 		</javadoc>
 	</target>
 	<!-- =================================================================== -->
-	<target name="test-all" depends="taskdefs,deploy,start.tomcat,junit,stop.tomcat,junit-report,jacoco-report" />
-	<target name="test" depends="taskdefs,deploy,junit,junit-report,jacoco-report" />
+	<target name="test-all" depends="taskdefs,deploy,start.tomcat,taskdefs,junit,stop.tomcat,junit-report,jacoco-report" />
+	<target name="test" depends="taskdefs,deploy,taskdefs,junit,junit-report,jacoco-report" />
 	<target name="cruise-control" depends="clean,war,deploy,junit,junit-report,jacoco-report,javadoc" />
 	<target name="all" depends="clean,dist" />
 </project>

@@ -32,9 +32,11 @@ package com.viper.database.interfaces;
 
 import java.util.List;
 
+import com.viper.database.model.Param;
+
 public interface TableValidatorInterface {
 
 	public <T> boolean isValid(T bean);
 	
-	public <T> List<String> validateErrors(T bean);
+	public <T> List<Param> validateErrors(T bean);
 }

@@ -41,10 +41,6 @@ import com.viper.rest.LocaleUtil;
 
 import #{database.packageName}.#{classname};
 
-## if (java.hasEnums(table)) {
-import #{database.packageName}.enums.*;
-## }
-
 @Path("classes/#{classname.toLowerCase()}")
 public class #{classname}Service {
 

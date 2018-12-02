@@ -33,7 +33,6 @@ package com.viper.database.dao;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -136,7 +135,7 @@ public class DatabaseMapper {
      * @param filter
      * @throws Exception
      */
-    public final static <T> void exportTableByFile(DatabaseInterface dao, String filename, Class<T> clazz)
+    public final static <T> void exportTableByFile(DatabaseSQLInterface dao, String filename, Class<T> clazz)
             throws Exception {
 
         String extension = getFileExtension(filename);
@@ -167,8 +166,7 @@ public class DatabaseMapper {
         for (Table table : database.getTables()) {
             log.fine("Processing table: " + table.getName());
 
-            Class tableClass = DatabaseUtil.toTableClass(database.getPackageName(), database.getName(),
-                    table.getName());
+            Class tableClass = DatabaseUtil.toTableClass(database.getPackageName(), table.getName());
             if (tableClass == null) {
                 throw new Exception("Unable to find class which belongs to table name:" + database.getName() + "."
                         + table.getName());
@@ -209,22 +207,24 @@ public class DatabaseMapper {
 
         try {
             String str = FileUtil.readFile(clazz, filename);
+            if (str == null || str.length() == 0) {
+                return;
+            }
             StringReader reader = new StringReader(str);
 
             log.info("importTableAsCSV#2: " + filename);
-            Iterator<CSVRecord> iterator = CSVFormat.DEFAULT.parse(reader).iterator();
+            Iterator<CSVRecord> iterator = CSVFormat.DEFAULT.withIgnoreSurroundingSpaces().parse(reader).iterator();
             while (iterator.hasNext()) {
                 CSVRecord result = iterator.next();
 
                 log.info("importTableAsCSV#2B: " + result.size());
-                
+
                 if (header.size() == 0) {
                     for (int i = 0; i < result.size(); i++) {
                         header.add(result.get(i));
                     }
                     continue;
                 }
-                
 
                 log.info("importTableAsCSV#2C: " + clazz.getName());
 
@@ -239,7 +239,7 @@ public class DatabaseMapper {
             log.info("importTableAsCSV#3: " + filename + "," + header.size());
         } catch (Throwable ex) {
             ex.printStackTrace();
-            throw ex;   
+            throw ex;
         }
     }
 
@@ -316,31 +316,39 @@ public class DatabaseMapper {
      *             failed.
      * @note the org.apache.commons.csv is used to write the files.
      */
-    public final static <T> void exportTableAsCSV(Class<T> clazz, DatabaseInterface dao, String filename)
+    public final static <T> void exportTableAsCSV(Class<T> clazz, DatabaseSQLInterface dao, String filename)
             throws Exception {
 
-        List<T> items = dao.queryAll(clazz);
+        String databasename = DatabaseUtil.getDatabaseName(clazz);
+        String tablename = DatabaseUtil.getTableName(clazz);
+        
+        String sql = "select * from " + databasename + "." + tablename;
+        
+        List<Row> items = dao.readRows(sql);
 
         new File(filename).getAbsoluteFile().getParentFile().mkdirs();
 
         PrintStream out = new PrintStream(new File(filename));
-        List<String> header = DatabaseUtil.getColumnFieldNames(clazz);
         boolean isFirst = true;
 
-        for (T obj : items) {
-            if (obj == null) {
+        for (Row row : items) {
+            if (row == null) {
                 continue;
             }
             if (isFirst) {
-                out.println(CSVFormat.EXCEL.format(header.toArray()));
+                List<String> header = new ArrayList<String>();
+                for (Cell cell : row.getCells()) {
+                    header.add(cell.getName());
+                }
+                out.println(CSVFormat.EXCEL.withIgnoreSurroundingSpaces().format(header.toArray()));
             }
             isFirst = false;
-            Object data[] = new Object[header.size()];
-            for (int i = 0; i < header.size(); i++) {
-                Object value = DatabaseUtil.getValue(obj, header.get(i));
-                data[i] = value;
+           
+            List data = new ArrayList<>();
+            for (Cell cell : row.getCells()) {
+                data.add(cell.getValue());
             }
-            out.println(CSVFormat.EXCEL.format(data));
+            out.println(CSVFormat.EXCEL.format(data.toArray()));
         }
         out.flush();
         out.close();
@@ -522,7 +530,7 @@ public class DatabaseMapper {
             }
             newTable.setIsRestService(oldTable.isIsRestService());
             newTable.setValidator(oldTable.getValidator());
-            newTable.setGenerator(oldTable.getGenerator());
+            newTable.setBeanGenerator(oldTable.getBeanGenerator());
             newTable.setConverter(oldTable.getConverter());
             newTable.setIterations(oldTable.getIterations());
             newTable.setFilter(oldTable.getFilter());

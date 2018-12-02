@@ -52,17 +52,24 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
 import com.viper.database.annotations.Column;
 import com.viper.database.annotations.ForeignKey;
 import com.viper.database.annotations.Table;
 import com.viper.database.dao.converters.Converters;
-import com.viper.database.interfaces.GeneratorInterface;
+import com.viper.database.dao.drivers.SQLDriver;
+import com.viper.database.filters.Predicate;
+import com.viper.database.interfaces.BeanGeneratorInterface;
+import com.viper.database.interfaces.ColumnValidatorInterface;
+import com.viper.database.interfaces.SqlGeneratorInterface;
 import com.viper.database.interfaces.TableConverterInterface;
 import com.viper.database.interfaces.TableValidatorInterface;
 import com.viper.database.model.Cell;
+import com.viper.database.model.ColumnParam;
 import com.viper.database.model.Database;
+import com.viper.database.model.EnumItem;
 import com.viper.database.model.Param;
 import com.viper.database.model.Row;
 
@@ -117,7 +124,7 @@ public class DatabaseUtil {
                 if (DatabaseInterface.PAGESIZE_KEY.equals(key)) {
                     continue;
                 }
-                
+
                 if (!hasPropertyName(item.getClass(), key)) {
                     return false;
                 }
@@ -132,7 +139,7 @@ public class DatabaseUtil {
                         return false;
                     }
                 } else if (beanValue instanceof Collection) {
-                    if (!((Collection) beanValue).contains(value)) {
+                    if (!((Collection<?>) beanValue).contains(value)) {
                         return false;
                     }
                 } else if (beanValue instanceof String && value instanceof String) {
@@ -260,15 +267,43 @@ public class DatabaseUtil {
         return results;
     }
 
-    public static final String findValue(Row row, String name) {
+    public static final Object findValue(Row row, String name) {
         return findValue(row.getCells(), name);
     }
 
-    public static final String findValue(List<Cell> list, String name) {
+    public static final Object findValue(List<Cell> list, String name) {
         if (list != null && name != null) {
             for (Cell item : list) {
                 if (name.equalsIgnoreCase(item.getName())) {
                     return item.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 
+     */
+    public static final Column findColumnAnnotation(List<Column> columns, String tablename, String fieldname) {
+        for (Column column : columns) {
+            if (tablename.equalsIgnoreCase(column.tableName())) {
+                if (fieldname.equalsIgnoreCase(column.field())) {
+                    return column;
+                }
+            }
+        }
+        for (Column column : columns) {
+            if (column.tableName() == null || column.tableName().isEmpty()) {
+                if (fieldname.equalsIgnoreCase(column.field())) {
+                    return column;
+                }
+            }
+        }
+        for (Column column : columns) {
+            if (column.tableName() == null || column.tableName().isEmpty()) {
+                if (fieldname.equalsIgnoreCase(column.name())) {
+                    return column;
                 }
             }
         }
@@ -292,6 +327,39 @@ public class DatabaseUtil {
     }
 
     /**
+     * Returns first loaded Class found in the searchPackages
+     * 
+     * @param classname
+     *            the simple class name (e.g. "String")
+     * @param searchPackages
+     *            String[] of packages to search.
+     *            <li>Place the more important packages at the top since the first
+     *            Class found is returned</li> <code>//Example
+     *                        public static final String[] searchPackages = {
+     *                          "java.lang",
+     *                          "java.util",
+     *                          "my.company",
+     *                          "my.company.other" };
+     *                       </code>
+     * @return the loaded Class or null if not found
+     */
+    public static final Class<?> findClassBySimpleName(String classname, List<String> searchPackages) {
+        try {
+            return Class.forName(classname);
+        } catch (ClassNotFoundException e) {
+            // simplename is not a fullname, try the package list
+        }
+        for (String searchPackage : searchPackages) {
+            try {
+                return Class.forName(searchPackage + "." + classname);
+            } catch (ClassNotFoundException e) {
+                // not in this package, try another
+            }
+        }
+        return null;
+    }
+
+    /**
      * Scans all classes accessible from the context class loader which belong to
      * the given packages.
      * 
@@ -300,8 +368,8 @@ public class DatabaseUtil {
      * @return list of classes in the package which are table annotated.
      * 
      */
-    public static final List<Class> getClasses(String packageName) {
-        List<Class> classes = new ArrayList<Class>();
+    public static final List<Class<?>> getClasses(String packageName) {
+        List<Class<?>> classes = new ArrayList<Class<?>>();
 
         if (packageName != null) {
 
@@ -312,7 +380,7 @@ public class DatabaseUtil {
                 while (resources.hasMoreElements()) {
                     URL resource = resources.nextElement();
 
-                    List<Class> clazzes = null;
+                    List<Class<?>> clazzes = null;
                     if ("file".equalsIgnoreCase(resource.getProtocol())) {
                         clazzes = findClassesInFile(classLoader, new File(resource.getFile()), packageName);
                     }
@@ -320,7 +388,7 @@ public class DatabaseUtil {
                         clazzes = findClassesInJar(classLoader, resource, packageName);
                     }
                     if (clazzes != null) {
-                        for (Class clazz : clazzes) {
+                        for (Class<?> clazz : clazzes) {
                             if (!classes.contains(clazz)) {
                                 classes.add(clazz);
                             }
@@ -343,10 +411,10 @@ public class DatabaseUtil {
      * @return list of classes in the package which are table annotated.
      * 
      */
-    public static final List<Class> getClasses(List<String> packageNames) {
-        List<Class> items = new ArrayList<Class>();
+    public static final List<Class<?>> getClasses(List<String> packageNames) {
+        List<Class<?>> items = new ArrayList<Class<?>>();
         for (String packagename : packageNames) {
-            List<Class> list = getClasses(packagename);
+            List<Class<?>> list = getClasses(packagename);
             if (list != null) {
                 items.addAll(list);
             }
@@ -366,9 +434,9 @@ public class DatabaseUtil {
      * @return The classes
      * @throws ClassNotFoundException
      */
-    private static final List<Class> findClassesInFile(ClassLoader classLoader, File directory, String packageName)
+    private static final List<Class<?>> findClassesInFile(ClassLoader classLoader, File directory, String packageName)
             throws Exception {
-        List<Class> classes = new ArrayList<Class>();
+        List<Class<?>> classes = new ArrayList<Class<?>>();
         if (!directory.exists()) {
             return classes;
         }
@@ -408,10 +476,10 @@ public class DatabaseUtil {
      * @return The classes
      * @throws Exception
      */
-    private static final List<Class> findClassesInJar(ClassLoader classLoader, URL resource, String packageName)
+    private static final List<Class<?>> findClassesInJar(ClassLoader classLoader, URL resource, String packageName)
             throws Exception {
 
-        List<Class> classes = new ArrayList<Class>();
+        List<Class<?>> classes = new ArrayList<Class<?>>();
 
         packageName = packageName.replace('.', '/');
 
@@ -453,11 +521,11 @@ public class DatabaseUtil {
      *            table, for all databases.
      * @return the list of all classes in the package.
      */
-    public static final List<Class> getClassesWithAnnotation(String packageName, Class annotationClass) {
+    public static final List<Class<?>> getClassesWithAnnotation(String packageName, Class annotationClass) {
 
-        List<Class> items = new ArrayList<Class>();
-        List<Class> classes = getClasses(packageName);
-        for (Class clazz : classes) {
+        List<Class<?>> items = new ArrayList<Class<?>>();
+        List<Class<?>> classes = getClasses(packageName);
+        for (Class<?> clazz : classes) {
             if (clazz.isAnnotationPresent(annotationClass)) {
                 items.add(clazz);
             }
@@ -474,12 +542,12 @@ public class DatabaseUtil {
      * 
      * @return the list of all classes in the package.
      */
-    public static final List<Class> getDatabaseClasses(String packageName) {
+    public static final List<Class<?>> getDatabaseClasses(String packageName) {
 
-        List<Class> dbClasses = new ArrayList<Class>();
+        List<Class<?>> dbClasses = new ArrayList<Class<?>>();
 
-        List<Class> classes = getClasses(packageName);
-        for (Class clazz : classes) {
+        List<Class<?>> classes = getClasses(packageName);
+        for (Class<?> clazz : classes) {
             if (clazz.isAnnotationPresent(Table.class)) {
                 dbClasses.add(clazz);
             }
@@ -489,6 +557,11 @@ public class DatabaseUtil {
 
     public static final Object newInstance(String classname) throws Exception {
         return Class.forName(classname).newInstance();
+    }
+
+
+    public static final <T, S> T newInstance(Class<T> clazz, S value) throws Exception {
+        return clazz.getConstructor(value.getClass()).newInstance(value);
     }
 
     /**
@@ -506,10 +579,10 @@ public class DatabaseUtil {
      *         if not defined.
      *
      */
-    public static final Class toTableClass(String packagename, String databasename, String tablename) {
+    public static final Class<?> toTableClass(String packagename, String tablename) {
 
-        List<Class> classes = getClasses(packagename);
-        for (Class clazz : classes) {
+        List<Class<?>> classes = getClasses(packagename);
+        for (Class<?> clazz : classes) {
             if (clazz.isAnnotationPresent(Table.class)) {
                 Table table = (Table) clazz.getAnnotation(Table.class);
                 if (table.name().equalsIgnoreCase(tablename)) {
@@ -535,10 +608,10 @@ public class DatabaseUtil {
      *         if not defined.
      *
      */
-    public static final Class toTableClass(List<String> packagenames, String databasename, String tablename) {
+    public static final Class<?> toTableClass(List<String> packagenames, String tablename) {
 
         for (String packagename : packagenames) {
-            Class clazz = toTableClass(packagename, databasename, tablename);
+            Class<?> clazz = toTableClass(packagename, tablename);
             if (clazz != null) {
                 return clazz;
             }
@@ -561,10 +634,10 @@ public class DatabaseUtil {
      *         if not defined.
      *
      */
-    public static final Class toTableClass(String classname) throws Exception {
+    public static final Class<?> toTableClass(String classname) throws Exception {
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        Class clazz = classLoader.loadClass(classname);
+        Class<?> clazz = classLoader.loadClass(classname);
         return (clazz.isAnnotationPresent(Table.class)) ? clazz : null;
     }
 
@@ -577,11 +650,11 @@ public class DatabaseUtil {
      * @return the list of classes which are part of the package after being
      *         filtered, zero size array if not classes not found.
      */
-    public static final List<Class> listDatabaseTableClasses(String packageName, String regexFilter) {
+    public static final List<Class<?>> listDatabaseTableClasses(String packageName, String regexFilter) {
 
-        List<Class> classes = DatabaseUtil.getDatabaseClasses(packageName);
-        List<Class> items = new ArrayList<Class>();
-        for (Class item : classes) {
+        List<Class<?>> classes = DatabaseUtil.getDatabaseClasses(packageName);
+        List<Class<?>> items = new ArrayList<Class<?>>();
+        for (Class<?> item : classes) {
             Table table = (Table) item.getAnnotation(Table.class);
             if (table != null
                     && ("table".equalsIgnoreCase(table.tableType()) || "view".equalsIgnoreCase(table.tableType()))) {
@@ -605,11 +678,11 @@ public class DatabaseUtil {
      * @return the list of classes which are part of the package and the database by
      *         name, zero size array if not classes not found.
      */
-    public static final List<Class> listTableClasses(String packageName, String databaseName) {
+    public static final List<Class<?>> listTableClasses(String packageName, String databaseName) {
 
-        List<Class> classes = DatabaseUtil.getDatabaseClasses(packageName);
-        List<Class> items = new ArrayList<Class>();
-        for (Class item : classes) {
+        List<Class<?>> classes = getDatabaseClasses(packageName);
+        List<Class<?>> items = new ArrayList<Class<?>>();
+        for (Class<?> item : classes) {
             Table table = (Table) item.getAnnotation(Table.class);
             if (table != null && databaseName.equalsIgnoreCase(table.databaseName())) {
                 items.add(item);
@@ -630,12 +703,12 @@ public class DatabaseUtil {
      * @return the list of classes which are part of the package and the database by
      *         name, zero size array if not classes not found.
      */
-    public static final Map<String, Class> mapTableClasses(String packageName) {
+    public static final Map<String, Class<?>> mapTableClasses(String packageName) {
 
-        Map<String, Class> map = new HashMap<String, Class>();
+        Map<String, Class<?>> map = new HashMap<String, Class<?>>();
 
-        List<Class> classes = getDatabaseClasses(packageName);
-        for (Class item : classes) {
+        List<Class<?>> classes = getDatabaseClasses(packageName);
+        for (Class<?> item : classes) {
             Table table = (Table) item.getAnnotation(Table.class);
             if (table != null) {
                 map.put(table.name().toLowerCase(), item);
@@ -687,6 +760,9 @@ public class DatabaseUtil {
         if (table == null) {
             System.err.println("Class does not contain a Table annotation: " + tableClass.getName());
             return null;
+        }
+        if (table.tableName() != null && table.tableName().length() > 0) {
+            return table.tableName();
         }
         String name = table.name();
         if (name == null || name.length() == 0) {
@@ -900,6 +976,23 @@ public class DatabaseUtil {
      * @param database
      * @return whether the database exists or not.
      */
+    public static List<EnumItem> getEnumValues(DatabaseSQLInterface dao, String databaseName, String tableName,
+            String columnName) throws Exception {
+
+        List<com.viper.database.model.Column> columns = new SQLDriver().loadColumns(dao, databaseName, tableName,
+                columnName);
+        for (com.viper.database.model.Column column : columns) {
+            return column.getEnumValues();
+        }
+        return new ArrayList<EnumItem>();
+    }
+
+    /**
+     * 
+     * @param dao
+     * @param database
+     * @return whether the database exists or not.
+     */
     public static boolean isDatabaseExist(DatabaseInterface dao, String database) {
         List<String> names = dao.listDatabases();
         return (names == null || names.contains(database.toLowerCase()));
@@ -1024,6 +1117,31 @@ public class DatabaseUtil {
      * @return the list of column annotations if defined with the class, zero size
      *         list otherwise.
      */
+    public static <T> List<Field> getColumnAnnotatedFields(Class<T> clazz) {
+        List<Field> items = new ArrayList<Field>();
+        for (Class<?> c = clazz; c != null; c = c.getSuperclass()) {
+            Field[] fields = c.getDeclaredFields();
+            for (Field field : fields) {
+                if (field.isAnnotationPresent(Column.class)) {
+                    items.add(field);
+                }
+            }
+        }
+        return items;
+    }
+
+    /**
+     * Given the table class, and the database field name, return the column
+     * annotation object.
+     * 
+     * @param tableClazz
+     *            java table model, with annotations.
+     * @param <T>
+     *            the class of the pojo database bean, annotated with classes from
+     *            package com.viper.database.annotations
+     * @return the list of column annotations if defined with the class, zero size
+     *         list otherwise.
+     */
     public static <T> Map<String, Column> getColumnAnnotationsMap(Class<T> clazz) {
         Map<String, Column> columns = new HashMap<String, Column>();
 
@@ -1052,7 +1170,17 @@ public class DatabaseUtil {
      *         list otherwise.
      */
     public static <T> Map<String, Column> getNestedColumnAnnotations(Class<T> clazz) throws Exception {
+
         Map<String, Column> columns = new TreeMap<String, Column>();
+
+        String path = clazz.getSimpleName();
+        makeNestedColumnAnnotationsInternal(columns, clazz, path);
+
+        return columns;
+    }
+
+    private static final <T> void makeNestedColumnAnnotationsInternal(Map<String, Column> columns, Class<T> clazz,
+            String path) throws Exception {
 
         Field[] fields = clazz.getDeclaredFields();
         if (fields != null) {
@@ -1062,7 +1190,7 @@ public class DatabaseUtil {
                     continue;
                 }
 
-                String key = toFullColumnName(clazz, annotation);
+                String key = path + "." + annotation.name();
 
                 columns.put(key, annotation);
 
@@ -1071,31 +1199,22 @@ public class DatabaseUtil {
                 if (type instanceof ParameterizedType) {
                     ParameterizedType pType = (ParameterizedType) type;
                     for (Type gtype : pType.getActualTypeArguments()) {
-                        List<Column> nestedColumns = getColumnAnnotations(Class.forName(gtype.getTypeName()));
-                        for (Column nestedColumn : nestedColumns) {
-                            columns.put(key + "." + nestedColumn.name(), nestedColumn);
-                        }
+                        Class<?> clazz1 = Class.forName(gtype.getTypeName());
+                        makeNestedColumnAnnotationsInternal(columns, clazz1, key);
                     }
                 } else if (type instanceof GenericArrayType) {
                     GenericArrayType pType = (GenericArrayType) type;
-                    Class nestedClass = Class.forName(pType.getGenericComponentType().getTypeName());
+                    Class<?> clazz1 = Class.forName(pType.getGenericComponentType().getTypeName());
+                    makeNestedColumnAnnotationsInternal(columns, clazz1, key);
 
-                    List<Column> nestedColumns = getColumnAnnotations(nestedClass);
-                    for (Column nestedColumn : nestedColumns) {
-                        columns.put(key + "." + nestedColumn.name(), nestedColumn);
-                    }
                 } else {
-                    List<Column> nestedColumns = getColumnAnnotations(field.getType());
-                    for (Column nestedColumn : nestedColumns) {
-                        columns.put(key + "." + nestedColumn.name(), nestedColumn);
-                    }
+                    makeNestedColumnAnnotationsInternal(columns, field.getType(), key);
                 }
             }
         }
-        return columns;
     }
 
-    public final static <T> String toFullColumnName(Class<T> clazz, Column column) {
+    public static final <T> String toFullColumnName(Class<T> clazz, Column column) {
         String name = clazz.getSimpleName();
         return name + "." + column.name();
     }
@@ -1169,6 +1288,32 @@ public class DatabaseUtil {
             }
         }
         return names;
+    }
+
+    /**
+     * Given the table class, return all the column field names.
+     * 
+     * @param tableClazz
+     *            java table model, with annotations.
+     * @param <T>
+     *            the class of the pojo database bean, annotated with classes from
+     *            package com.viper.database.annotations
+     * @return the list of column annotations if defined with the class, zero size
+     *         list otherwise.
+     */
+    public static <T> String getColumnFieldName(Class<T> tableClazz, String name) {
+        Method[] methods = tableClazz.getMethods();
+        if (methods != null) {
+            for (Method method : methods) {
+                Column column = method.getAnnotation(Column.class);
+                if (column != null) {
+                    if (name.equalsIgnoreCase(column.name()) || name.equalsIgnoreCase(column.field())) {
+                        return (isEmpty(column.field())) ? column.name() : column.field();
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -1266,7 +1411,7 @@ public class DatabaseUtil {
         for (com.viper.database.model.Table table : db.getTables()) {
             log.fine("Processing table: " + table.getName());
 
-            Class tableClass = DatabaseUtil.toTableClass(db.getPackageName(), db.getName(), table.getName());
+            Class tableClass = DatabaseUtil.toTableClass(db.getPackageName(), table.getName());
             if (tableClass == null) {
                 throw new Exception(
                         "Unable to find class which belongs to table name:" + db.getName() + "." + table.getName());
@@ -1293,22 +1438,54 @@ public class DatabaseUtil {
      *            generator is written to update.
      * 
      */
-    public static <T> void callGenerator(T bean) throws Exception {
-        if (bean == null) {
-            return;
+    public static <T> String callSqlGenerator(Class<T> clazz) throws Exception {
+        if (clazz == null) {
+            return null;
         }
 
-        Table table = getTableAnnotation(bean.getClass());
-        if (table == null || table.generator() == null || table.generator().trim().length() == 0) {
-            return;
+        Table table = getTableAnnotation(clazz);
+        if (table == null || table.sqlGenerator() == null || table.sqlGenerator().trim().length() == 0) {
+            return null;
         }
 
-        GeneratorInterface api = (GeneratorInterface) newInstance(table.generator());
+        SqlGeneratorInterface api = (SqlGeneratorInterface) newInstance(table.sqlGenerator());
         if (api == null) {
-            return;
+            return null;
         }
 
-        api.generate(bean);
+        return api.generate(clazz);
+    }
+
+    /**
+     * Call the beans generator class from the annotation.
+     * 
+     * @param bean
+     *            the bean upon which the generator will operate, should NOT be
+     *            null.
+     * 
+     *            On return the bean will be populated with the fields which the
+     *            generator is written to update.
+     * 
+     */
+    public static <T> List<T> callBeanGenerator(List<T> beans) throws Exception {
+        if (beans == null || beans.size() == 0) {
+            return beans;
+        }
+
+        Table table = getTableAnnotation(beans.get(0).getClass());
+        if (table == null || table.beanGenerator() == null || table.beanGenerator().trim().length() == 0) {
+            return beans;
+        }
+
+        BeanGeneratorInterface api = (BeanGeneratorInterface) newInstance(table.beanGenerator());
+        if (api == null) {
+            return beans;
+        }
+
+        for (T bean : beans) {
+            api.generate(bean);
+        }
+        return beans;
     }
 
     /**
@@ -1332,7 +1509,7 @@ public class DatabaseUtil {
             return;
         }
 
-        TableConverterInterface api = (TableConverterInterface) newInstance(table.generator());
+        TableConverterInterface api = (TableConverterInterface) newInstance(table.converter());
         if (api == null) {
             return;
         }
@@ -1341,32 +1518,60 @@ public class DatabaseUtil {
     }
 
     /**
-     * Call the beans generator class from the annotation.
+     * Call the bean validation class, and all the column validation classes. Table
+     * validation is for overall validation, column validation for each column.
+     * There is a custom validation possible per column and a predefined validation
+     * per column. String will be validated for length, and possible pattaern match.
+     * Numbers can be validated against a range, etc.
      * 
      * @param bean
-     *            the bean upon which the generator will operate, should NOT be
-     *            null.
+     *            the bean which is to be validated
      * 
-     *            On return the bean will be populated with the fields which the
-     *            generator is written to update.
+     *            On return a list of errors will be returned, these errors should
+     *            be looked up in a locale properties file for translation, even for
+     *            english.
      * 
      */
-    public static <T> boolean callTableValidation(T bean) throws Exception {
+    public static <T> List<Param> callTableValidation(T bean) throws Exception {
+        List<Param> errors = new ArrayList<Param>();
         if (bean == null) {
-            return true;
+            return errors;
         }
 
         Table table = getTableAnnotation(bean.getClass());
-        if (table == null || table.validator() == null || table.validator().trim().length() == 0) {
-            return true;
+        if (table != null && table.validator() != null && !table.validator().trim().isEmpty()) {
+
+            TableValidatorInterface api = (TableValidatorInterface) newInstance(table.validator());
+            if (api != null) {
+                errors.addAll(api.validateErrors(bean));
+            }
+        }
+        List<Column> columns = getAllColumnAnnotations(bean.getClass());
+        for (Column column : columns) {
+            if (column == null) {
+                continue;
+            }
+
+            // ***** TODO Perform predefined validation on the column.
+
+            if (column.validator() != null && !column.validator().trim().isEmpty()) {
+
+                ColumnValidatorInterface api = (ColumnValidatorInterface) newInstance(column.validator());
+                if (api != null) {
+                    errors.addAll(api.validateErrors(bean, column));
+                }
+            }
         }
 
-        TableValidatorInterface api = (TableValidatorInterface) newInstance(table.validator());
-        if (api == null) {
-            return true;
-        }
+        return errors;
+    }
 
-        return api.isValid(bean);
+    public static <T> List<Param> callTableValidation(List<T> beans) throws Exception {
+        List<Param> errors = new ArrayList<Param>();
+        for (T bean : beans) {
+            errors.addAll(callTableValidation(bean));
+        }
+        return errors;
     }
 
     /**
@@ -1467,6 +1672,53 @@ public class DatabaseUtil {
         }
     }
 
+    public static final <T> List<T> applyFilter(List<T> beans, Predicate predicate) {
+        List<T> results = new ArrayList<T>();
+        if (beans.size() > 0) {
+            for (T bean : beans) {
+                if (predicate.apply(bean)) {
+                    results.add(bean);
+                }
+            }
+        }
+        return results;
+    }
+
+    public static final <T> List<T> applyGroupBy(List<T> beans, List<ColumnParam> columnParams) {
+        Map<Object, T> results = new HashMap<Object, T>();
+        if (beans.size() > 0) {
+            boolean hasGroupBy = false;
+            for (ColumnParam param : columnParams) {
+                if (param.isGroupBy()) {
+                   hasGroupBy = true;
+                }
+            }
+            if (!hasGroupBy) {
+                return beans;
+            }
+            
+            for (T bean : beans) {
+                List<Object> key = new ArrayList<Object>();
+                for (ColumnParam param : columnParams) {
+                    if (param.isGroupBy()) {
+                        String name = param.getName().substring(param.getName().lastIndexOf('.') + 1);
+                        Object value = getValue(bean, name);
+                        key.add(value);
+                    }
+                }
+
+                if (results.containsKey(key)) {
+                    T bean1 = results.get(key);
+                    setValue(bean1, "count", (Integer) (getValue(bean1, "count")) + 1);
+                } else {
+                    setValue(bean, "count", 1);
+                    results.put(key, bean);
+                }
+            }
+        }
+        return new ArrayList<T>(results.values());
+    }
+
     /**
      * Copy all values from source object to destination object, where the names
      * match.
@@ -1520,6 +1772,69 @@ public class DatabaseUtil {
         return (column.name() == null) ? column.field() : column.name();
     }
 
+    /**
+     * Given the table class and the column field name, return the java property
+     * name.
+     *
+     * @param clazz
+     *            java table model, with annotations.
+     * @param fieldname
+     * @param <T>
+     *            the class of the pojo database bean, annotated with classes from
+     *            package com.viper.database.annotations
+     * 
+     * @return the name of the java property corresponding to the fieldname.
+     * 
+     */
+    public static <T> String toPropertyName(Class<T> clazz, String tablename, String fieldname) {
+        Column column = getColumnAnnotation(clazz, fieldname);
+        if (column == null) {
+            return fieldname;
+        }
+        return (column.name() == null) ? column.field() : column.name();
+    }
+
+    /**
+     * 
+     * @param bean
+     * @param column
+     * @return
+     */
+    public static <T> Class<?> toPropertyType(T bean, Column column) {
+        String propertyName = null;
+        try {
+            if (column != null) {
+                if (column.name() != null) {
+                    propertyName = column.name();
+                } else {
+                    propertyName = column.field();
+                }
+                return PropertyUtils.getPropertyType(bean, propertyName);
+            }
+        } catch (Exception ex) {
+            log.severe("toPropertyType failed for " + bean.getClass() + "." + propertyName + ":" + ex);
+        }
+        return null;
+    }
+
+    /**
+     * Given the table class and the column field name, return the java property
+     * name.
+     *
+     * @param clazz
+     *            java table model, with annotations.
+     * @param fieldname
+     * @param <T>
+     *            the class of the pojo database bean, annotated with classes from
+     *            package com.viper.database.annotations
+     * 
+     * @return the name of the java property corresponding to the fieldname.
+     * 
+     */
+    public static <T> String toPropertyName(Column column) {
+        return (column.name() == null || column.name().isEmpty()) ? column.field() : column.name();
+    }
+
     public static <T> boolean hasPropertyName(Class<T> clazz, String fieldname) {
         Column column = getColumnAnnotation(clazz, fieldname);
         if (column != null) {
@@ -1531,6 +1846,11 @@ public class DatabaseUtil {
             ; // intentionally blank
         }
         return false;
+    }
+
+    public static <T> boolean hasColumn(Class<T> clazz, String fieldname) {
+        Column column = getColumnAnnotation(clazz, fieldname);
+        return (column != null);
     }
 
     /**
@@ -1612,7 +1932,7 @@ public class DatabaseUtil {
      */
     public static <T> void setValue(T bean, String fieldname, Object value) {
         try {
-            Class fieldClazz = toPropertyClass(bean.getClass(), fieldname);
+            Class<?> fieldClazz = toPropertyClass(bean.getClass(), fieldname);
             if (fieldClazz == null) {
                 System.err.println("DatabaseJDBC.read: " + bean.getClass().getName() + ", " + fieldname);
                 return;
@@ -1693,6 +2013,30 @@ public class DatabaseUtil {
         return fields;
     }
 
+    /**
+     * 
+     * @param type
+     * @return
+     */
+
+    public static List<Column> getAllColumnAnnotations(Class<?> type) {
+        List<Column> columns = new ArrayList<Column>();
+        for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+            Field fields[] = c.getDeclaredFields();
+            if (fields != null) {
+                for (Field field : fields) {
+                    Column cols[] = field.getAnnotationsByType(Column.class);
+                    if (cols != null) {
+                        for (Column col : cols) {
+                            columns.add(col);
+                        }
+                    }
+                }
+            }
+        }
+        return columns;
+    }
+
     public static Object convert(Column column, Class clazz, Object value) throws Exception {
 
         final String DELIMITERS = "\\s*[\\)\\(,]\\s*";
@@ -1746,7 +2090,7 @@ public class DatabaseUtil {
             String foreignDatabase = foreignKey.foreignDatabase();
             String foreignTable = foreignKey.foreignTable();
             String[] foreignKeyName = foreignKey.foreignColumns();
-            Class foreignClass = toTableClass(tableClazz.getPackage().getName(), foreignDatabase, foreignTable);
+            Class foreignClass = toTableClass(tableClazz.getPackage().getName(), foreignTable);
 
             Object child = dao.query(foreignClass, foreignKeyName[0], localValue);
             if (child != null) {
@@ -1782,8 +2126,7 @@ public class DatabaseUtil {
                         String foreignDatabase = foreignKey.getForeignDatabase();
                         String foreignTable = foreignKey.getForeignTable();
                         String foreignKeyName = foreignKey.getForeignKeyReferences().get(0).getForeignColumn();
-                        Class foreignClass = toTableClass(tableClazz.getPackage().getName(), foreignDatabase,
-                                foreignTable);
+                        Class foreignClass = toTableClass(tableClazz.getPackage().getName(), foreignTable);
 
                         Object child = dao.query(foreignClass, foreignKeyName, localValue);
                         if (child != null) {
@@ -1830,5 +2173,9 @@ public class DatabaseUtil {
         param.setName(name);
         param.setValue(value);
         params.add(param);
+    }
+
+    private static final boolean isEmpty(String str) {
+        return (str == null || str.trim().isEmpty());
     }
 }

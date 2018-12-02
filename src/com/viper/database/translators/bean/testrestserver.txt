@@ -30,11 +30,6 @@ import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.RandomBean;
 import com.viper.database.rest.model.*;
 
-## if (java.hasEnums(table)) {
-import #{database.packageName}.enums.*;
-## }
-
-
 public class Test#{classname}RestServer extends AbstractTestCase {
 
     private static DatabaseInterface database = null;

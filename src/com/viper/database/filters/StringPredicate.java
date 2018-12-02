@@ -30,10 +30,13 @@
 
 package com.viper.database.filters;
 
+import java.util.logging.Logger;
+
 import com.viper.database.dao.DatabaseUtil;
-import com.viper.database.dao.Predicate;
 
 public class StringPredicate<T> implements Predicate<T> {
+
+    private final static Logger log = Logger.getLogger(StringPredicate.class.getName());
 
     private String fieldname = null;
     private StringOperator operator = null;
@@ -47,7 +50,7 @@ public class StringPredicate<T> implements Predicate<T> {
 
     @Override
     public boolean apply(T bean) {
-        
+
         if (operator == null) {
             return true;
         }
@@ -63,10 +66,16 @@ public class StringPredicate<T> implements Predicate<T> {
         if (bean == null) {
             return false;
         }
-        
-        String value = DatabaseUtil.getString(bean, fieldname);
+
+        String name = fieldname.substring(fieldname.lastIndexOf('.') + 1);
+        String value = DatabaseUtil.getString(bean, name);
+        if (value == null) {
+            value = "";
+        }
         String valueLC = value.toLowerCase();
         String filterValueLC = filterValue.toLowerCase();
+
+        log.fine("StringPredicate: " + operator + "=" + valueLC + "," + filterValueLC);
 
         switch (operator) {
         case EQUALS:
@@ -83,5 +92,26 @@ public class StringPredicate<T> implements Predicate<T> {
             return !valueLC.contains(filterValueLC);
         }
         return false;
+    }
+
+    @Override
+    public String toSQL() {
+        StringBuilder buf = new StringBuilder();
+
+        switch (operator) {
+        case EQUALS:
+            return fieldname + " like '" + filterValue + "'";
+        case NOT_EQUALS:
+            return fieldname + " not like '" + filterValue + "'";
+        case STARTS_WITH:
+            return fieldname + " like '" + filterValue + "%' COLLATE utf8_bin";
+        case END_WITH:
+            return fieldname + " like '%" + filterValue + "' COLLATE utf8_bin";
+        case CONTAINS:
+            return fieldname + " like '%" + filterValue + "%' COLLATE utf8_bin";
+        case NOT_CONTAINS:
+            return fieldname + " not like '%" + filterValue + "%' COLLATE utf8_bin";
+        }
+        return buf.toString();
     }
 }

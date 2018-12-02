@@ -28,26 +28,9 @@
  * -----------------------------------------------------------------------------
  */
 
-package com.viper.database.filters;
+package com.viper.database.interfaces;
 
-import com.viper.database.dao.Predicate;
+public interface BeanGeneratorInterface {
 
-public class LimitPredicate<T> implements Predicate<T> {
-
-    private long limit;
-
-    public LimitPredicate(long limit) {
-        this.limit = limit;
-    }
-    
-    public void reset(long limit) {
-        this.limit = limit;
-    }
-
-    @Override
-    public boolean apply(T bean) {
-        boolean isValid = (limit > 0);
-        limit = limit - 1;
-        return isValid;
-    }
+	public <T> void generate(T bean);
 }

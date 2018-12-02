@@ -1,9 +1,8 @@
 ## for (var table : root.tables) {
-##   var classname = java.toJavaName(table);
 ##
 ##   for (column : table.getColumns()) {
 ##   if (java.isEnum(column)) {
-##       var filename = outdir + "/enums/" + java.toJavaType(column) + ".java";
+##       var filename = outdir + "/enums/" + java.toEnumType(column) + ".java";
 ##
 // =============================================================================
 // WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
@@ -15,12 +14,12 @@
 
 package #{database.packageName}.enums;
 
-public enum #{java.toJavaType(column)} {
+public enum #{java.toEnumType(column)} {
 	 #{java.toEnumDefinition(column)};
 	 
     private final String value;       
 
-    private #{java.toJavaType(column)}(String s) {
+    private #{java.toEnumType(column)}(String s) {
         value = s;
     }
     
@@ -32,8 +31,8 @@ public enum #{java.toJavaType(column)} {
        return value;
     }
     
-    public static final #{java.toJavaType(column)} findEnumValue(String s) {
-      	for (#{java.toJavaType(column)} enumValue : values()) {
+    public static final #{java.toEnumType(column)} findEnumValue(String s) {
+      	for (#{java.toEnumType(column)} enumValue : values()) {
         	if ( enumValue.toValue().equals(s)) {
             	return enumValue;
        		}

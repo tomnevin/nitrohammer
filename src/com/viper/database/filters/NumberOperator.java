@@ -32,6 +32,6 @@ package com.viper.database.filters;
 
 public enum NumberOperator {
 
-    EQUALS, NOT_EQUALS, LESS, GREATER, GREATER_EQUAL, LESS_EQUAL
+    EQUALS, NOT_EQUALS, LESS, GREATER, GREATER_EQUAL, LESS_EQUAL, IN_RANGE
 
 }

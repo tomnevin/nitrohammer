@@ -49,153 +49,161 @@ import com.viper.demo.unit.model.User;
 
 public class TestDaoHBase extends AbstractTestCase {
 
-	private final static Logger log = Logger.getLogger(TestDaoHBase.class.getName());
-	private final static String DATABASE_NAME = "test-hbase";
+    private final static String DATABASE_NAME = "test-hbase";
 
-	@BeforeClass
-	public static void initializeClass() throws Exception {
+    @BeforeClass
+    public static void initializeClass() throws Exception {
 
-		Logger.getGlobal().setLevel(Level.INFO);
+        Logger.getGlobal().setLevel(Level.INFO);
 
-		DatabaseRegistry.getInstance();
-		
-		// connection.setModel("com.viper.unit.test.model");
+        DatabaseRegistry.getInstance();
 
-	}
+        // connection.setModel("com.viper.unit.test.model");
 
-	private DatabaseInterface getDatabase() throws Exception {
-		return DatabaseFactory.getInstance(DATABASE_NAME);
-	}
+    }
 
-	@Test
-	public void testCreate() throws Exception {
+    private DatabaseInterface getDatabase() throws Exception {
+        return DatabaseFactory.getInstance(DATABASE_NAME);
+    }
 
-		Organization expected = RandomBean.getRandomBean(Organization.class, 101);
-		expected.setId(0);
+    @Test
+    public void testCreate() throws Exception {
 
-		DatabaseInterface database = getDatabase();
-		database.insert(expected);
+        Organization expected = RandomBean.getRandomBean(Organization.class, 101);
+        expected.setId(0);
 
-		Assert.assertTrue(getCallerMethodName() + " - the organization id not set: " + expected.getId(), expected.getId() > 0);
-	}
+        DatabaseInterface database = getDatabase();
+        database.insert(expected);
 
-	@Test
-	public void testCreateCollection() throws Exception {
+        Assert.assertTrue(getCallerMethodName() + " - the organization id not set: " + expected.getId(),
+                expected.getId() > 0);
+    }
 
-		List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 102);
+    @Test
+    public void testCreateCollection() throws Exception {
 
-		DatabaseInterface database = getDatabase();
-		database.insertAll(organizations);
+        List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 102);
 
-		for (Organization organization : organizations) {
-			Assert.assertNotNull(getCallerMethodName() + " - the organization id not set: " + organization.getId(), organization.getId());
-		}
-	}
+        DatabaseInterface database = getDatabase();
+        database.insertAll(organizations);
 
-	@Test
-	public void testPrimaryKey() throws Exception {
+        for (Organization organization : organizations) {
+            Assert.assertNotNull(getCallerMethodName() + " - the organization id not set: " + organization.getId(),
+                    organization.getId());
+        }
+    }
 
-		List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 103);
+    @Test
+    public void testPrimaryKey() throws Exception {
 
-		DatabaseInterface database = getDatabase();
-		database.insertAll(organizations);
+        List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 103);
 
-		for (Organization organization : organizations) {
-			Assert.assertNotNull(getCallerMethodName() + " - no orgaization id:", organization.getId());
-			Assert.assertTrue(getCallerMethodName() + " - orgaization id is zero:", organization.getId() != 0);
-		}
+        DatabaseInterface database = getDatabase();
+        database.insertAll(organizations);
 
-		Organization expected = organizations.get(50);
+        for (Organization organization : organizations) {
+            Assert.assertNotNull(getCallerMethodName() + " - no orgaization id:", organization.getId());
+            Assert.assertTrue(getCallerMethodName() + " - orgaization id is zero:", organization.getId() != 0);
+        }
 
-		Organization actual = database.query(Organization.class, "id", expected.getId());
+        Organization expected = organizations.get(50);
 
-		Assert.assertNotNull(getCallerMethodName() + " - could not find Organization1:" + expected.getId(), actual);
-		Assert.assertEquals(getCallerMethodName() + " - could not find Organization2: " + expected.getId(), expected.getName(), actual.getName());
-	}
+        Organization actual = database.query(Organization.class, "id", expected.getId());
 
-	@Test
-	public void testQuery() throws Exception {
+        Assert.assertNotNull(getCallerMethodName() + " - could not find Organization1:" + expected.getId(), actual);
+        Assert.assertEquals(getCallerMethodName() + " - could not find Organization2: " + expected.getId(),
+                expected.getName(), actual.getName());
+    }
 
-		List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 104);
+    @Test
+    public void testQuery() throws Exception {
 
-		DatabaseInterface database = getDatabase();
-		database.insertAll(organizations);
+        List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 104);
 
-		Organization expected = organizations.get(50);
+        DatabaseInterface database = getDatabase();
+        database.insertAll(organizations);
 
-		Organization actual = database.query(Organization.class, "name", expected.getName());
-		Assert.assertNotNull(getCallerMethodName() + " - could not find Organization", actual);
-		Assert.assertEquals(getCallerMethodName() + " - could not find Organization2", expected.getName(), actual.getName());
-	}
+        Organization expected = organizations.get(50);
 
-	@Test
-	public void testList() throws Exception {
+        Organization actual = database.query(Organization.class, "name", expected.getName());
+        Assert.assertNotNull(getCallerMethodName() + " - could not find Organization", actual);
+        Assert.assertEquals(getCallerMethodName() + " - could not find Organization2", expected.getName(),
+                actual.getName());
+    }
 
-		List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 106);
+    @Test
+    public void testList() throws Exception {
 
-		DatabaseInterface database = getDatabase();
-		database.insertAll(organizations);
+        List<Organization> organizations = RandomBean.getRandomBeans(Organization.class, 100, 106);
 
-		Organization expected = organizations.get(75);
+        DatabaseInterface database = getDatabase();
+        database.insertAll(organizations);
 
-		Collection<Organization> actual = database.queryList(Organization.class, "id", expected.getId());
-		Assert.assertNotNull(getCallerMethodName() + " null - could not find Organization", actual);
-		Assert.assertEquals(getCallerMethodName() + " size - could not find Organization", 1, actual.size());
-	}
+        Organization expected = organizations.get(75);
 
-	@Test
-	public void testListAll() throws Exception {
+        Collection<Organization> actual = database.queryList(Organization.class, "id", expected.getId());
+        Assert.assertNotNull(getCallerMethodName() + " null - could not find Organization", actual);
+        Assert.assertEquals(getCallerMethodName() + " size - could not find Organization", 1, actual.size());
+    }
 
-		DatabaseInterface database = getDatabase();
-		List<Organization> expected = RandomBean.getRandomBeans(Organization.class, 100, 107);
-		database.deleteAll(Organization.class);
-		database.insertAll(expected);
+    @Test
+    public void testListAll() throws Exception {
 
-		Collection<Organization> organizations = database.queryAll(Organization.class);
-		Assert.assertNotNull(getCallerMethodName() + " null - could not find Organization", organizations);
-		Assert.assertTrue(getCallerMethodName() + " size - could not find Organization: " + organizations.size(), organizations.size() >= 100);
-	}
+        DatabaseInterface database = getDatabase();
+        List<Organization> expected = RandomBean.getRandomBeans(Organization.class, 100, 107);
+        database.deleteAll(Organization.class);
+        database.insertAll(expected);
 
-	@Test
-	public void testQueryUser() throws Exception {
+        Collection<Organization> organizations = database.queryAll(Organization.class);
+        Assert.assertNotNull(getCallerMethodName() + " null - could not find Organization", organizations);
+        Assert.assertTrue(getCallerMethodName() + " size - could not find Organization: " + organizations.size(),
+                organizations.size() >= 100);
+    }
 
-		User expected = RandomBean.getRandomBean(User.class, 1);
+    @Test
+    public void testQueryUser() throws Exception {
 
-		DatabaseInterface database = getDatabase();
-		database.insert(expected);
+        User expected = RandomBean.getRandomBean(User.class, 1);
 
-		User actual = database.query(User.class, "username", expected.getUsername());
+        DatabaseInterface database = getDatabase();
+        database.insert(expected);
 
-		Assert.assertNotNull(getCallerMethodName() + " - could not find User", actual);
-		Assert.assertEquals(getCallerMethodName() + " - could not find User.name", expected.getName(), actual.getName());
-		Assert.assertEquals(getCallerMethodName() + " - could not find User.friends.size", expected.getFriends().size(), actual.getFriends().size());
-		Assert.assertEquals(getCallerMethodName() + " - could not find User.friends", expected.getFriends(), actual.getFriends());
-	}
+        User actual = database.query(User.class, "username", expected.getUsername());
 
-	@Test
-	public void testListDatabases() throws Exception {
+        Assert.assertNotNull(getCallerMethodName() + " - could not find User", actual);
+        Assert.assertEquals(getCallerMethodName() + " - could not find User.name", expected.getName(),
+                actual.getName());
+        Assert.assertEquals(getCallerMethodName() + " - could not find User.friends.size", expected.getFriends().size(),
+                actual.getFriends().size());
+        Assert.assertEquals(getCallerMethodName() + " - could not find User.friends", expected.getFriends(),
+                actual.getFriends());
+    }
 
-		DatabaseInterface database = getDatabase();
-		List<String> items = database.listDatabases();
+    @Test
+    public void testListDatabases() throws Exception {
 
-		for (String item : items) {
-			log.info(getCallerMethodName() + " database Name=" + item);
-		}
+        DatabaseInterface database = getDatabase();
+        List<String> items = database.listDatabases();
 
-		Assert.assertTrue(getCallerMethodName() + " - number of database must be > 0: " + items.size(), items.size() > 0);
-		Assert.assertTrue(getCallerMethodName() + " - test: ", items.contains("test"));
-	}
+        for (String item : items) {
+            System.out.println(getCallerMethodName() + " database Name=" + item);
+        }
 
-	@Test
-	public void testListTables() throws Exception {
+        Assert.assertTrue(getCallerMethodName() + " - number of database must be > 0: " + items.size(),
+                items.size() > 0);
+        Assert.assertTrue(getCallerMethodName() + " - test: ", items.contains("test"));
+    }
 
-		DatabaseInterface database = getDatabase();
-		List<String> items = database.listTables(DATABASE_NAME);
+    @Test
+    public void testListTables() throws Exception {
 
-		for (String item : items) {
-			log.info(getCallerMethodName() + ": table Name=" + item);
-		}
+        DatabaseInterface database = getDatabase();
+        List<String> items = database.listTables(DATABASE_NAME);
 
-		Assert.assertTrue(getCallerMethodName() + " - number of tables must be > 0: " + items.size(), items.size() > 0);
-	}
+        for (String item : items) {
+            System.out.println(getCallerMethodName() + ": table Name=" + item);
+        }
+
+        Assert.assertTrue(getCallerMethodName() + " - number of tables must be > 0: " + items.size(), items.size() > 0);
+    }
 }

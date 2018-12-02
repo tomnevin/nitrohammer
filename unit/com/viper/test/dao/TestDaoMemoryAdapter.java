@@ -41,10 +41,8 @@ import org.junit.Test;
 
 import com.viper.database.dao.DatabaseFactory;
 import com.viper.database.dao.DatabaseInterface;
-import com.viper.database.dao.DatabaseSQLInterface;
 import com.viper.database.dao.DatabaseUtil;
-import com.viper.database.dao.MemoryAdapter;
-import com.viper.database.dao.Predicate;
+import com.viper.database.filters.Predicate;
 import com.viper.database.model.DatabaseConnection;
 import com.viper.database.utils.DatabaseRegistry;
 import com.viper.database.utils.RandomBean;
@@ -53,8 +51,6 @@ import com.viper.demo.unit.model.Organization;
 import com.viper.demo.unit.model.User;
 
 public class TestDaoMemoryAdapter extends AbstractTestCase {
-
-	private final static Logger log = Logger.getLogger(TestDaoMemoryAdapter.class.getName());
 
 	@BeforeClass
 	public static void initializeClass() throws Exception {
@@ -169,11 +165,16 @@ public class TestDaoMemoryAdapter extends AbstractTestCase {
 		database.insertAll(expected);
 
 		List<Organization> organizations = database.queryList(Organization.class, new Predicate<Organization>() {
-			@Override
-			public boolean apply(Organization e) {
-				return e.getId() == expected.get(0).getId();
-			}
-		});
+		    @Override
+            public boolean apply(Organization organization) {
+                return organization.getId() == expected.get(0).getId();
+            }
+
+            @Override
+            public String toSQL() {
+                return null;
+            }
+		}, null, null);
 		Assert.assertNotNull("testQueryExpression null - could not find Organization", organizations);
 		Assert.assertTrue("testQueryExpression size - could not find Organization: " + organizations.size(), organizations.size() == 1);
 	}
@@ -239,7 +240,7 @@ public class TestDaoMemoryAdapter extends AbstractTestCase {
 		List<String> items = database.listDatabases();
 
 		for (String item : items) {
-			log.info("testListDatabases: database Name=" + item);
+			System.out.println("testListDatabases: database Name=" + item);
 		}
 
 		Assert.assertTrue("testListDatabases - number of database must be > 0: " + items.size(), items.size() > 0);
@@ -253,7 +254,7 @@ public class TestDaoMemoryAdapter extends AbstractTestCase {
 		List<String> items = database.listTables("test");
 
 		for (String item : items) {
-			log.info("testListTables: table Name=" + item);
+		    System.out.println("testListTables: table Name=" + item);
 		}
 
 		Assert.assertTrue("testListTables - number of tables must be > 0: " + items.size(), items.size() > 0);
@@ -266,7 +267,7 @@ public class TestDaoMemoryAdapter extends AbstractTestCase {
 		List<String> items = database.listColumns(Organization.class);
 
 		for (String item : items) {
-			log.info("testListColumns: column Name=" + item);
+		    System.out.println("testListColumns: column Name=" + item);
 		}
 
 		Assert.assertTrue("testListColumns - number of columns must be > 0: " + items.size(), items.size() > 0);

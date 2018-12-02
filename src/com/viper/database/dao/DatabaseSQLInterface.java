@@ -69,22 +69,7 @@ public interface DatabaseSQLInterface extends DatabaseInterface {
 	 *             of zero to N length.
 	 */
 	public <T> List<T> querySQL(Class<T> clazz, String sql) throws Exception;
-
-	/**
-	 * Given a meta data category query the databaseMetaData object and return a
-	 * list of row objects
-	 * 
-	 * @param metaName
-	 *            the category of metadata, see DatabaseMetaData.get<metaName>
-	 * 
-	 * @return the list of row objects, for the matches in the query,
-	 * @throws Exception
-	 *             failure to get table data, no database, no table, bad connection,
-	 *             etc. Note the returned list will NOT be null, will be valid list
-	 *             of zero to N length.
-	 */
-	public List<Row> readMetaRows(String metaName) throws Exception;
-
+	
 	/**
 	 * Write a sql update or insert into the database.
 	 * 

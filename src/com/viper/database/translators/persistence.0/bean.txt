@@ -11,6 +11,8 @@
 
 package #{packagename};
 
+import com.viper.database.dao.DynamicEnum;
+
 ## if (java.hasEnums(table)) {
 import #{database.packageName}.enums.*;
 ## }

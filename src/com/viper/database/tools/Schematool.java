@@ -88,6 +88,7 @@ import com.viper.database.dao.SQLWriter;
 import com.viper.database.dao.drivers.SQLDriver;
 import com.viper.database.model.Cell;
 import com.viper.database.model.Column;
+import com.viper.database.model.ColumnVisibilityType;
 import com.viper.database.model.Database;
 import com.viper.database.model.DatabaseConnection;
 import com.viper.database.model.DatabaseConnections;
@@ -104,6 +105,7 @@ import com.viper.database.utils.FileUtil;
 import com.viper.database.utils.JEXLUtil;
 import com.viper.database.utils.RandomBean;
 import com.viper.database.utils.SortedProperties;
+import com.viper.database.utils.XMLUtil;
 
 public class Schematool {
 
@@ -134,7 +136,8 @@ public class Schematool {
                 String value = args[++i];
                 parameters.put(key, value);
 
-            } else if ("-meta2database".equals(args[i]) || "-import".equals(args[i]) || "-model2database".equals(args[i])) {
+            } else if ("-meta2database".equals(args[i]) || "-import".equals(args[i])
+                    || "-model2database".equals(args[i])) {
 
                 String sourceUrl = args[++i];
                 String packageName = args[++i];
@@ -355,13 +358,26 @@ public class Schematool {
                 final String filename = args[++i];
                 final String classname = args[++i];
 
-                System.out.println("-export: filename=" + filename + ", classname=>" + classname);
+                System.out.println("-import.table: filename=" + filename + ", classname=>" + classname);
 
                 DatabaseConnection connection = createConnection(source);
                 DatabaseInterface dao = DatabaseFactory.getInstance(connection);
 
                 Class clazz = DatabaseUtil.toTableClass(classname);
                 DatabaseMapper.importTableByFile(dao, filename, clazz);
+
+            } else if ("-export.table".equalsIgnoreCase(args[i])) {
+                final String source = args[++i];
+                final String filename = args[++i];
+                final String classname = args[++i];
+
+                System.out.println("-export.table: filename=" + filename + ", classname=>" + classname);
+
+                DatabaseConnection connection = createConnection(source);
+                DatabaseSQLInterface dao = (DatabaseSQLInterface) DatabaseFactory.getInstance(connection);
+
+                Class clazz = DatabaseUtil.toTableClass(classname);
+                DatabaseMapper.exportTableByFile(dao, filename, clazz);
 
             } else if ("-resources".equalsIgnoreCase(args[i])) {
                 final String indir = args[++i];
@@ -427,6 +443,14 @@ public class Schematool {
                 List<Database> databases = load(indir, ".xml");
                 exportDocument(databases, outfile);
 
+            } else if ("-document-xsd".equalsIgnoreCase(args[i])) {
+                final String indir = args[++i];
+                final String outdir = args[++i];
+
+                System.out.println("-document-xsd:indir=" + indir + ", outdir=>" + outdir);
+
+                generateXSDDocument(new File(indir), new File(outdir), ".xml");
+
             } else if ("-password".equalsIgnoreCase(args[i])) {
                 final String password = args[++i];
                 System.out.println("Password: " + password + ", encrypted: " + encryptPassword(password));
@@ -465,8 +489,8 @@ public class Schematool {
         }
     }
 
-    private static String[] connectionFilenames = new String[] { "./etc/databases.xml", "./databases.xml",
-            "res:/databases.xml" };
+    private static String[] connectionFilenames = new String[] { "./etc/dev/databases.xml", "./etc/databases.xml",
+            "./databases.xml", "res:/databases.xml" };
 
     private DatabaseConnection createConnection(String source) throws Exception {
 
@@ -497,19 +521,29 @@ public class Schematool {
         return "ENC:" + encPassword;
     }
 
-    private void encryptFile(String password, String algorithm, String infile, String outfile) throws Exception {
+    private void encryptFile(String password, String transformation, String infile, String outfile) throws Exception {
+
+        String algorithm = transformation;
+        if (transformation.indexOf("/") != -1) {
+            algorithm = transformation.substring(0, transformation.indexOf("/"));
+        }
 
         Encryptor encryptor = new Encryptor();
         String value = readFile(infile);
-        String result = encryptor.encrypt(value, algorithm, password);
+        String result = encryptor.encrypt(value, algorithm, transformation, password);
 
         Files.write(new File(outfile).toPath(), result.getBytes());
     }
 
-    private void decryptFile(String password, String algorithm, String infile, String outfile) throws Exception {
+    private void decryptFile(String password, String transformation, String infile, String outfile) throws Exception {
+
+        String algorithm = transformation;
+        if (transformation.indexOf("/") != -1) {
+            algorithm = transformation.substring(0, transformation.indexOf("/"));
+        }
 
         Encryptor encryptor = new Encryptor();
-        encryptor.decrypt(infile, algorithm, password, outfile);
+        encryptor.decrypt(infile, algorithm, transformation, password, outfile);
     }
 
     private void importSQL2Database(DatabaseConnection connection, String filename) {
@@ -580,6 +614,14 @@ public class Schematool {
             System.out.println("Processing: " + file.getPath());
 
             Database database = DatabaseMapper.read(Database.class, file.getPath());
+
+            for (Table table : database.getTables()) {
+                int orderno = 0;
+                for (Column column : table.getColumns()) {
+                    orderno = orderno + 1;
+                    column.setOrder(orderno);
+                }
+            }
 
             String packageName = (String) params.get("packagename");
 
@@ -931,16 +973,14 @@ public class Schematool {
             Map<String, Object> params) throws Exception {
 
         for (Table table : database.getTables()) {
-            if (table.getImportTables().size() > 0) {
-                for (String tablename : table.getImportTables()) {
-                    for (Table importTable : cache) {
-                        if (importTable.getName().matches("(?i)" + tablename)) {
-                            mergeColumns(table, importTable, params);
-                        }
+            for (String tablename : table.getImportTables()) {
+                for (Table importTable : cache) {
+                    if (importTable.getName().matches("(?i)" + tablename)) {
+                        mergeColumns(table, importTable, params);
                     }
                 }
-                sortColumnsByName(table.getColumns());
             }
+            sortColumnsByName(table.getColumns());
         }
     }
 
@@ -1033,7 +1073,7 @@ public class Schematool {
 
             for (Table table : database.getTables()) {
                 fillInColumnNames(table);
-                Class clazz = DatabaseUtil.toTableClass(database.getPackageName(), database.getName(), table.getName());
+                Class clazz = DatabaseUtil.toTableClass(database.getPackageName(), table.getName());
                 dao.insertAll(DatabaseMapper.toObjects(clazz, table.getRows()));
             }
         }
@@ -1052,7 +1092,7 @@ public class Schematool {
         int iteration = 1;
 
         DatabaseInterface database = DatabaseFactory.getInstance(connection);
-        List<Class> clazzes = DatabaseUtil.getClasses(connection.getPackageNames());
+        List<Class<?>> clazzes = DatabaseUtil.getClasses(connection.getPackageNames());
         Class[] classes = new Class[clazzes.size()];
         int counter = 0;
         for (Class clazz : clazzes) {
@@ -1111,9 +1151,9 @@ public class Schematool {
             if (packagename == null || packagename.length() == 0) {
                 packagename = connection.getPackageNames().get(0) + "." + item.getName();
             }
-            List<Class> classes = DatabaseUtil.getDatabaseClasses(packagename);
+            List<Class<?>> classes = DatabaseUtil.getDatabaseClasses(packagename);
 
-            for (Class clazz : classes) {
+            for (Class<?> clazz : classes) {
                 com.viper.database.annotations.Table table = (com.viper.database.annotations.Table) clazz
                         .getAnnotation(com.viper.database.annotations.Table.class);
 
@@ -1548,10 +1588,10 @@ public class Schematool {
      * 
      */
     public void generateDictionary(String infile, String outfile) throws Exception {
-        
+
         SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
         WikiHandler handler = new WikiHandler(outfile);
-        
+
         saxParser.parse(new File(infile), handler);
     }
 
@@ -1639,6 +1679,38 @@ public class Schematool {
      * @param outfile
      * @throws Exception
      */
+    public void generateXSDDocument(File indir, File outdir, String filter) throws Exception {
+
+        outdir.mkdirs();
+
+        for (File infile : indir.listFiles()) {
+            if (infile.isDirectory()) {
+                generateXSDDocument(infile, outdir, filter);
+                continue;
+            }
+
+            if (!infile.getName().endsWith(filter)) {
+                System.out.println("Skipping " + infile.getName() + ", fails the filter test: " + filter);
+                continue;
+            }
+
+            Document document = XMLUtil.readXMLFile(infile);
+
+            // TODO Convert XSD document to XHTML document, make changes
+
+            // Write the XHTML file out
+
+            File outfile = new File(outdir, infile.getName().substring(0, infile.getName().lastIndexOf(".")) + ".html");
+            XMLUtil.writeDocumentToFile(document, outfile);
+        }
+    }
+
+    /**
+     * 
+     * @param databases
+     * @param outfile
+     * @throws Exception
+     */
     public void exportDocument(List<Database> databases, String outfile) throws Exception {
 
         new File(outfile).getParentFile().mkdirs();
@@ -1704,70 +1776,60 @@ public class Schematool {
     }
 
     private void mergeColumns(Table table, Table importTable, Map<String, Object> params) {
-        if (importTable != null) {
-            for (Column column : importTable.getColumns()) {
-                if (!hasColumn(table, column)) {
-                    column.setTableName(importTable.getName());
+        if (importTable == null) {
+            return;
+        }
 
-                    if (table.isFieldsAllNullable()) {
-                        String tablename = importTable.getName();
-                        if (importTable.getTableName() != null && !importTable.getTableName().isEmpty()) {
-                            tablename = importTable.getTableName();
-                        }
-                        String javaType = SQLDriver.toJavaType(tablename, column.getName(), column.getDataType(),
-                                false);
-                        if (javaType != null) {
-                            column.setJavaType(javaType);
-                            column.setDefaultValue(null);
-                        }
-                    }
-                    table.getColumns().add(column);
+        for (Column col : importTable.getColumns()) {
 
-                } else {
-                    Column column1 = findColumn(table, column);
-                    if (column1 != null) {
-                        if ("enum".equalsIgnoreCase(column1.getDataType())) {
-                            column1.setJavaType(makeNewEnumType(column1.getJavaType(), table, params));
-                            mergeEnumList(column1.getEnumValues(), column.getEnumValues());
-                        }
-                        column1.setTableName("ALL");
-                    }
+            // TODO make copy of column, dont use cached copy
+            // Future load all the filenames, and then read each imported table
+            // individually.
+            Column column = new Column();
+            DatabaseUtil.copyFields(col, column);
+
+            column.setTableName(getTableName(importTable));
+
+            int index = findSpecificColumnIndex(table, column);
+            if (index == -1) {
+                index = findAvailableColumnIndex(table, column);
+            }
+            if (index != -1) {
+                Column currentColumn = table.getColumns().get(index);
+                // replace baseColumn with column, but add extra info.
+                column.setColumnVisibility(currentColumn.getColumnVisibility());
+
+                column.setName(currentColumn.getName());
+                column.setTableName(currentColumn.getTableName());
+                if (currentColumn.getField() != null && !currentColumn.getField().isEmpty()) {
+                    column.setField(currentColumn.getField());
                 }
-            }
-        }
-    }
+                column.setOrder(currentColumn.getOrder());
+                column.setLogicalType(currentColumn.getLogicalType());
+                column.setRenderer(currentColumn.getRenderer());
 
-    private String makeNewEnumType(String oldname, Table table, Map<String, Object> params) {
-        int index = oldname.lastIndexOf('.');
-        if (index == -1) {
-            return oldname;
-        }
-        if (oldname.toLowerCase().contains("." + table.getName().toLowerCase())) {
-            return oldname;
-        }
-        String packagename = oldname.substring(0, index);
-        if (params != null && params.containsKey("packagename")) {
-            packagename = (String) params.get("packagename");
-        }
-        return table.getName() + oldname.substring(index + 1);
-    }
+                if ("enum".equalsIgnoreCase(column.getDataType())) {
+                    // column.setJavaType(String.class.getName());
+                    column.getEnumValues().addAll(col.getEnumValues());
+                }
 
-    private void mergeEnumList(List<EnumItem> toItems, List<EnumItem> fromItems) {
-        for (EnumItem fromItem : fromItems) {
-            EnumItem toItem = find(toItems, fromItem);
-            if (toItem == null) {
-                toItems.add(fromItem);
+                table.getColumns().set(index, column);
+                continue;
             }
-        }
-    }
 
-    private EnumItem find(List<EnumItem> items, EnumItem findItem) {
-        for (EnumItem item : items) {
-            if (findItem.getValue().equalsIgnoreCase(item.getValue())) {
-                return item;
+            if (isDuplicateColumn(table, column)) {
+                column.setColumnVisibility(ColumnVisibilityType.HIDDEN);
+                column.setName(importTable.getDatabaseName() + "_" + importTable.getName() + "_" + column.getName());
+                continue;
             }
+            if ("enum".equalsIgnoreCase(column.getDataType())) {
+                // column.setJavaType(String.class.getName());
+                // column.setDefaultValue(null);
+                column.getEnumValues().addAll(col.getEnumValues());
+            }
+            table.getColumns().add(column);
+
         }
-        return null;
     }
 
     private boolean hasColumn(Table table, Column column) {
@@ -1779,31 +1841,54 @@ public class Schematool {
         return false;
     }
 
-    private Database findDatabase(List<Database> items, String name) {
-        for (Database database : items) {
-            if (name.equalsIgnoreCase(database.getName())) {
-                return database;
-            }
-        }
-        return null;
-    }
-
-    private Table findTable(List<Table> items, String name) {
-        for (Table table : items) {
-            if (name.equalsIgnoreCase(table.getName())) {
-                return table;
-            }
-        }
-        return null;
-    }
-
-    private Column findColumn(Table table, Column column) {
+    private boolean isDuplicateColumn(Table table, Column column) {
         for (Column col : table.getColumns()) {
             if (col.getName().equalsIgnoreCase(column.getName())) {
-                return col;
+                return true;
             }
         }
-        return null;
+        return false;
+    }
+
+    private int findSpecificColumnIndex(Table table, Column column) {
+        for (int index = 0; index < table.getColumns().size(); index++) {
+            Column col = table.getColumns().get(index);
+            if (col.getTableName() == null || col.getTableName().isEmpty()) {
+                continue;
+            }
+            if (!col.getTableName().equalsIgnoreCase(column.getTableName())) {
+                continue;
+            }
+            if (col.getName() != null && col.getName().equalsIgnoreCase(column.getName())) {
+                return index;
+            }
+            if (col.getName() != null && col.getName().equalsIgnoreCase(column.getField())) {
+                return index;
+            }
+            if (col.getField() != null && col.getField().equalsIgnoreCase(column.getName())) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    private int findAvailableColumnIndex(Table table, Column column) {
+        for (int index = 0; index < table.getColumns().size(); index++) {
+            Column col = table.getColumns().get(index);
+            if (!isEmpty(col.getTableName())) {
+                continue;
+            }
+            if (col.getName() != null && col.getName().equalsIgnoreCase(column.getName())) {
+                return index;
+            }
+            if (col.getName() != null && col.getName().equalsIgnoreCase(column.getField())) {
+                return index;
+            }
+            if (col.getField() != null && col.getField().equalsIgnoreCase(column.getName())) {
+                return index;
+            }
+        }
+        return -1;
     }
 
     private Column adjustEnumColumn(String packagename, Column column) {
@@ -2306,6 +2391,10 @@ public class Schematool {
         return (maxOccurs == null || maxOccurs.isEmpty() || "1".equals(maxOccurs)) ? false : true;
     }
 
+    private boolean isEmpty(String str) {
+        return (str == null || str.trim().length() == 0);
+    }
+
     private Document parseToDocument(String filename) throws Exception {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -2478,6 +2567,14 @@ public class Schematool {
             }
             return outcome;
         }
+    }
+
+    private String getTableName(Table table) {
+        String name = table.getName();
+        if (table.getTableName() != null && !table.getTableName().isEmpty()) {
+            name = table.getTableName();
+        }
+        return name;
     }
 
     public static void main(String args[]) {

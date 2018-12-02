@@ -85,7 +85,7 @@ public final class BigDecimalConverter implements ConverterInterface {
         }
 
         if (!(fromValue instanceof BigDecimal)) {
-            throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+            throw new Exception("BigDecimalConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
 
         } else if (toType.equals(BigDecimal.class)) {
             return fromValue;
@@ -94,10 +94,10 @@ public final class BigDecimalConverter implements ConverterInterface {
             return ((BigDecimal) fromValue).toBigInteger();
 
         } else if (toType.equals(Blob.class)) {
-            throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+            throw new Exception("BigDecimalConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
 
         } else if (toType.equals(Clob.class)) {
-            throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+            throw new Exception("BigDecimalConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
 
         } else if (toType.equals(Boolean.class)) {
             return (((BigDecimal) fromValue).doubleValue() == 0.0) ? false : true;
@@ -127,7 +127,7 @@ public final class BigDecimalConverter implements ConverterInterface {
             return ((BigDecimal) fromValue).toString();
 
         } else {
-            throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+            throw new Exception("BigDecimalConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
         }
     }
 
@@ -137,7 +137,7 @@ public final class BigDecimalConverter implements ConverterInterface {
             new DecimalFormat(qualifiers[0]).format(fromValue);
         }
 
-        throw new Exception("Unhandled conversion from " + fromValue + " to String.");
+        throw new Exception("BigDecimalConverter: Unhandled conversion from " + fromValue + " to String.");
     }
 
     @Override
@@ -154,7 +154,7 @@ public final class BigDecimalConverter implements ConverterInterface {
             return toValues;
         }
 
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+        throw new Exception("BigDecimalConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
     }
 
     public BigDecimal convertToBigDecimal(Object fromValue) throws Exception {
@@ -193,7 +193,7 @@ public final class BigDecimalConverter implements ConverterInterface {
             return new BigDecimal((String) fromValue);
 
         } else {
-            throw new Exception("Unhandled conversion from " + fromValue + " to BigDecimal.");
+            throw new Exception("BigDecimalConverter: Unhandled conversion from " + fromValue + " to BigDecimal.");
         }
     }
 }

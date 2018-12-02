@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd" name='examples'
+	package-name="com.viper.examples.model">
+	<table name='user' table-type='table' is-rest-service="true" is-schema-updatable="true">
+		<column name='username' java-type='String' size='32' primary-key='true' id-method="assigned"
+			logical-type="email:email.txt" />
+		<column name='password' java-type='String' size='128' required='true' logical-type="password:" />
+		<column name='firstname' java-type='String' size='255' required='false' logical-type="name:firstnames.txt" />
+		<column name='lastname' java-type='String' size='255' required='false' logical-type="name:lastnames.txt" />
+		<column name="title" java-type="String" size="128" required="false" />
+		<column name="company" java-type="String" size="128" required="false" />
+		<column name="work_phone" java-type="String" size="48" required="false" />
+		<column name="cell_phone" java-type="String" size="48" required="false" />
+		<column name="state" data-type="enum" default-value="NEW" required="false">
+			<enum-value name="ACTIVE">ACTIVE</enum-value>
+			<enum-value name="NEW">NEW</enum-value>
+			<enum-value name="INACTIVE">INACTIVE</enum-value>
+		</column>
+	</table>
+</database>

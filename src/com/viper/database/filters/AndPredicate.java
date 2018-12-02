@@ -34,30 +34,42 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.viper.database.dao.Predicate;
-
 public class AndPredicate<T> implements Predicate<T> {
 
-    private List<Predicate<T>> predicates = new ArrayList<Predicate<T>>();
+    private List<Predicate> predicates = new ArrayList<Predicate>();
 
     public AndPredicate() {
     }
 
-    public AndPredicate(Predicate<T>[] predicates) {
+    public AndPredicate(Predicate[] predicates) {
         this.predicates.addAll(Arrays.asList(predicates));
     }
 
-    public void addPredicate(Predicate<T> predicate) {
+    public void addPredicate(Predicate predicate) {
         predicates.add(predicate);
     }
 
     @Override
     public boolean apply(T item) {
         for (Predicate predicate : predicates) {
-            if (!predicate.apply(item)) {
+            if (predicate != null && !predicate.apply(item)) {
                 return false;
             }
         }
         return true;
+    }
+
+    @Override
+    public String toSQL() {
+        StringBuilder buf = new StringBuilder();
+        for (Predicate predicate : predicates) {
+            if (predicate != null) {
+                if (buf.length() > 0) {
+                    buf.append(" AND ");
+                }
+                buf.append(predicate.toSQL());
+            }
+        }
+        return buf.toString();
     }
 }

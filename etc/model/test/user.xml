@@ -5,7 +5,7 @@
 		<column name='username' java-type='String' size='32' required='true' primary-key='true' id-method="assigned" logical-type="email:email.txt" />
 		<column name='password' java-type='String' size='32' required='false' logical-type="password:" />
 		<column name='name' java-type='String' size='255' required='false' logical-type="name:firstnames.txt" />
-		<column name='cube' java-type='String' size='32' required='false' />
+		<column name='rolw' java-type='String' size='32' required='false' />
 		<column name='job' java-type='String' size='32' required='false' />
 		<column name='school' java-type='String' size='255' required='false' />
 		<column name='email' java-type='String' size='255' required='false' logical-type="email:email.txt" />

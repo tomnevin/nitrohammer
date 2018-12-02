@@ -5,5 +5,6 @@
 		<column name="b" java-type="int" />
 		<column name="l" java-type="int" />
 		<column name="r" java-type="int" />
+		<column name="pad" java-type="int" />
 	</table>
 </database>

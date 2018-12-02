@@ -30,10 +30,10 @@
 
 package com.viper.test.dao;
 
-import com.viper.database.interfaces.GeneratorInterface;
+import com.viper.database.interfaces.BeanGeneratorInterface;
 import com.viper.demo.beans.model.BeanGeneration;
 
-public class TestGeneratorInterface implements GeneratorInterface {
+public class TestGeneratorInterface implements BeanGeneratorInterface {
 
 	@Override
 	public <T> void generate(T bean) {

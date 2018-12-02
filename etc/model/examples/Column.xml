@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<p>
+          An example of a cell with a table element.
+          <pre>
+          <![CDATA[
+<table name='states' table-type='table' is-rest-service="true">
+	<column name='id' java-type='int' id-method="assigned" required='true' primary-key='true' />
+	<column name='state' java-type='String' size='50' required='true' />
+	<column name='code' java-type='String' size='2' required='true' />
+	<row>
+		<cell name="id">1</cell>
+		<cell name="state">ALABAMA</cell>
+		<cell name="code">AL</cell>
+	</row>
+	<row>
+		<cell name="id">2</cell>
+		<cell name="state">ALASKA</cell>
+		<cell name="code">AK</cell>
+	</row>
+	...
+	<row>
+		<cell name="id">50</cell>
+		<cell name="state">WYOMING</cell>
+		<cell name="code">WY</cell>
+	</row>
+</table>
+			]]>
+			</pre>
+</p>

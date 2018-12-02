@@ -27,5 +27,8 @@
 			<enum-value name="C.3">C_3</enum-value>
 		</column>
 		<column name="stringList" java-type="java.util.List" generic-type="String" />
+		
+		<column name="date1Field" java-type="java.util.Date"/>
+		<column name="date2Field" java-type="java.util.Date"/>
 	</table>
 </database>

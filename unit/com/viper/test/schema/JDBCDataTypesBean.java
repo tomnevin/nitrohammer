@@ -47,7 +47,7 @@ public class JDBCDataTypesBean implements java.io.Serializable {
 	private String stringField = "Z";
 	private java.sql.Date dateField = java.sql.Date.valueOf("2005-05-14"); // yyyy-[m]m-[d]d
 	private java.sql.Time timeField = java.sql.Time.valueOf("11:23:21");
-	private com.viper.demo.beans.model.enums.MyColor myColorField = com.viper.demo.beans.model.enums.MyColor.RED;
+	private com.viper.demo.beans.model.enums.MyColor myColorField = new com.viper.demo.beans.model.enums.MyColor("RED");
 	private java.sql.Timestamp timeStampField = java.sql.Timestamp.valueOf("1991-12-07 08:30:00");
 	private java.math.BigInteger bigIntegerField = java.math.BigInteger.valueOf(450L);
 	private java.math.BigDecimal bigDecimalField = java.math.BigDecimal.valueOf(1234567.00000);

@@ -6,8 +6,18 @@
 		<column name="name" java-type="String" />
 		<column name="x" java-type="java.util.List" />
 		<column name="y" java-type="java.util.List" />
+		<column name="values" java-type="java.util.List" />
+		<column name="labels" java-type="java.util.List" />
+		<column name="text" java-type="java.util.List" />
+		<column name="overlayUrl" java-type="String" />
 		<column name="line" java-type="Object" />
 		<column name="visible" java-type="boolean" default-value="true" />
+		<!--  Any combination of "label", "text", "value", "percent", "name" joined with a "+" OR "all" or "none" or "skip".  -->
+		<column name="hoverinfo" java-type="String" />
+		<!--  Any combination of "label", "text", "value", "percent" joined with a "+" OR "none".  -->
+		<column name="textinfo" java-type="String" />
+		<!--  "inside" | "outside" | "auto" | "none" -->
+		<column name="textposition" java-type="String" />
 		<column name="clientData" java-type="Object" />
 	</table>
 </database>

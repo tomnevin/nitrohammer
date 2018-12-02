@@ -33,11 +33,12 @@ package com.viper.database.interfaces;
 import java.util.List;
 
 import com.viper.database.annotations.Column;
+import com.viper.database.model.Param;
 
-public interface ColumnValidationInterface {
+public interface ColumnValidatorInterface {
 
 	public <T> boolean isValid(T bean, Column column);
 	
-	public <T> List<String> validateErrors(T bean, Column column);
+	public <T> List<Param> validateErrors(T bean, Column column);
 
 }

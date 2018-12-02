@@ -111,7 +111,7 @@ public class RandomBean {
 			return clazz.newInstance();
 		}
 
-		String generator = table.generator();
+		String generator = table.beanGenerator();
 		T bean = clazz.newInstance();
 
 		BeanInfo info = Introspector.getBeanInfo(clazz);
@@ -1133,7 +1133,7 @@ public class RandomBean {
 		if (beans == null) {
 			try {
 				DatabaseInterface dao = DatabaseFactory.getInstance(connectionName);
-				tableCache.put(key, dao.queryAll(DatabaseUtil.toTableClass(packagename, databasename, tablename)));
+				tableCache.put(key, dao.queryAll(DatabaseUtil.toTableClass(packagename, tablename)));
 				beans = tableCache.get(key);
 			} catch (Exception e) {
 				e.printStackTrace();

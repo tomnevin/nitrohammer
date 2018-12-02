@@ -36,6 +36,7 @@
 			<xsd:element name="description" type="xsd:string" />
 			<xsd:element name="server-filename" type="xsd:string" />
 			<xsd:element name="resource-filename" type="xsd:string" />
+			<xsd:element name="initial-sql-filename" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="package-name" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="schema-alias" type="Param" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="param" type="Param" minOccurs="0" maxOccurs="unbounded" />
@@ -116,7 +117,7 @@
 		<xsd:annotation>
 			<xsd:documentation xml:lang="en">
 			<![CDATA[ 
-			The table element contains all the specifications for creating/accessing a database table.
+			The table element contains all the specifications for the mapping of a database table.
 	        As well as, data for dispay/formatting/validating the table data in a UI.
 			]]>
 			</xsd:documentation>
@@ -133,7 +134,8 @@
 			</xsd:element>
 			<xsd:element name="validator" type="xsd:string" />
 			<xsd:element name="converter" type="xsd:string" />
-			<xsd:element name="generator" type="xsd:string" />
+			<xsd:element name="sql-generator" type="xsd:string" />
+			<xsd:element name="bean-generator" type="xsd:string" />
 			<xsd:element name="filter" type="xsd:string" />
 			<xsd:element name="seed-filename" type="xsd:string" />
 			<xsd:element name="index" type="Index" minOccurs="0" maxOccurs="unbounded" />
@@ -141,11 +143,33 @@
 			<xsd:element name="sql-update" type="xsd:string" minOccurs="0" maxOccurs="1" />
 			<xsd:element name="sql-insert" type="xsd:string" minOccurs="0" maxOccurs="1" />
 			<xsd:element name="sql-delete" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="sql-size" type="xsd:string" minOccurs="0" maxOccurs="1" />
 			<xsd:element name="query-class-name" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="param" type="Param" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="row" type="Row" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
-		<xsd:attribute name="name" type="xsd:string" use="required" />
-		<xsd:attribute name="table-name" type="xsd:string" />
+		<xsd:attribute name="name" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation xml:lang="en">
+            <![CDATA[ 
+           This the name of the table, it is used as the java class name of the bean representimg the table, and is by
+           default the database name of the table, which  can be specified elsewhere.
+           This name must conform to Java naming conventions for Java class names.
+            ]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="table-name" type="xsd:string">
+			<xsd:annotation>
+				<xsd:documentation xml:lang="en">
+            <![CDATA[ 
+            The actual database table name, if the <i>name</i> matches the database table name then this value is not  necessary.
+            This value is only required the name of the table, the java class name deviates from the database table name.
+            For MySql linux, by default the table name is case sensitive, in general however, the table names are case insensitive.
+            ]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
 		<xsd:attribute name="java-name" type="xsd:string" />
 		<xsd:attribute name="database-name" type="xsd:string" />
 		<xsd:attribute name="table-type" type="TableType" default="table" />
@@ -238,7 +262,8 @@
 		<xsd:attribute name="default-value" type="xsd:string" />
 		<xsd:attribute name="size" type="xsd:long" default="0" />
 		<xsd:attribute name="order" type="xsd:int" default="1" />
-		<xsd:attribute name="columnVisibility" type="ColumnVisibilityType" default="normal" />
+		<xsd:attribute name="columnVisibility" type="ColumnVisibilityType" default="default" />
+		<xsd:attribute name="pattern" type="xsd:string" />
 		<!-- Flags -->
 		<xsd:attribute name="natural-key" type="xsd:boolean" default="false" />
 		<xsd:attribute name="primary-key" type="xsd:boolean" default="false" />
@@ -301,10 +326,50 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="Cell">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				The cell element represents a value with in a table cell. Since this is XML the representation of the data
+				must be in string
+				format. Each cell has:
+				<ol>
+					<li>A name, the same as the columns name</li>
+					<li>And withion the cell element is the value of the cell in string format</li>
+				</ol>
+				The cell elements attach to a table are useful, for initial loading of data into the table.
+				<p>
+					An example of a cell with a table element.
+					<pre>
+          <![CDATA[
+<table name='states' table-type='table' is-rest-service="true">
+	<column name='id' java-type='int' id-method="assigned" required='true' primary-key='true' />
+	<column name='state' java-type='String' size='50' required='true' />
+	<column name='code' java-type='String' size='2' required='true' />
+	<row>
+		<cell name="id">1</cell>
+		<cell name="state">ALABAMA</cell>
+		<cell name="code">AL</cell>
+	</row>
+	<row>
+		<cell name="id">2</cell>
+		<cell name="state">ALASKA</cell>
+		<cell name="code">AK</cell>
+	</row>
+	...
+	<row>
+		<cell name="id">50</cell>
+		<cell name="state">WYOMING</cell>
+		<cell name="code">WY</cell>
+	</row>
+</table>
+			]]>
+					</pre>
+				</p>
+			</xsd:documentation>
+		</xsd:annotation>
 		<xsd:simpleContent>
-			<xsd:extension base="xsd:string">
+			<xsd:extension base="xsd:anySimpleType">
 				<xsd:attribute name="name" type="xsd:string" />
-				<xsd:attribute name="type" type="xsd:string" default="int" />
+				<xsd:attribute name="type" type="xsd:string" />
 			</xsd:extension>
 		</xsd:simpleContent>
 	</xsd:complexType>
@@ -314,6 +379,18 @@
 				<xsd:attribute name="name" type="xsd:string" />
 			</xsd:extension>
 		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="ColumnParam">
+		<xsd:attribute name="name" type="xsd:string" use="required" />
+		<xsd:attribute name="orderBy" type="SortType" use="required" />
+		<xsd:attribute name="aggregation" type="AggregationType" use="required" />
+		<xsd:attribute name="groupBy" type="xsd:boolean" use="required" />
+		<xsd:attribute name="visible" type="xsd:boolean" use="required" />
+		<xsd:attribute name="columnOrder" type="xsd:int" use="required" />
+	</xsd:complexType>
+	<xsd:complexType name="LimitParam">
+		<xsd:attribute name="pageno" type="xsd:int" use="required" />
+		<xsd:attribute name="pagesize" type="xsd:int" use="required" />
 	</xsd:complexType>
 	<xsd:simpleType name="EngineType">
 		<xsd:restriction base="xsd:string">
@@ -407,6 +484,16 @@
 			<xsd:enumeration value="none" />
 			<xsd:enumeration value="ascend" />
 			<xsd:enumeration value="descend" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AggregationType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="none" />
+			<xsd:enumeration value="sum" />
+			<xsd:enumeration value="count" />
+			<xsd:enumeration value="min" />
+			<xsd:enumeration value="max" />
+			<xsd:enumeration value="average" />
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="UpdateType">
@@ -558,7 +645,7 @@
 	</xsd:simpleType>
 	<xsd:simpleType name="ColumnVisibilityType">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="normal" />
+			<xsd:enumeration value="default" />
 			<xsd:enumeration value="required" />
 			<xsd:enumeration value="optional" />
 			<xsd:enumeration value="hidden" />
@@ -578,6 +665,12 @@
 			<xsd:element name="ForwardOnly" type="xsd:boolean" default="false" />
 			<xsd:element name="ScrollInsensitive" type="xsd:boolean" default="true" />
 			<xsd:element name="ScrollSensitive" type="xsd:boolean" default="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- -->
+	<xsd:complexType name="EnumList">
+		<xsd:sequence>
+			<xsd:element name="enum-values" type="EnumItem" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
 	<!-- -->

@@ -42,7 +42,7 @@ import org.junit.Test;
 import com.viper.database.dao.DatabaseFactory;
 import com.viper.database.dao.DatabaseInterface;
 import com.viper.database.dao.DatabaseUtil;
-import com.viper.database.dao.Predicate;
+import com.viper.database.filters.Predicate;
 import com.viper.database.utils.DatabaseRegistry;
 import com.viper.database.utils.RandomBean;
 import com.viper.database.utils.junit.AbstractTestCase;
@@ -179,11 +179,15 @@ public class TestDaoMemory extends AbstractTestCase {
 		database.insertAll(expected);
 
 		List<Organization> organizations = database.queryList(Organization.class, new Predicate<Organization>() {
-			@Override
-			public boolean apply(Organization e) {
-				return e.getId() == expected.get(0).getId();
-			}
-		});
+		    @Override
+            public boolean apply(Organization organization) {
+                return organization.getId() == expected.get(0).getId();
+            }
+            @Override
+            public String toSQL() {
+                return null;
+            }
+		}, null, null);
 
 		Assert.assertNotNull("testQueryExpression null - could not find Organization", organizations);
 		Assert.assertTrue("testQueryExpression size - could not find Organization: " + organizations.size(), organizations.size() == 1);

@@ -38,7 +38,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import com.viper.database.annotations.Table;
+import com.viper.database.filters.Predicate;
+import com.viper.database.model.ColumnParam;
 import com.viper.database.model.DatabaseConnection;
+import com.viper.database.model.LimitParam;
 import com.viper.database.model.Row;
 
 public class InterceptorAdapter implements DatabaseSQLInterface {
@@ -155,8 +158,9 @@ public class InterceptorAdapter implements DatabaseSQLInterface {
      * 
      */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter) throws Exception {
-        return loadAdapterClass(clazz).queryList(clazz, filter);
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam) throws Exception {
+
+        return loadAdapterClass(clazz).queryList(clazz, filter, columnParams, limitParam);
     }
 
     /**
@@ -252,15 +256,6 @@ public class InterceptorAdapter implements DatabaseSQLInterface {
     public <T> List<T> querySQL(Class<T> clazz, String sql) throws Exception {
         return ((DatabaseSQLInterface) loadAdapterClass(clazz)).querySQL(clazz, sql);
 
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     */
-    @Override
-    public List<Row> readMetaRows(String metaName) throws Exception {
-        return ((DatabaseSQLInterface) dao).readMetaRows(metaName);
     }
 
     /**

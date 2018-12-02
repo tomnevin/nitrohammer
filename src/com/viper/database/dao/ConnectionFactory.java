@@ -32,7 +32,6 @@ package com.viper.database.dao;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -103,7 +102,7 @@ public class ConnectionFactory {
 		return ds;
 	}
 
-	public final static synchronized void release() throws Exception {
+	public final static synchronized void releaseAll() throws Exception {
 		for (String key : dataSources.keySet()) {
 			PoolingDataSource ds = dataSources.get(key);
 			ds.close();

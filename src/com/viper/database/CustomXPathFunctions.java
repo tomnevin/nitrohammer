@@ -109,42 +109,49 @@ public final class CustomXPathFunctions {
     }
 
     public final static String toJavaType(Column column) {
-        String clazz = column.getJavaType();
-        if (isEnum(column)) { 
-              clazz = getChild(clazz);
+        String classname = column.getJavaType();
+        if (isEnum(column)) {
+            classname = getChild(classname);
         }
         if (column.getGenericType() != null && !column.getGenericType().isEmpty()) {
-            clazz = clazz + "<" + column.getGenericType() + ">";
+            classname = classname + "<" + column.getGenericType() + ">";
         }
-        return clazz;
+        return classname;
     }
 
-    public final static String toJavaFullClassName(Column column) {
-        String clazz = column.getJavaType();
-        if (isEnum(column)) { 
-              // clazz = getChild(clazz);
+    public final static String toEnumType(Column column) {
+        String classname = column.getJavaType();
+        if (isEnum(column)) {
+            classname = getChild(classname);
         }
         if (column.getGenericType() != null && !column.getGenericType().isEmpty()) {
-            clazz = clazz + "<" + column.getGenericType() + ">";
+            classname = classname + "<" + column.getGenericType() + ">";
         }
-        return toClassName(clazz);
+        return classname;
+    }
+
+    public final static String toJavaClassName(Column column) {
+        String classname = column.getJavaType();
+        if (isEnumType(column)) {
+            classname = getChild(classname);
+        }
+        if (column.getGenericType() != null && !column.getGenericType().isEmpty()) {
+            classname = classname + "<" + column.getGenericType() + ">";
+        }
+        return classname;
     }
 
     public final static String toJavaClass(Database database, Table table, Column column) {
-        String clazz = column.getJavaType();
-        if (isEnum(column)) {
-            if (clazz.indexOf('.') == -1) {
-                clazz = database.getPackageName() + ".enums." + clazz;
-            } else {
-                clazz = getChild(clazz);
-            }
+        String classname = column.getJavaType();
+        if (isEnumType(column)) {
+            classname = getChild(classname);
         }
-        return toClassName(clazz);
+        return toClassName(classname);
     }
 
     public final static boolean isArray(Database database, Table table, Column column) {
         String name = toJavaClass(database, table, column);
-        
+
         return (name != null && name.startsWith("["));
     }
 
@@ -231,12 +238,33 @@ public final class CustomXPathFunctions {
         return buf.toString();
     }
 
-    public final static boolean isEnum(Column column) {
-        if (column.getDataType() == null || column.getDataType().trim().length() == 0
-                || "enum".equalsIgnoreCase(column.getDataType())) {
-            return (column.getEnumValues() != null && column.getEnumValues().size() > 0);
+    public final static String toDynamicEnumDefinition(Column column) {
+        StringBuffer buf = new StringBuffer();
+        if (column.getEnumValues() != null) {
+            buf.append("\n");
+            for (EnumItem item : column.getEnumValues()) {
+                buf.append("    public static final " + toEnumType(column) + " " + getName(item));
+                buf.append(" = new " + toEnumType(column) + "(\"" + getValue(item) + "\");\n");
+            }
         }
-        return false;
+        return buf.toString();
+    }
+
+    private static final String getValue(EnumItem item) {
+        return (item.getName() == null || item.getName().trim().isEmpty()) ? item.getValue() : item.getName();
+    }
+
+    private static final String getName(EnumItem item) {
+        return (item.getValue() == null || item.getValue().trim().isEmpty()) ? "EXTRA" : item.getValue();
+    }
+
+    public final static boolean isEnumType(Column column) {
+        return ("enum".equalsIgnoreCase(column.getDataType())
+                || column.getEnumValues() != null && column.getEnumValues().size() > 0);
+    }
+
+    public final static boolean isEnum(Column column) {
+        return (column.getEnumValues() != null && column.getEnumValues().size() > 0);
     }
 
     public final static boolean hasEnums(Table table) {
@@ -431,9 +459,9 @@ public final class CustomXPathFunctions {
         if (column.getJavaType().equals("String")) {
             return " = \"" + column.getDefaultValue() + "\"";
         }
-        if ("enum".equalsIgnoreCase(column.getDataType())) {
+        if (isEnumType(column)) {
             if (validEnumType(column.getEnumValues(), column.getDefaultValue())) {
-                return " = " + column.getJavaType() + ".valueOf(\"" + column.getDefaultValue() + "\")";
+                return " = " + column.getJavaType() + "." + column.getDefaultValue();
             }
         }
         // check for primitive instead
@@ -583,14 +611,20 @@ public final class CustomXPathFunctions {
         if (!isEmpty(table.getSqlDelete())) {
             append(buf, "sqlDelete", table.getSqlDelete().replaceAll("(\\r|\\n)", " "));
         }
+        if (!isEmpty(table.getSqlSize())) {
+            append(buf, "sqlSize", table.getSqlSize().replaceAll("(\\r|\\n)", " "));
+        }
         if (!isEmpty(table.getQueryClassName())) {
             append(buf, "queryClassName", table.getQueryClassName().replaceAll("(\\r|\\n)", " "));
         }
         if (!isEmpty(table.getConverter())) {
             append(buf, "converter", table.getConverter().replaceAll("(\\r|\\n)", " "));
         }
-        if (!isEmpty(table.getGenerator())) {
-            append(buf, "generator", table.getGenerator().replaceAll("(\\r|\\n)", " "));
+        if (!isEmpty(table.getBeanGenerator())) {
+            append(buf, "beanGenerator", table.getBeanGenerator().replaceAll("(\\r|\\n)", " "));
+        }
+        if (!isEmpty(table.getSqlGenerator())) {
+            append(buf, "sqlGenerator", table.getSqlGenerator().replaceAll("(\\r|\\n)", " "));
         }
         if (!isEmpty(table.getSeedFilename())) {
             append(buf, "seedFilename", table.getSeedFilename().replaceAll("(\\r|\\n)", " "));
@@ -610,15 +644,19 @@ public final class CustomXPathFunctions {
     public final static String toColumnAnnotation(Table table, Column column) {
 
         StringBuffer buf = new StringBuffer();
-        append(buf, "field", column.getName());
+        if (!isEmpty(column.getField())) {
+            append(buf, "field", column.getField());
+        } else {
+            append(buf, "field", column.getName());
+        }
         append(buf, "name", toJavaVariableName(column));
-        if (column.getGenericType() != null && !column.getGenericType().trim().isEmpty()) {
+        if (!isEmpty(column.getGenericType())) {
             append(buf, "genericType", column.getGenericType());
         }
-        if (column.getJavaType() != null && !column.getJavaType().trim().isEmpty()) {
+        if (!isEmpty(column.getJavaType())) {
             append(buf, "javaType", column.getJavaType());
         }
-        if (column.getTableName() != null && !column.getTableName().trim().isEmpty()) {
+        if (!isEmpty(column.getTableName())) {
             append(buf, "tableName", column.getTableName());
         }
         append(buf, "logicalType", column.getLogicalType());
@@ -668,6 +706,8 @@ public final class CustomXPathFunctions {
         append(buf, "maximumValue", column.getMaximumValue());
         append(buf, "valuesClassname", column.getValuesClassname());
         append(buf, "columnVisibilty", column.getColumnVisibility().value());
+        append(buf, "validationMessage", column.getValidationMessage());
+        append(buf, "pattern", column.getPattern());
 
         return buf.toString();
     }

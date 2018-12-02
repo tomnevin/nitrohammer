@@ -4,8 +4,12 @@
 		<column name="title" java-type="String" />
 		<column name="showlegend" java-type="boolean" />
 		<column name="autosize" java-type="boolean" />
+		<column name="width" java-type="int" />
+		<column name="height" java-type="int" />
 		<column name="xaxis" java-type="com.viper.database.rest.model.PlotlyAxis" />
 		<column name="yaxis" java-type="com.viper.database.rest.model.PlotlyAxis" />
+		<column name="margin" java-type="com.viper.database.rest.model.PlotlyMargin" />
+		<column name="legend" java-type="com.viper.database.rest.model.PlotlyLegend" />
 		<column name="updatemenus" java-type="java.util.List"  generic-type="com.viper.database.rest.model.PlotlyUpdateMenu" />
 	</table>
 </database>

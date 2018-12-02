@@ -49,7 +49,6 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.ArrayUtils;
 
 import com.viper.database.annotations.Column;
@@ -58,11 +57,16 @@ import com.viper.database.dao.converters.ConverterUtils;
 import com.viper.database.dao.converters.Converters;
 import com.viper.database.dao.drivers.SQLConversionTables;
 import com.viper.database.dao.drivers.SQLDriver;
+import com.viper.database.filters.Predicate;
 import com.viper.database.model.Cell;
+import com.viper.database.model.ColumnParam;
 import com.viper.database.model.DatabaseConnection;
 import com.viper.database.model.EnumItem;
+import com.viper.database.model.LimitParam;
 import com.viper.database.model.Param;
 import com.viper.database.model.Row;
+import com.viper.database.model.SortType;
+import com.viper.database.utils.FileUtil;
 
 public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterface {
 
@@ -80,7 +84,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
     private String variant = "mysql";
     private DatabaseConnection dbc = new DatabaseConnection();
-    private Map<Class, String> checksums = new HashMap<Class, String>();
+    private Map<Class<?>, String> checksums = new HashMap<Class<?>, String>();
 
     /**
      * Given the configuration map of parameters, get an instance of Database access
@@ -116,6 +120,8 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                 createDatabase(packagename);
             }
         }
+        
+        initializeDatabaseWithSQL(dbc);
 
         for (String packagename : dbc.getPackageNames()) {
             initializeDatabase(packagename);
@@ -134,12 +140,17 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         // env.put(Context.INITIAL_CONTEXT_FACTORY, DEFAULT_FACTORY_CLASSNAME);
         // env.put(Context.PROVIDER_URL, DEFAULT_PROVIDER_URL);
 
-        DataSource source = ConnectionFactory.getDataSource(dbc);
+        try {
+            DataSource source = ConnectionFactory.getDataSource(dbc);
 
-        Connection connection = source.getConnection();
-        connection.setAutoCommit(true);
+            Connection connection = source.getConnection();
+            connection.setAutoCommit(true);
 
-        return connection;
+            return connection;
+        } catch (Exception ex) {
+            System.err.println("Failed to connect to databases.xml : " + dbc.getName());
+            throw ex;
+        }
     }
 
     private void initializeDatabase(String packagename) {
@@ -149,8 +160,8 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         Map<String, String> cache = new HashMap<String, String>();
 
         try {
-            List<Class> classes = DatabaseUtil.listDatabaseTableClasses(packagename, null);
-            for (Class clazz : classes) {
+            List<Class<?>> classes = DatabaseUtil.listDatabaseTableClasses(packagename, null);
+            for (Class<?> clazz : classes) {
                 try {
                     Table table = DatabaseUtil.getTableAnnotation(clazz);
                     if (table.isSchemaUpdatable()) {
@@ -165,6 +176,36 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     log.throwing("", "Problems Creating Table: " + clazz, ex);
+                }
+            }
+        } finally {
+            release(connection);
+        }
+    }
+
+    private void initializeDatabaseWithSQL(DatabaseConnection dbc) {
+
+        if (dbc == null || dbc.getInitialSqlFilenames().size() == 0) {
+            return;
+        }
+
+        Connection connection = null;
+
+        try {
+            for (String filename : dbc.getInitialSqlFilenames()) {
+                try {
+                    if (connection == null) {
+                        connection = getConnection();
+                    }
+
+                    List<String> items = FileUtil.readFileViaLines(getClass(), filename);
+                    for (String item : items) {
+                        if (item != null && item.trim().length() > 0) {
+                            write(item.trim());
+                        }
+                    }
+                } catch (Exception ex) {
+                    log.throwing("", "Problems initializing database, sql file: " + filename, ex);
                 }
             }
         } finally {
@@ -194,7 +235,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     public void release() {
 
         try {
-            ConnectionFactory.release();
+            ConnectionFactory.releaseAll();
         } catch (Exception e) {
             log.throwing("Can't close connection ", "", e);
         }
@@ -207,16 +248,26 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     @Override
     public <T> long size(Class<T> clazz) throws Exception {
 
-        StringBuilder sql = new StringBuilder();
-        sql.append("select count(*) from ");
-        sql.append(toFullName(clazz));
+        StringBuilder buf = new StringBuilder();
+
+        Table table = DatabaseUtil.getTableAnnotation(clazz);
+        if (table != null && table.sqlSize() != null && !table.sqlSize().trim().isEmpty()) {
+            buf.append(table.sqlSize());
+        } else if (table != null && table.sqlSelect() != null && !table.sqlSelect().trim().isEmpty()) {
+            buf.append(table.sqlSelect().replaceAll("SELECT \\* FROM", "SELECT COUNT(*) FROM"));
+        } else {
+            buf.append("select count(*) from ");
+            buf.append(toFullName(dbc, clazz));
+        }
+
+        String sql = convertSqlSchemaName(buf.toString());
 
         ResultSet rs = null;
         Statement stmt = null;
         Connection connection = null;
 
         try {
-            log.fine("read: sql=" + sql);
+            // log.info("size: sql=" + sql);
 
             connection = getConnection();
             stmt = connection.createStatement();
@@ -346,7 +397,6 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     public <T> List<String> listColumns(Class<T> clazz) {
         List<String> items = new ArrayList<String>();
         Connection connection = null;
-
         try {
             connection = getConnection();
             items = listColumns(connection, clazz);
@@ -411,7 +461,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
             ex.printStackTrace();
         }
         if (changed) {
-            log.info("FYI: Table change status, changed=" + changed + "," + clazz.getName());
+            log.fine("FYI: Table change status, changed=" + changed + "," + clazz.getName());
         }
         return changed;
     }
@@ -423,8 +473,8 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     @Override
     public <T> void createDatabase(String packagename) {
 
-        List<Class> classes = DatabaseUtil.listDatabaseTableClasses(packagename, null);
-        for (Class clazz : classes) {
+        List<Class<?>> classes = DatabaseUtil.listDatabaseTableClasses(packagename, null);
+        for (Class<?> clazz : classes) {
             try {
                 create(clazz);
             } catch (Exception ex) {
@@ -478,23 +528,33 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
      * 
      */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter) throws Exception {
-        List<T> results = new ArrayList<T>();
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams,
+            LimitParam limitParam) throws Exception {
 
-        int pageno = 0;
-        int limit = 50000;
-        while (true) {
-            List<T> beans = queryList(clazz, PAGENO_KEY, pageno, PAGESIZE_KEY, limit);
-            for (T bean : beans) {
-                if (filter.apply(bean)) {
-                    results.add(bean);
-                }
+        StringBuilder buf = new StringBuilder();
+
+        Table table = DatabaseUtil.getTableAnnotation(clazz);
+        if (table != null && table.sqlSelect() != null && !table.sqlSelect().trim().isEmpty()) {
+
+            if (isSQLGroupByClause(columnParams)) {
+                buf.append("select count(*) as COUNT, " + table.sqlSelect().substring(7));
+            } else {
+                buf.append(table.sqlSelect());
             }
-            if (beans.size() < limit) {
-                break;
+            buf.append(toSQLWhere(filter, columnParams, limitParam, "having"));
+
+        } else {
+
+            if (isSQLGroupByClause(columnParams)) {
+                buf.append("select *, count(*) as COUNT from ");
+            } else {
+                buf.append("select * from ");
             }
+            buf.append(toFullName(dbc, clazz));
+            buf.append(toSQLWhere(filter, columnParams, limitParam, "where"));
         }
-        return results;
+
+        return read(clazz, buf.toString());
     }
 
     /**
@@ -567,7 +627,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
      */
     @Override
     public <T> List<T> executeQuery(Class<T> clazz, String sql, Object... params) throws Exception {
-        return new ArrayList();
+        return new ArrayList<T>();
     }
 
     /**
@@ -626,7 +686,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         } else {
             buf.append("delete from ");
         }
-        buf.append(toFullName(bean.getClass()));
+        buf.append(toFullName(dbc, bean.getClass()));
 
         List<Object> pairs = new ArrayList<Object>();
         for (Column primaryKeyColumn : primaryKeyColumns) {
@@ -658,7 +718,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         Connection connection = null;
         try {
             connection = getConnection();
-            write(connection, "delete from " + toFullName(clazz), Statement.NO_GENERATED_KEYS);
+            write(connection, "delete from " + toFullName(dbc, clazz), Statement.NO_GENERATED_KEYS);
 
         } finally {
             release(connection);
@@ -674,7 +734,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
         StringBuilder buf = new StringBuilder();
         buf.append("delete from ");
-        buf.append(toFullName(clazz));
+        buf.append(toFullName(dbc, clazz));
         buf.append(" ");
         buf.append(buildWhereClause(clazz, keyValue));
 
@@ -697,9 +757,9 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     public <T> List<Object> uniqueValues(Class<T> clazz, String fieldname) throws Exception {
 
         StringBuilder buf = new StringBuilder();
-        buf.append("select distinct " + fieldname + " from ");
-        buf.append(toFullName(clazz));
-        buf.append(" order by " + fieldname);
+        buf.append("select distinct " + toFieldName(fieldname) + " from ");
+        buf.append(toFullName(dbc, clazz));
+        buf.append(" order by " + toFieldName(fieldname));
 
         List<T> list = read(clazz, buf.toString());
 
@@ -723,7 +783,6 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         Connection connection = null;
         try {
             connection = getConnection();
-
             write(connection, sql, Statement.NO_GENERATED_KEYS);
 
         } finally {
@@ -768,6 +827,8 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     @Override
     public List<Row> readRows(String sql) throws Exception {
 
+        sql = convertSqlSchemaName(sql);
+
         List<Row> list = new ArrayList<Row>();
         Statement stmt = null;
         Connection conn = null;
@@ -785,16 +846,26 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnCount = rsmd.getColumnCount();
+            if (columnCount > 0) {
 
-            while (rs.next()) {
-                Row bean = new Row();
-                for (int i = 1; i <= columnCount; i++) {
-                    String columnName = rsmd.getColumnName(i);
-                    String columnType = rsmd.getColumnTypeName(i);
-                    String value = rs.getString(i);
-                    bean.getCells().add(newCell(columnName, columnType, value));
+                String columnNames[] = new String[columnCount];
+                String columnTypes[] = new String[columnCount];
+
+                for (int i = 0; i < columnCount; i++) {
+                    columnNames[i] = rsmd.getColumnName(i + 1);
+                    columnTypes[i] = rsmd.getColumnTypeName(i + 1);
+
+                    columnNames[i] = (columnNames[i] == null) ? "" : columnNames[i].toLowerCase();
                 }
-                list.add(bean);
+
+                while (rs.next()) {
+                    Row bean = new Row();
+                    for (int i = 1; i <= columnCount; i++) {
+                        Object value = rs.getObject(i);
+                        bean.getCells().add(newCell(columnNames[i - 1], columnTypes[i - 1], value));
+                    }
+                    list.add(bean);
+                }
             }
         } finally {
             close(rs);
@@ -804,103 +875,12 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         return list;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     */
-    @Override
-    public List<Row> readMetaRows(String metaName) throws Exception {
-
-        List<Row> list = new ArrayList<Row>();
-        Connection conn = null;
-        ResultSet rs = null;
-
-        try {
-            conn = getConnection();
-
-            // System.out.println("**** read: metaName=" + metaName);
-
-            DatabaseMetaData dmd = conn.getMetaData();
-            if ("primarykeys".equalsIgnoreCase(metaName)) {
-                rs = dmd.getPrimaryKeys(null, null, "%");
-            } else if ("attributes".equalsIgnoreCase(metaName)) {
-                rs = dmd.getAttributes(null, null, "%", "%");
-            } else if ("BestRowIdentifier".equalsIgnoreCase(metaName)) {
-                rs = dmd.getBestRowIdentifier(null, null, null, 0, false);
-            } else if ("Catalogs".equalsIgnoreCase(metaName)) {
-                rs = dmd.getCatalogs();
-            } else if ("CrossReference".equalsIgnoreCase(metaName)) {
-                rs = dmd.getCrossReference(null, null, "%", null, null, "%");
-            } else if ("SupportsConvert".equalsIgnoreCase(metaName)) {
-                List<Row> types = readMetaRows("TypeInfo");
-                for (Row type1 : types) {
-                    for (Row type2 : types) {
-                        int typeName1 = Integer.parseInt(DatabaseUtil.findValue(type1.getCells(), "data_type"));
-                        int typeName2 = Integer.parseInt(DatabaseUtil.findValue(type2.getCells(), "data_type"));
-                        boolean result = dmd.supportsConvert(typeName1, typeName2);
-                        Row item = new Row();
-                        item.getCells().add(newCell("fromType", null, typeName1));
-                        item.getCells().add(newCell("toType", null, typeName2));
-                        item.getCells().add(newCell("supported", null, result));
-                        list.add(item);
-                    }
-                }
-                return list;
-            } else if ("TypeInfo".equalsIgnoreCase(metaName)) {
-                rs = dmd.getTypeInfo();
-            } else if ("TableTypes".equalsIgnoreCase(metaName)) {
-                rs = dmd.getTableTypes();
-            }
-
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-
-            while (rs.next()) {
-                Row bean = new Row();
-                for (int i = 1; i <= columnCount; i++) {
-                    String columnName = rsmd.getColumnName(i);
-                    Object value = rs.getObject(i);
-                    bean.getCells().add(newCell(columnName, null, value));
-                }
-                list.add(bean);
-            }
-        } finally {
-            close(rs);
-            release(conn);
-        }
-        return list;
-    }
-
     private Cell newCell(String name, String columnType, Object value) {
         Cell cell = new Cell();
-        cell.setName((name == null) ? "" : name.toLowerCase());
+        cell.setName(name);
         cell.setType(columnType);
-        cell.setValue((value == null) ? null : value.toString());
+        cell.setValue(value);
         return cell;
-    }
-
-    /**
-     * Available only for DatabaseJDBC, read from sql string into resultSet.
-     * 
-     * @param sql
-     * @return
-     * @throws Exception
-     */
-    public ResultSet readResultSet(String sql) throws Exception {
-        Connection connection = null;
-        try {
-
-            sql = convertSqlSchemaName(sql);
-
-            log.fine("read: sql=" + sql);
-
-            connection = getConnection();
-            Statement stmt = connection.createStatement();
-            return stmt.executeQuery(sql);
-
-        } catch (SQLException e) {
-            throw new Exception(sql, e);
-        }
     }
 
     private <T> List<T> read(Class<T> clazz, String sql) throws Exception {
@@ -908,17 +888,18 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         List<T> list = new ArrayList<T>();
         Statement stmt = null;
         Connection conn = null;
+        ResultSet rs = null;
 
         sql = convertSqlSchemaName(sql);
 
-        log.fine("read: sql=" + sql);
+        log.info("READ: sql=" + sql);
 
         try {
 
             conn = getConnection();
             stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
 
-            ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnCount = rsmd.getColumnCount();
 
@@ -926,19 +907,32 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
             Column[] fieldColumns = new Column[columnCount];
             String[] propertyNames = new String[columnCount];
 
+            List<Column> columns = DatabaseUtil.getAllColumnAnnotations(clazz);
+
             T extra = clazz.newInstance();
 
             for (int i = 0; i < columnCount; i++) {
-                String columnName = rsmd.getColumnName(i + 1);
-                fieldColumns[i] = DatabaseUtil.getColumnAnnotation(clazz, columnName);
-                fieldClazzs[i] = toPropertyType(extra, columnName);
 
-                if (fieldClazzs[i] == null) {
-                    log.info("DatabaseJDBC: (column) " + columnName + " (not found in bean) "
-                            + extra.getClass().getName());
+                String columnName = rsmd.getColumnName(i + 1);
+                String tableName = rsmd.getTableName(i + 1);
+                fieldColumns[i] = DatabaseUtil.findColumnAnnotation(columns, tableName, columnName);
+
+                if (fieldColumns[i] == null) {
+                    log.fine("DatabaseJDBC: COLUMN " + tableName + "," + columnName
+                            + " (not found in bean annotations) " + clazz.getName());
+                    continue;
                 }
 
-                propertyNames[i] = DatabaseUtil.toPropertyName(clazz, columnName);
+                fieldClazzs[i] = DatabaseUtil.toPropertyType(extra, fieldColumns[i]);
+                if (fieldClazzs[i] == null) {
+                    log.fine("DatabaseJDBC: COLUMN " + tableName + "," + columnName + " (not found in bean properties) "
+                            + clazz.getName());
+                }
+
+                // Check if the column already exists, can happen in joins, there will be a
+                // table name to distinguish, need more work here.
+                propertyNames[i] = DatabaseUtil.toPropertyName(fieldColumns[i]);
+
             }
 
             while (rs.next()) {
@@ -946,14 +940,25 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
                 for (int i = 1; i <= columnCount; i++) {
 
-                    Class fieldClazz = fieldClazzs[i - 1];
+                    Class<?> fieldClazz = fieldClazzs[i - 1];
                     Column fieldColumn = fieldColumns[i - 1];
                     String propertyName = propertyNames[i - 1];
                     Object inputValue = rs.getObject(i);
 
+                    // duplicate columns skip, we use first column found!
+                    if (propertyName == null) {
+                        continue;
+                    }
+
                     try {
                         if (fieldClazz == null) {
                             DatabaseUtil.set(bean, propertyName, 0);
+
+                        } else if (DynamicEnum.class.isAssignableFrom(fieldClazz)) {
+                            DatabaseUtil.set(bean, propertyName, DatabaseUtil.newInstance(fieldClazz, inputValue));
+
+                            System.err.println("*** DYNAMIC_ENUM: " + propertyName + ", " + inputValue + ","
+                                    + DatabaseUtil.get(bean, propertyName));
 
                         } else if (fieldClazz.isPrimitive() && inputValue == null) {
                             DatabaseUtil.set(bean, propertyName, 0);
@@ -977,23 +982,24 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                         }
 
                     } catch (Throwable ex) {
-                        log.info("ERROR: JDBC field read: " + clazz.getName() + "," + rsmd.getColumnName(i) + ","
+                        log.info("DatabaseJDBC field read: " + clazz.getName() + "," + rsmd.getColumnName(i) + ","
                                 + fieldClazz + "," + inputValue + "," + ex);
-                        ex.printStackTrace();
                     }
                 }
 
-                // When reading beans update the fields which maybe calculated or for whatever
-                // reason the user deems needs to be altered.
-                DatabaseUtil.callGenerator(bean);
                 list.add(bean);
             }
             rs.close();
 
+            // When reading beans update the fields which maybe calculated or for whatever
+            // reason the user deems needs to be altered.
+            DatabaseUtil.callBeanGenerator(list);
+
         } catch (Exception ex) {
-            throw new Exception("Read sql failed: " + dbc.getDatabaseUrl() + "," + sql, ex);
+            throw new Exception("DatabaseJDBC: Read sql failed: " + dbc.getDatabaseUrl() + "," + sql, ex);
 
         } finally {
+            close(rs);
             close(stmt);
             release(conn);
         }
@@ -1036,7 +1042,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
             }
 
         } catch (Throwable ex) {
-            System.err.println("ERROR.write: " + ex + ": SQL=" + sql);
+            log.warning("DatabaseJDBC..write: " + ex + ": SQL=" + sql);
             throw ex;
 
         } finally {
@@ -1055,7 +1061,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
         } else {
             buf.append("select * from ");
-            buf.append(toFullName(clazz));
+            buf.append(toFullName(dbc, clazz));
             buf.append(buildWhereClause(clazz, pairs));
         }
 
@@ -1075,7 +1081,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
      */
     private <T> String buildWhereClause(Class<T> clazz, Object[] keyValue) throws Exception {
 
-        long pageno = -1;
+        long pageno = 0;
         long pagesize = -1;
 
         StringBuilder buf = new StringBuilder();
@@ -1100,20 +1106,23 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                     continue;
                 }
 
-                Column column = DatabaseUtil.getColumnAnnotation(clazz, key);
-                if (column == null) {
-                    continue;
-                }
-
                 if (buf.length() == 0) {
                     buf.append(" where ");
                 } else {
                     buf.append(" and ");
                 }
 
-                buf.append(toFieldName(column.field()));
-                buf.append(" = ");
-                buf.append(toFieldValue(column, value));
+                Column column = DatabaseUtil.getColumnAnnotation(clazz, key);
+                if (column == null) {
+                    buf.append(toFieldName(key));
+                    buf.append(" = ");
+                    buf.append(toFieldValue(column, value));
+
+                } else {
+                    buf.append(toFieldName(column.field()));
+                    buf.append(" = ");
+                    buf.append(toFieldValue(column, value));
+                }
             }
         }
 
@@ -1129,7 +1138,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     private <T> void constructDBTable(Map<String, String> cache, Connection connection, Class<T> clazz)
             throws Exception {
 
-        log.info("constructDBTable: checking " + toFullName(clazz));
+        log.info("constructDBTable: checking " + toFullName(dbc, clazz));
 
         String databaseName = toAliasSchemaName(clazz);
         if (!isDatabaseCreated(cache, clazz)) {
@@ -1147,11 +1156,11 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
         if (!isTableCreated(cache, clazz)) {
 
-            log.info("constructDBTables: create table " + toFullName(clazz));
+            log.info("constructDBTables: create table " + toFullName(dbc, clazz));
 
             // generate Table create SQL
             StringBuilder sql = new StringBuilder();
-            sql.append("create table if not exists " + toFullName(clazz));
+            sql.append("create table if not exists " + toFullName(dbc, clazz));
             sql.append(" (");
 
             boolean isFirst = true;
@@ -1200,7 +1209,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         if (table.seedFilename() != null && !table.seedFilename().isEmpty()) {
             if (this.size(clazz) == 0) {
 
-                log.info("constructDBTables: import table " + table.seedFilename() + ", " + toFullName(clazz));
+                log.info("constructDBTables: import table " + table.seedFilename() + ", " + toFullName(dbc, clazz));
                 DatabaseMapper.importTableByFile(this, table.seedFilename(), clazz);
             }
         }
@@ -1249,7 +1258,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     private <T> void addDefaultColumn(Connection connection, Class<T> clazz, Column column) throws Exception {
 
         StringBuilder sql = new StringBuilder();
-        sql.append("alter table " + toFullName(clazz));
+        sql.append("alter table " + toFullName(dbc, clazz));
         sql.append(" add ");
         sql.append(toFieldName(column.field()));
         sql.append(" TEXT"); // TODO fix this, pull from column type.
@@ -1266,7 +1275,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     private <T> boolean isTableCreated(Map<String, String> cache, Class<T> clazz) {
 
         Table table = clazz.getAnnotation(Table.class);
-        String name = toFullName(clazz);
+        String name = toFullName(dbc, clazz);
         return cache.containsKey(name);
     }
 
@@ -1318,7 +1327,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                     }
                     append(updates, toFieldName(column.field()), "null", ',');
                 } else {
-                    System.err.println("WARN: value is null, column is required: " + bean.getClass().getName() + ","
+                    log.warning("WARN: value is null, column is required: " + bean.getClass().getName() + ","
                             + column.field());
                 }
             } else {
@@ -1338,7 +1347,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
         StringBuilder buf = new StringBuilder();
         buf.append("insert into ");
-        buf.append(toFullName(bean.getClass()));
+        buf.append(toFullName(dbc, bean.getClass()));
         buf.append(" (");
         buf.append(names.toString());
         buf.append(") values (");
@@ -1387,7 +1396,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         List<Column> primaryKeyColumns = DatabaseUtil.getPrimaryKeyColumns(bean.getClass());
         if (primaryKeyColumns.size() == 0) {
             buf.append("update ");
-            buf.append(toFullName(bean.getClass()));
+            buf.append(toFullName(dbc, bean.getClass()));
             buf.append(" set ");
             buf.append(buf1.toString());
 
@@ -1405,7 +1414,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
             // ON DUPLICATE KEY UPDATE c=3;
 
             buf.append("update ");
-            buf.append(toFullName(bean.getClass()));
+            buf.append(toFullName(dbc, bean.getClass()));
             buf.append(" set ");
             buf.append(buf1.toString());
             buf.append(" ");
@@ -1413,6 +1422,95 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         }
 
         return buf.toString();
+    }
+
+    private final <T> String toSQLWhere(Predicate filter, List<ColumnParam> params, LimitParam limitParam,
+            String command) throws Exception {
+
+        StringBuilder buf = new StringBuilder();
+        if (filter != null) {
+            String where = filter.toSQL();
+            if (where.length() > 0) {
+                buf.append(" " + command + " ");
+                buf.append(where);
+            }
+        }
+
+        if (params != null) {
+            String orderby = toSQLOrderByClause(params);
+            if (orderby.length() > 0) {
+                buf.append(" order by ");
+                buf.append(orderby);
+            }
+
+            String groupby = toSQLGroupByClause(params);
+            if (groupby.length() > 0) {
+                buf.append(" group by ");
+                buf.append(groupby);
+            }
+        }
+
+        if (limitParam != null) {
+            buf.append(toSQLLimit(limitParam));
+        }
+
+        return buf.toString();
+    }
+
+    private final String toSQLLimit(LimitParam limitParam) {
+        if (limitParam == null) {
+            return "";
+        }
+
+        StringBuilder buf = new StringBuilder();
+        buf.append(" limit ");
+        buf.append(limitParam.getPagesize());
+        buf.append(" offset ");
+        buf.append(limitParam.getPageno() * limitParam.getPagesize());
+
+        return buf.toString();
+    }
+
+    private final String toSQLOrderByClause(List<ColumnParam> params) {
+
+        StringBuilder buf = new StringBuilder();
+        for (ColumnParam param : params) {
+            if (param.getOrderBy() == SortType.NONE) {
+                continue;
+            }
+            if (buf.length() > 0) {
+                buf.append(",");
+            }
+            buf.append(toFieldName(param.getName()));
+            buf.append(" ");
+            buf.append((param.getOrderBy() == SortType.DESCEND) ? "DESC" : "ASC");
+        }
+        return buf.toString();
+    }
+
+    private final String toSQLGroupByClause(List<ColumnParam> params) {
+
+        StringBuilder buf = new StringBuilder();
+        for (ColumnParam param : params) {
+            if (!param.isGroupBy()) {
+                continue;
+            }
+            if (buf.length() > 0) {
+                buf.append(",");
+            }
+            buf.append(toFieldName(param.getName()));
+        }
+        return buf.toString();
+    }
+
+    private final boolean isSQLGroupByClause(List<ColumnParam> params) {
+
+        for (ColumnParam param : params) {
+            if (!param.isGroupBy()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private <T> String convertSqlSchemaName(String sql) {
@@ -1426,33 +1524,8 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         return sql;
     }
 
-    private <T> String toAliasSchemaName(Class<T> clazz) {
-        String databasename = DatabaseUtil.getDatabaseName(clazz);
-        String schema = DatabaseUtil.getValue(dbc.getSchemaAlias(), databasename);
-        return (schema == null) ? databasename : schema;
-    }
-
-    private <T> String toAliasSchemaName(String databasename) {
-        String schema = DatabaseUtil.getValue(dbc.getSchemaAlias(), databasename);
-        return (schema == null) ? databasename : schema;
-    }
-
-    // Temporary see the Memory adapter, add this to interface, or to a utility or
-    // something should not be public.
-    private <T> String toFullName(Class<T> clazz) {
-
-        String tablename = DatabaseUtil.getTableName(clazz);
-        String schema = toAliasSchemaName(clazz);
-        if (schema != null && schema.length() > 0) {
-            tablename = toFieldName(schema) + '.' + toFieldName(tablename);
-        } else {
-            tablename = toFieldName(tablename);
-        }
-        return toCase(tablename);
-    }
-
     private String getColumnType(Method field, Column annotation) throws Exception {
-        Class type = field.getReturnType();
+        Class<?> type = field.getReturnType();
         long length = annotation.size();
         int decimal = annotation.decimalSize();
 
@@ -1548,12 +1621,13 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
     // Use Converters.
     private <T> String toFieldValue(Column column, Object value) throws Exception {
-        int size = (int) column.size();
+        int size = (column == null) ? 128 : (int) column.size();
+        String datatype = (column == null) ? null : column.dataType();
 
         if (value == null) {
             return "NULL";
         }
-        if (value instanceof Long && "timestamp".equalsIgnoreCase(column.dataType())) {
+        if (value instanceof Long && "timestamp".equalsIgnoreCase(datatype)) {
             return escape(toUpdateDateTime((long) value));
         }
         if (value instanceof String) {
@@ -1603,6 +1677,10 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         if (value.getClass().isPrimitive()) {
             return (value.toString().isEmpty()) ? "0" : toLimitedString(value.toString(), size);
         }
+        if (value instanceof DynamicEnum) {
+            String v = ((DynamicEnum) value).value();
+            return QUOTE_VALUE + v + QUOTE_VALUE;
+        }
         if (value.getClass().isEnum()) {
             String v = value.toString();
             if (value instanceof EnumItem) {
@@ -1628,7 +1706,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         if (value.getClass().isArray()) {
             return escape(ConverterUtils.writeJsonFromArray((Object[]) value));
         }
-        if ("json".equalsIgnoreCase(column.dataType())) {
+        if ("json".equalsIgnoreCase(datatype)) {
             String json = ConverterUtils.writeJson(value);
             if (json == null || json.length() == 0) {
                 return QUOTE_VALUE + QUOTE_VALUE;
@@ -1689,7 +1767,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                 }
             }
         }
-        System.err.println("Unable to find method with field name of " + fieldname + " in class " + clazz.getName());
+        log.warning("Unable to find method with field name of " + fieldname + " in class " + clazz.getName());
         return null;
     }
 
@@ -1719,21 +1797,6 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
             buf.append(String.format("%02X", b));
         }
         return "X'" + buf.toString() + "'";
-    }
-
-    private <T> Class toPropertyType(T bean, String fieldname) {
-        String propertyName = fieldname;
-        try {
-            Column column = DatabaseUtil.getColumnAnnotation(bean.getClass(), fieldname);
-            if (column != null) {
-                propertyName = column.name();
-            }
-            return PropertyUtils.getPropertyType(bean, propertyName);
-        } catch (Exception ex) {
-            log.severe(
-                    "getType failed for " + bean.getClass() + "." + fieldname + "." + propertyName + ": ERROR " + ex);
-        }
-        return null;
     }
 
     private Object generateKeyValue(Method method, Column column) {
@@ -1773,22 +1836,61 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
     }
 
     private final <T> String getChecksum(Class<T> clazz) throws Exception {
-        List<Row> rows = readRows("checksum table " + toFullName(clazz));
+        List<Row> rows = readRows("checksum table " + toFullName(dbc, clazz));
         for (Row row : rows) {
             for (Cell cell : row.getCells()) {
                 if ("checksum".equalsIgnoreCase(cell.getName())) {
-                    return cell.getValue();
+                    return (cell.getValue() == null) ? null : cell.getValue().toString();
                 }
             }
         }
         return null;
     }
 
+    // Temporary see the Memory adapter, add this to interface, or to a utility or
+    // something should not be public.
+    public final <T> String toFullName(DatabaseConnection dbc, Class<T> clazz) {
+
+        String tablename = DatabaseUtil.getTableName(clazz);
+        String schema = toAliasSchemaName(clazz);
+        if (schema != null && schema.length() > 0) {
+            tablename = toFieldName(schema) + '.' + toFieldName(tablename);
+        } else {
+            tablename = toFieldName(tablename);
+        }
+        return toCase(dbc, tablename);
+    }
+
+    public final <T> String toAliasSchemaName(Class<T> clazz) {
+        String databasename = DatabaseUtil.getDatabaseName(clazz);
+        String schema = DatabaseUtil.getValue(dbc.getSchemaAlias(), databasename);
+        return (schema == null) ? databasename : schema;
+    }
+
+    public final <T> String toAliasSchemaName(String databasename) {
+        String schema = DatabaseUtil.getValue(dbc.getSchemaAlias(), databasename);
+        return (schema == null) ? databasename : schema;
+    }
+
+    public final String toCase(DatabaseConnection dbc, String name) {
+        if (name == null || dbc.getNameCase() == null) {
+            return name;
+        }
+        switch (dbc.getNameCase()) {
+        case UPPER:
+            return name.toUpperCase();
+        case LOWER:
+            return name.toLowerCase();
+        default:
+            return name;
+        }
+    }
+
     private boolean isEmpty(String str) {
         return (str == null || str.isEmpty());
     }
 
-    private Class toClass(String classname) throws Exception {
+    private Class<?> toClass(String classname) throws Exception {
         if (classname == null) {
             return null;
         }
@@ -1802,17 +1904,4 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         return updaterDateTime.format(new Date(datetime));
     }
 
-    private String toCase(String name) {
-        if (name == null || dbc.getNameCase() == null) {
-            return name;
-        }
-        switch (dbc.getNameCase()) {
-        case UPPER:
-            return name.toUpperCase();
-        case LOWER:
-            return name.toLowerCase();
-        default:
-            return name;
-        }
-    }
 }

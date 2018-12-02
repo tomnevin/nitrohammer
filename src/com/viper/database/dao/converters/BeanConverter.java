@@ -85,7 +85,7 @@ public final class BeanConverter implements ConverterInterface {
             return ConverterUtils.convertFromString(toType,
                     new StringReader(new String(ConverterUtils.convertBlobToBytes(fromValue))));
         }
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+        throw new Exception("BeanConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
     }
 
     /**
@@ -122,7 +122,7 @@ public final class BeanConverter implements ConverterInterface {
             return ConverterUtils.convertToArray(toType,
                     new StringReader(new String(ConverterUtils.convertBlobToBytes(fromValue))));
         }
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+        throw new Exception("BeanConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
     }
 
     /**

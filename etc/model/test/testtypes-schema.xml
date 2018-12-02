@@ -48,6 +48,6 @@
         <column name="FLOAT_ARRAY_TYPE" java-type="float[]" />
         <column name="DOUBLE_ARRAY_TYPE" java-type="double[]" />
         <column name="SHORT_ARRAY_TYPE" java-type="short[]" />
-        <column name="ENUM_ARRAY_TYPE" java-type="MyColor[]" />
+        <column name="ENUM_ARRAY_TYPE" java-type="MyColor[]" data-type="enum" />
 	</table>
 </database>

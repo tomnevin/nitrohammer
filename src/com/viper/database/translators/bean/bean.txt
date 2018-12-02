@@ -20,6 +20,7 @@ import com.viper.database.annotations.Index;
 import com.viper.database.annotations.ForeignKey;
 import com.viper.database.annotations.Column;
 import com.viper.database.annotations.Table;
+import com.viper.database.dao.DynamicEnum;
 
 ## if (java.hasEnums(table)) {
 import #{database.packageName}.enums.*;

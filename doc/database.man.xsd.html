@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Nitro-Hammer database.xsd documentation</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet"
+	href="https://www.w3schools.com/lib/w3-theme-teal.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+	font-family: "Roboto", sans-serif;
+	margin: 25px;
+}
+
+h1 {
+	font-weight: bold
+}
+
+dt {
+	float: left;
+	clear: left;
+	width: 300px;
+	text-align: left;
+	font-weight: bold; 
+}
+
+dt::after {
+	content: ":";
+}
+
+dd {
+	margin: 0 0 0 110px;
+	padding: 0 0 0.5em 0;
+}
+
+.w3-bar-block .w3-bar-item {
+	padding: 16px;
+	font-weight: bold
+}
+</style>
+</head>
+<body>
+
+	<h2>Quick Look</h2>
+
+	The following is a model, definition of object which represents a User
+	object and table definition.
+	<ol>
+		<li>The database is defined with a <b>name</b> attribute. In the
+			following example of the name of the database schema will be <b>examples</b>.
+		</li>
+		<li>The table is defined as a child to the database element, and
+			the table is defined with the name attribute of value user. This will
+			be the name of the java bean and of the database table.</li>
+		<li>The java bean properties and the database columns are defined
+			within the table tag. The following table has several columns, the
+			first being the username column. This column has several attributes
+			indicating the sepcification of the username column.
+			<ol>
+				<li>The type of the column is a java type java.lang.String.</li>
+				<li>It is limited in the database to 32 characters.</li>
+				<li>It is a primary key field, indicating the username will be
+					unique within the user table.</li>
+				<li>The id-method indicates the primary key is assigned by the
+					application, and not by the database.</li>
+				<li>The logical-type attribute indicates what type of field
+					this is, this attribute is useful many purposes, validation,
+					auto-generation of data, determining UI componet to use for this
+					field, among others. The email.txt is a filename indicating where a
+					list of possible emails will exist, useful for auto-generating the
+					field for testing purposes.</li>
+			</ol>
+		</li>
+		<li>It is from this model definition, from which much of the
+			backend and some of the frontend application will be generated.
+			Including the Java beans, the database creation a collection of SQL
+			files, the rest service layer, the dao layer, test files, etc. In
+			addition, the developer may develop his own templates to auto
+			generate his own code, scripts, etc.</li>
+	</ol>
+	<pre>
+		<code>
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;database xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+	xsi:noNamespaceSchemaLocation='http://www.vipersoftwareservices.com/schemas/database.xsd' 
+	name='examples' package-name='com.viper.examples.model'&gt;
+  &lt;table name='user' table-type='table' is-rest-service='true' is-schema-updatable='true'&gt;
+    &lt;column name='username' java-type='String' size='32' primary-key='true' id-method='assigned' logical-type='email:email.txt' /&gt;
+    &lt;column name='password' java-type='String' size='128' required='true' logical-type='password:' /&gt;
+    &lt;column name='firstname' java-type='String' size='255' required='false' logical-type='name:firstnames.txt' /&gt;
+    &lt;column name='lastname' java-type='String' size='255' required='false' logical-type='name:lastnames.txt' /&gt;
+    &lt;column name='title' java-type='String' size='128' required='false' /&gt;
+    &lt;column name='company' java-type='String' size='128' required='false' /&gt;
+    &lt;column name='work_phone' java-type='String' size='48' required='false' /&gt;
+    &lt;column name='cell_phone' java-type='String' size='48' required='false' /&gt;
+    &lt;column name='state' data-type='enum' default-value='NEW' required='false'&gt;
+      &lt;enum-value name='ACTIVE'&gt;ACTIVE&lt;/enum-value&gt;
+      &lt;enum-value name='NEW'&gt;NEW&lt;/enum-value&gt;
+      &lt;enum-value name='INACTIVE'&gt;INACTIVE&lt;/enum-value&gt;
+    &lt;/column&gt;
+  &lt;/table&gt;
+&lt;/database&gt;
+</code>
+			</pre>
+
+	<h2>Model definitions</h2>
+
+	<h3>Database</h3>
+
+	The database tag has the following attributes and child elements
+
+	<h4>Attributes</h4>
+	<dl>
+		<dt>name</dt>
+		<dd>The name of the database, for SQL this name will rename as
+			is. For Java, this name will be canonicalized for the Java class
+			name. For example, a table name of orgainzations_list will be
+			converted to OrganizationsList.</dd>
+		<dt>catalog</dt>
+		<dd>this is the catalog name used by databases, see the JDBC
+			documentation. It currently has limited use, it is collected from the
+			database schema and stored in this XML model.</dd>
+		<dt>charset-name</dt>
+		<dd>Derived from the database schemas, see the JDBC
+			documentation.</dd>
+		<dt>collation-name</dt>
+		<dd>Derived from the database schemas, see the JDBC
+			documentation.</dd>
+		<dt>default-base-class</dt>
+		<dd>Normally, when generated the Java bean, the class will be
+			generated with out extending another class. If the developer wishes
+			his beans to be extended from another class, the class name can be
+			entered here. Provide the full class path, such as java.util.List,
+			for example.</dd>
+		<dt>default-java-naming-method</dt>
+		<dd>
+			Normally, Java names will be generated using a conanical method. But
+			the method to be used can be specified here. Possible values:
+			<ol>
+				<li>nochange -- TODO finish</li>
+				<li>underscore</li>
+				<li>javaname</li>
+			</ol>
+		</dd>
+		<dt>filename</dt>
+		<dd>TODO Deprecated?</dd>
+		<dt>package-name</dt>
+		<dd>Specifies the base java package name for the java beans,
+			sub-packages will be used under this packed for rest services, dao
+			objects, and test cases. This value can be overwritten on the
+			schematool's command line.</dd>
+		<dt>version</dt>
+		<dd>TODO Unknown?</dd>
+	</dl>
+
+	<h4>Nested Elements for the database element</h4>
+	<dl>
+		<dt>table</dt>
+		<dd>List of nested table elements which define the tables which
+			belong to this database. It is not necessary to include all tables
+			under the same database elements. One can have multiple table XML
+			files, with the same database tag, and separate table tags.</dd>
+		<dt>procedure</dt>
+		<dd>List of nested stored procedure model definitions, each
+			stored procedure will have its own procedure element.</dd>
+		<dt>trigger</dt>
+		<dd>List of nested trigger elements, each trigger will have it's
+			own trigger element.</dd>
+	</dl>
+
+</body>
+</html>

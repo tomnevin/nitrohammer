@@ -41,7 +41,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.viper.database.dao.DatabaseUtil;
 import com.viper.database.dao.converters.Converters;
 import com.viper.database.dao.converters.EnumConverter;
 import com.viper.database.dao.converters.ListConverter;

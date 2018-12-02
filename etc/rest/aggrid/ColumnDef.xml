@@ -62,7 +62,7 @@
 		<!-- Custom params to be passed to floatingFilterComponent or floatingFilterComponentFramework -->
 		<column name="floatingFilterComponentParams" java-type="String" />
 		<!-- Set to 'left' or 'right' to pin. -->
-		<column name="pinned" java-type="String" data-type="enum" />
+		<column name="pinned" java-type="String" />
 		<!-- Set to true to always have column displayed first. -->
 		<column name="lockPosition" java-type="Boolean" />
 		<!-- Set to true block making column visible / hidden via the UI (API will still work). -->
@@ -70,7 +70,7 @@
 		<!-- Set to true block pinning column via the UI (API will still work). -->
 		<column name="lockPinned" java-type="Boolean" />
 		<!-- Set to 'asc' or 'desc' to sort by this column by default. -->
-		<column name="sort" java-type="String" data-type="enum" />
+		<column name="sort" java-type="String" />
 		<!-- If doing multi sort by default, this column should say when the sort for each column was done in milliseconds, 
 			so the grid knows which order to execute the sort. -->
 		<column name="sortedAt" java-type="String" />

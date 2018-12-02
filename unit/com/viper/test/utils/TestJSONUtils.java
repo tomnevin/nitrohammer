@@ -27,7 +27,6 @@
  *
  * -----------------------------------------------------------------------------
  */
- 
 
 package com.viper.test.utils;
 
@@ -36,6 +35,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.json.JSONArray;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,11 +58,25 @@ public class TestJSONUtils extends AbstractTestCase {
 
     @Test
     public void testJSONMap() throws Exception {
-    	
-    	Map<String, Object> map = new HashMap<String, Object>();
-    	map.put("foo", 25);
-    	map.put("bar", "Alpha");
 
-    	assertEquals("{\"bar\":\"Alpha\",\"foo\":25}", JSONUtil.toJSON(map));
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("foo", 25);
+        map.put("bar", "Alpha");
+
+        assertEquals("{\"bar\":\"Alpha\",\"foo\":25}", JSONUtil.toJSON(map));
+    }
+
+    @Test
+    public void testJSONArrayGetInt() throws Exception {
+
+        String str = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]";
+
+        JSONArray favorites = new JSONArray(str);
+        
+        assertEquals(getCallerMethodName(), favorites.length(), 10);
+        
+        for (int i = 0; i < favorites.length(); i++) {
+           assertEquals(getCallerMethodName(), favorites.getInt(i), i);
+        }
     }
 }

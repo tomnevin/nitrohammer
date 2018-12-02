@@ -30,6 +30,9 @@
 
 package com.viper.database.dao;
 
-public interface Predicate<T> {
-	boolean apply(T type);
+public abstract class DynamicEnum {
+    
+    abstract public String value();
+
+  
 }

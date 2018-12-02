@@ -8,8 +8,8 @@
 		## for (var column : table.column) {
 		## if (column.persistent and column.primaryKey) {
 		<id name="#{java.toJavaVariableName(column)}" column="#{column.name}">
-			## if (java.toGeneratorClass(column) != 'none') {
-			<generator class="#{java.toGeneratorClass(column)}"/>
+			## if (java.toPostGeneratorClass(column) != 'none') {
+			<bean-generator class="#{java.toPostGeneratorClass(column)}"/>
 			## }
 		</id>
 		## }

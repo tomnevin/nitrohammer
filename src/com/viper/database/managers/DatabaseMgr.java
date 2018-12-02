@@ -180,7 +180,7 @@ public class DatabaseMgr {
 
     // -------------------------------------------------------------------------
 
-    public static String findValue(List<Cell> list, String name) {
+    public static Object findValue(List<Cell> list, String name) {
         if (list != null && name != null) {
             for (Cell item : list) {
                 if (name.equalsIgnoreCase(item.getName())) {
@@ -191,7 +191,7 @@ public class DatabaseMgr {
         return null;
     }
 
-    public static String findValue(Row row, String name) {
+    public static Object findValue(Row row, String name) {
         return findValue(row.getCells(), name);
     }
 
@@ -241,7 +241,7 @@ public class DatabaseMgr {
         for (Row row : table.getRows()) {
             for (Cell cell : row.getCells()) {
                 if (keyname.equalsIgnoreCase(cell.getName())) {
-                    if (keyvalue.equalsIgnoreCase(cell.getValue())) {
+                    if (keyvalue.equalsIgnoreCase((String)cell.getValue())) {
                         for (Cell c : row.getCells()) {
                             if (fieldname.equalsIgnoreCase(c.getName())) {
                                 return c;
@@ -255,7 +255,7 @@ public class DatabaseMgr {
         return null;
     }
 
-    public static String getParameter(List<Table> md, String fieldname) {
+    public static Object getParameter(List<Table> md, String fieldname) {
         Table table = DatabaseUtil.findOneItem(md, "name", "basic");
         if (table == null) {
             return null;

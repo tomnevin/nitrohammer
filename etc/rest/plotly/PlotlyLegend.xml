@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyLegend" table-type="bean">
+		<column name="orientation" java-type="String" />
+		<column name="x" java-type="double" />
+		<column name="y" java-type="double" />
+	</table>
+</database>

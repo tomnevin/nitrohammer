@@ -35,25 +35,34 @@ import java.util.List;
 
 import com.viper.database.annotations.Column;
 import com.viper.database.dao.DatabaseUtil;
-import com.viper.database.interfaces.ColumnValidationInterface;
+import com.viper.database.interfaces.ColumnValidatorInterface;
+import com.viper.database.model.Param;
 
-public class ValidationLength implements ColumnValidationInterface {
-
-    @Override
-	public final <T> boolean isValid(T bean, Column column) {
-		return validateErrors(bean, column).size() == 0;
-	}
+public class ValidationLength implements ColumnValidatorInterface {
 
     @Override
-	public final <T> List<String> validateErrors(T bean, Column column) {
-    	List<String> errors = new ArrayList<String>();
-    	
+    public final <T> boolean isValid(T bean, Column column) {
+        return validateErrors(bean, column).size() == 0;
+    }
+
+    @Override
+    public final <T> List<Param> validateErrors(T bean, Column column) {
+        List<Param> errors = new ArrayList<Param>();
+
         if (column.javaType().equals("String")) {
-            String value = DatabaseUtil.getString(bean,  column.field());
+            String value = DatabaseUtil.getString(bean, column.field());
             if (value.length() > column.size()) {
-               errors.add("String field too long S/B less then " + column.size() + " was " + value.length());
+                errors.add(newParam(column.name(),
+                        "String field too long S/B less then " + column.size() + " was " + value.length()));
             }
         }
         return errors;
+    }
+
+    private final Param newParam(String name, String value) {
+        Param param = new Param();
+        param.setName(name);
+        param.setValue(value);
+        return param;
     }
 }

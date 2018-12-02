@@ -63,7 +63,10 @@ import org.apache.hadoop.hbase.filter.ValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.viper.database.dao.converters.ConverterUtils;
+import com.viper.database.filters.Predicate;
+import com.viper.database.model.ColumnParam;
 import com.viper.database.model.DatabaseConnection;
+import com.viper.database.model.LimitParam;
 
 public class DatabaseHBase implements DatabaseInterface {
 
@@ -255,8 +258,8 @@ public class DatabaseHBase implements DatabaseInterface {
     @Override
     public <T> void createDatabase(String packagename) throws Exception {
 
-        List<Class> classes = DatabaseUtil.listDatabaseTableClasses(packagename, null);
-        for (Class clazz : classes) {
+        List<Class<?>> classes = DatabaseUtil.listDatabaseTableClasses(packagename, null);
+        for (Class<?> clazz : classes) {
             try {
                 create(clazz);
             } catch (Exception ex) {
@@ -346,7 +349,7 @@ public class DatabaseHBase implements DatabaseInterface {
      * 
      */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter) throws Exception {
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam) throws Exception {
 
         List<T> results = new ArrayList<T>();
 

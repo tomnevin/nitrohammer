@@ -47,23 +47,7 @@ public class TestDatabaseMetaData extends AbstractTestCase {
 	
 	private final static SQLDriver driver = new SQLDriver();
 
-	@Test
-	public void testDatabaseDriver() throws Exception {
-
-		DatabaseSQLInterface dao = (DatabaseSQLInterface)DatabaseFactory.getInstance(DATABASE_NAME);
-		assertNotNull("JDBCDriver should not be null", dao);
-
-		assertTrue("Meta.getAttributes", dao.readMetaRows("attributes").size() >= 0);
-		assertTrue("Meta.getCrossReference", dao.readMetaRows("crossreference").size() >= 0);
-		// assertTrue("Meta.getPrimaryKeys", dao.readMetaRows("primarykeys").size() >= 0);
-		assertTrue("Meta.getTriggerInfo", dao.readMetaRows("triggerinfo").size() >= 0);
-		assertTrue("Meta.getTypeInfo", dao.readMetaRows("typeinfo").size() >= 0);
-        assertTrue("Meta.getTableTypes", dao.readMetaRows("TableTypes").size() >= 0);
-		assertTrue("Meta.getBestRowIdentifier", dao.readMetaRows("BestRowIdentifier").size() >= 0);
-		assertTrue("Meta.getSupportsConvertByType", dao.readMetaRows("SupportsConvert").size() >= 0);
-
-		((DatabaseInterface)dao).release();
-	}
+	
 
 	@Test
 	public void testListDatabases() throws Exception {

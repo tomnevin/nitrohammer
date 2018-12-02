@@ -53,220 +53,238 @@ import com.viper.database.model.DatabaseConnections;
 
 public class DatabaseFactory {
 
-	private final static Map<String, DatabaseInterface> cache = new HashMap<String, DatabaseInterface>();
-	
-	private final static String DEFAULT_CONNECTION_FILENAME = "res:/databases.xml";
-	private final static String CONNECTION_FILENAME_PROPERTY = "DATABASE_CONNECTION_FILENAME";
-	
-	private final static String getConnectionFilename() {
-		// TODO use ResourceUtil.getResource
-		String filename = System.getenv(CONNECTION_FILENAME_PROPERTY);
-		if (filename == null || filename.length() == 0) {
-			filename = System.getProperty(CONNECTION_FILENAME_PROPERTY);
-		}
-		if (filename == null || filename.length() == 0) {
+    private static final Map<String, DatabaseInterface> cache = new HashMap<String, DatabaseInterface>();
+    private static final Map<String, DatabaseConnections> cache1 = new HashMap<String, DatabaseConnections>();
+
+    private static final String DEFAULT_CONNECTION_FILENAME = "res:/databases.xml";
+    private static final String CONNECTION_FILENAME_PROPERTY = "DATABASE_CONNECTION_FILENAME";
+
+    private static final String getConnectionFilename() {
+        // TODO use ResourceUtil.getResource
+        String filename = System.getenv(CONNECTION_FILENAME_PROPERTY);
+        if (filename == null || filename.length() == 0) {
+            filename = System.getProperty(CONNECTION_FILENAME_PROPERTY);
+        }
+        if (filename == null || filename.length() == 0) {
             filename = DEFAULT_CONNECTION_FILENAME;
         }
-		return filename;
-	}
+        return filename;
+    }
 
-	/**
-	 * Given the database connection name, open a database (dao) object, of the
-	 * appropriate database type.
-	 * 
-	 * The connection name must be in a list of databases connections in the jar
-	 * file root directory, under the filename databases.xml
-	 * 
-	 * Note: An added feature the MemoryAdapter this adds an intercepter to the
-	 * existing DAO engines, which will cache the data. The cache can have a
-	 * time out, and a size limit. (TODO add a refresh cache method which will
-	 * force cache be refreshed on next access. Use of memory adapter is
-	 * triggered by the cache timeout parameter and/or the number of rows limit
-	 * parameter.
-	 * 
-	 * @param connectionName
-	 *            the name of the connection, specified in the configuration
-	 *            file of connections.
-	 * 
-	 * @return the database interface (dao) object
-	 * 
-	 * @throws Exception
-	 *             failure to get table data, no database, no table, bad
-	 *             connection, etc.
-	 */
-	public final static DatabaseInterface getInstance(String connectionName) throws Exception {
-		return getInstance(getConnectionFilename(), connectionName);
-	}
+    /**
+     * Given the database connection name, open a database (dao) object, of the
+     * appropriate database type.
+     * 
+     * The connection name must be in a list of databases connections in the jar
+     * file root directory, under the filename databases.xml
+     * 
+     * Note: An added feature the MemoryAdapter this adds an intercepter to the
+     * existing DAO engines, which will cache the data. The cache can have a time
+     * out, and a size limit. (TODO add a refresh cache method which will force
+     * cache be refreshed on next access. Use of memory adapter is triggered by the
+     * cache timeout parameter and/or the number of rows limit parameter.
+     * 
+     * @param connectionName
+     *            the name of the connection, specified in the configuration file of
+     *            connections.
+     * 
+     * @return the database interface (dao) object
+     * 
+     * @throws Exception
+     *             failure to get table data, no database, no table, bad connection,
+     *             etc.
+     */
+    public static final DatabaseInterface getInstance(String connectionName) throws Exception {
+        return getInstance(getConnectionFilename(), connectionName);
+    }
 
-	/**
-	 * Given the database connection name, open a database (dao) object, of the
-	 * appropriate database type.
-	 * 
-	 * The connection name must be in a list of databases connections in the jar
-	 * file root directory, under the filename databases.xml
-	 * 
-	 * @param filename
-	 *            the name of the database configuration file (XML), which
-	 *            contains the list of database connections.
-	 * @param connectionName
-	 *            the name of the connection, specified in the configuration
-	 *            file of connections.
-	 * 
-	 * @return the database (dao) object
-	 * 
-	 * @throws Exception
-	 *             failure to get table data, no database, no table, bad
-	 *             connection, etc.
-	 */
-	public final static DatabaseInterface getInstance(String filename, String connectionName) throws Exception {
+    /**
+     * Given the database connection name, open a database (dao) object, of the
+     * appropriate database type.
+     * 
+     * The connection name must be in a list of databases connections in the jar
+     * file root directory, under the filename databases.xml
+     * 
+     * @param filename
+     *            the name of the database configuration file (XML), which contains
+     *            the list of database connections.
+     * @param connectionName
+     *            the name of the connection, specified in the configuration file of
+     *            connections.
+     * 
+     * @return the database (dao) object
+     * 
+     * @throws Exception
+     *             failure to get table data, no database, no table, bad connection,
+     *             etc.
+     */
+    public static final DatabaseInterface getInstance(String filename, String connectionName) throws Exception {
 
-		DatabaseConnection connection = getDatabaseConnection(filename, connectionName);
-		if (connection == null) {
-			throw new Exception("Can't find connection in databases.xml:" + filename + "," + connectionName);
-		}
+        DatabaseConnection connection = getDatabaseConnection(filename, connectionName);
+        if (connection == null) {
+            throw new Exception("Can't find connection in databases.xml:" + filename + "," + connectionName);
+        }
 
-		return getInstance(connection);
-	}
+        return getInstance(connection);
+    }
 
-	/**
-	 * Given the database connection name, and the filename of database
-	 * connections, return the named database connection object.
-	 * 
-	 * The connection name must be in a list of databases connections in the jar
-	 * file root directory, under the filename databases.xml
-	 * 
-	 * @param filename
-	 *            the name of the database configuration file (XML), which
-	 *            contains the list of database connections.
-	 * @param connectionName
-	 *            the name of the connection, specified in the configuration
-	 *            file of connections.
-	 * 
-	 * @return the database connection object.
-	 * 
-	 * @throws Exception
-	 *             failure to get table data, no database, no table, bad
-	 *             connection, etc.
-	 */
-	public final static DatabaseConnection getDatabaseConnection(String connectionName) throws Exception {
+    /**
+     * Given the database connection name, and the filename of database connections,
+     * return the named database connection object.
+     * 
+     * The connection name must be in a list of databases connections in the jar
+     * file root directory, under the filename databases.xml
+     * 
+     * @param filename
+     *            the name of the database configuration file (XML), which contains
+     *            the list of database connections.
+     * @param connectionName
+     *            the name of the connection, specified in the configuration file of
+     *            connections.
+     * 
+     * @return the database connection object.
+     * 
+     * @throws Exception
+     *             failure to get table data, no database, no table, bad connection,
+     *             etc.
+     */
+    public static final DatabaseConnection getDatabaseConnection(String connectionName) throws Exception {
 
-		DatabaseConnections connections = DatabaseMapper.readConnections(getConnectionFilename());
+        return getDatabaseConnection(getConnectionFilename(), connectionName);
+    }
 
-		return DatabaseUtil.findOneItem(connections.getConnections(), "name", connectionName);
-	}
+    /**
+     * Given the database connection name, and the filename of database connections,
+     * return the named database connection object.
+     * 
+     * The connection name must be in a list of databases connections in the jar
+     * file root directory, under the filename databases.xml
+     * 
+     * @param filename
+     *            the name of the database configuration file (XML), which contains
+     *            the list of database connections.
+     * @param connectionName
+     *            the name of the connection, specified in the configuration file of
+     *            connections.
+     * 
+     * @return the database connection object.
+     * 
+     * @throws Exception
+     *             failure to get table data, no database, no table, bad connection,
+     *             etc.
+     */
+    public static final DatabaseConnection getDatabaseConnection(String filename, String connectionName)
+            throws Exception {
 
-	/**
-	 * Given the database connection name, and the filename of database connections,
-	 * return the named database connection object.
-	 * 
-	 * The connection name must be in a list of databases connections in the jar
-	 * file root directory, under the filename databases.xml
-	 * 
-	 * @param filename
-	 *            the name of the database configuration file (XML), which contains
-	 *            the list of database connections.
-	 * @param connectionName
-	 *            the name of the connection, specified in the configuration file of
-	 *            connections.
-	 * 
-	 * @return the database connection object.
-	 * 
-	 * @throws Exception
-	 *             failure to get table data, no database, no table, bad connection,
-	 *             etc.
-	 */
-	public final static DatabaseConnection getDatabaseConnection(String filename, String connectionName)
-			throws Exception {
+        if (filename == null) {
+            filename = getConnectionFilename();
+        }
 
-		if (filename == null) {
-			filename = getConnectionFilename();
-		}
+        DatabaseConnections connections;
+        if (cache1.containsKey(filename)) {
+            connections = cache1.get(filename);
+        } else {
+            connections = DatabaseMapper.readConnections(filename);
+            cache1.put(filename, connections);
+        }
 
-		DatabaseConnections connections = DatabaseMapper.readConnections(filename);
-	
-		return DatabaseUtil.findOneItem(connections.getConnections(), "name", connectionName);
-	}
+        if (connections == null) {
+            throw new Exception("Could not load/parse connections file: " + filename);
+        }
 
-	/**
-	 * Given the database connection parameters, open a database (dao) object,
-	 * of the appropriate database type.
-	 * 
-	 * @param dbc
-	 *            the database connection object
-	 * 
-	 * @return the database (dao) object
-	 * 
-	 * @throws Exception
-	 *             failure to get table data, no database, no table, bad
-	 *             connection, etc.
-	 */
-	public final static synchronized DatabaseInterface getInstance(DatabaseConnection dbc) throws Exception {
+        return DatabaseUtil.findOneItem(connections.getConnections(), "name", connectionName);
+    }
 
-		DatabaseInterface database = cache.get(dbc.getName());
-		if (database != null) {
-			return database;
-		}
+    /**
+     * Given the database connection parameters, open a database (dao) object, of
+     * the appropriate database type.
+     * 
+     * @param dbc
+     *            the database connection object
+     * 
+     * @return the database (dao) object
+     * 
+     * @throws Exception
+     *             failure to get table data, no database, no table, bad connection,
+     *             etc.
+     */
+    public static final synchronized DatabaseInterface getInstance(DatabaseConnection dbc) throws Exception {
 
-		if (dbc.getSsh() != null && dbc.getSsh().getLocalPort() != 0) {
-			new DatabaseTunnel().doSshTunnel(dbc);
-		}
+        // TODO check for null dbc.
 
-		String url = dbc.getDatabaseUrl();
-		if (url == null) {
-			throw new Exception("Unknown database to be used: " + dbc.getName());
-		}
-		if (url.startsWith("mongodb:")) {
-			database = getInstance("com.viper.database.dao.DatabaseMongoDB", dbc);
+        DatabaseInterface database = null;
+        if (dbc.getName() != null) {
+            database = cache.get(dbc.getName());
+            if (database != null) {
+                return database;
+            }
+        }
 
-		} else if (url.startsWith("jdbc:")) {
-			database = getInstance("com.viper.database.dao.DatabaseJDBC", dbc);
+        if (dbc.getSsh() != null && dbc.getSsh().getLocalPort() != 0) {
+            new DatabaseTunnel().doSshTunnel(dbc);
+        }
 
-		} else if (url.startsWith("hbase:")) {
-			database = getInstance("com.viper.database.dao.DatabaseHBase", dbc);
+        String url = dbc.getDatabaseUrl();
+        if (url == null) {
+            throw new Exception("Unknown database to be used: " + dbc.getName());
+        }
+        if (url.startsWith("mongodb:")) {
+            database = getInstance("com.viper.database.dao.DatabaseMongoDB", dbc);
 
-		} else if (url.startsWith("jta:")) {
-			database = getInstance("com.viper.database.dao.DatabaseJTA", dbc);
+        } else if (url.startsWith("jdbc:")) {
+            database = getInstance("com.viper.database.dao.DatabaseJDBC", dbc);
 
-		} else if (url.startsWith("mem:")) {
-			database = getInstance("com.viper.database.dao.DatabaseMemory", dbc);
+        } else if (url.startsWith("hbase:")) {
+            database = getInstance("com.viper.database.dao.DatabaseHBase", dbc);
 
-		} else {
-			throw new Exception("Unknown database to be used: " + url);
-		}
+        } else if (url.startsWith("jta:")) {
+            database = getInstance("com.viper.database.dao.DatabaseJTA", dbc);
 
-		if (useMemoryAdapter(dbc)) {
-			database = new MemoryAdapter(database, dbc);
-		}
+        } else if (url.startsWith("mem:")) {
+            database = getInstance("com.viper.database.dao.DatabaseMemory", dbc);
 
-		if (useInterceptorAdapter(dbc)) {
-			database = new InterceptorAdapter(database, dbc);
-		}
+        } else {
+            throw new Exception("Unknown database to be used: " + url);
+        }
 
-		cache.put(dbc.getName(), database);
-		return database;
-	}
+        if (useMemoryAdapter(dbc)) {
+            database = new MemoryAdapter(database, dbc);
+        }
 
-	private final static DatabaseInterface getInstance(String classname, DatabaseConnection dbc) throws Exception {
-		Class clazz = Class.forName(classname);
-		Method method = clazz.getDeclaredMethod("getInstance", DatabaseConnection.class);
-		return (DatabaseInterface) method.invoke(null, dbc);
-	}
+        if (useInterceptorAdapter(dbc)) {
+            database = new InterceptorAdapter(database, dbc);
+        }
 
-	private final static boolean useMemoryAdapter(DatabaseConnection dbc) {
-		return (dbc.getCacheTimeout() > 0 || dbc.getNumberOfRowsLimit() > 0);
-	}
+        cache.put(dbc.getName(), database);
+        return database;
+    }
 
-	private final static boolean useInterceptorAdapter(DatabaseConnection dbc) {
-		return true;
-	}
-	
-	
-	public final static synchronized void release(String name) throws Exception {
+    private static final DatabaseInterface getInstance(String classname, DatabaseConnection dbc) throws Exception {
+        Class clazz = Class.forName(classname);
+        Method method = clazz.getDeclaredMethod("getInstance", DatabaseConnection.class);
+        return (DatabaseInterface) method.invoke(null, dbc);
+    }
 
+    private static final boolean useMemoryAdapter(DatabaseConnection dbc) {
+        return (dbc.getCacheTimeout() > 0 || dbc.getNumberOfRowsLimit() > 0);
+    }
+
+    private static final boolean useInterceptorAdapter(DatabaseConnection dbc) {
+        return true;
+    }
+
+    public static final synchronized void release(String name) throws Exception {
         DatabaseInterface database = cache.get(name);
         if (database != null) {
             cache.remove(name);
             database.release();
         }
-	}
+    }
+
+    public static final synchronized void releaseAll() throws Exception {
+        for (DatabaseInterface dao : cache.values()) {
+            dao.release();
+        }
+        cache.clear();
+    }
 }
