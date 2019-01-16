@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <database name="NA">
 	<table name="PlotlyLegend" table-type="bean">
-		<column name="orientation" java-type="String" />
 		<column name="x" java-type="double" />
 		<column name="y" java-type="double" />
+		<!--   enumerated : "auto" | "left" | "center" | "right"  -->
+		<column name="xanchor" java-type="String" />
+		<!--   enumerated : "auto" | "top" | "middle" | "bottom"  -->
+		<column name="yanchor" java-type="String" />
+		<column name="bgcolor" java-type="String" />
+		<column name="bordercolor" java-type="String" />
+		<column name="borderwidth" java-type="Integer" />
+		<!--   enumerated : "v" | "h"  -->
+		<column name="orientation" java-type="String" />
+		<!--   "reversed", "grouped", "reversed+grouped", "normal"  -->
+		<column name="traceorder" java-type="String" />
+		<column name="tracegroupgap" java-type="Integer" />
+		<column name="font" java-type="com.viper.database.rest.model.PlotlyFont" />
 	</table>
 </database>

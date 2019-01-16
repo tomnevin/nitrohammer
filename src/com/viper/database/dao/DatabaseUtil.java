@@ -51,6 +51,8 @@ import java.util.TreeMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.PropertyUtilsBean;
@@ -88,6 +90,35 @@ public class DatabaseUtil {
             // Intentionally blank
         }
         return urlStr;
+    }
+
+    public static final String replaceTokens(String content, List<Param> replacements) {
+        Map<String, String> map = new HashMap<String, String>();
+        for (Param r : replacements) {
+            map.put(r.getName(), r.getValue());
+        }
+        return replaceTokens(content, map);
+    }
+
+    public static final String replaceTokens(String content, Map<String, String> replacements) {
+        Pattern pattern = Pattern.compile("#\\{(.+?)\\}");
+        Matcher matcher = pattern.matcher(content);
+        // populate the replacements map ...
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        while (matcher.find()) {
+            String replacement = replacements.get(matcher.group(1));
+            builder.append(content.substring(i, matcher.start()));
+            if (replacement == null) {
+                builder.append(matcher.group(0));
+            } else {
+                builder.append(replacement);
+            }
+            i = matcher.end();
+        }
+        builder.append(content.substring(i, content.length()));
+
+        return builder.toString();
     }
 
     /**
@@ -558,7 +589,6 @@ public class DatabaseUtil {
     public static final Object newInstance(String classname) throws Exception {
         return Class.forName(classname).newInstance();
     }
-
 
     public static final <T, S> T newInstance(Class<T> clazz, S value) throws Exception {
         return clazz.getConstructor(value.getClass()).newInstance(value);
@@ -1690,13 +1720,13 @@ public class DatabaseUtil {
             boolean hasGroupBy = false;
             for (ColumnParam param : columnParams) {
                 if (param.isGroupBy()) {
-                   hasGroupBy = true;
+                    hasGroupBy = true;
                 }
             }
             if (!hasGroupBy) {
                 return beans;
             }
-            
+
             for (T bean : beans) {
                 List<Object> key = new ArrayList<Object>();
                 for (ColumnParam param : columnParams) {

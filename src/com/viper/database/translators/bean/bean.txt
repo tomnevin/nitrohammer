@@ -50,7 +50,7 @@ public class #{classname} #{java.toBaseClass(table)} #{java.toInterface(table)} 
 
     @Column (#{java.toColumnAnnotation(table, column)})
     public #{java.toFinal(table)} #{java.toJavaType(column)} get#{java.toJavaName(column)}() {
-    ## if (!column.isNullable()) {
+    ## if (!column.isIsNullable()) {
     ## if (java.isList(column)) {
         if (#{java.toJavaVariableName(column)} == null) {
             #{java.toJavaVariableName(column)} = new java.util.ArrayList#{java.toGenericType(column)}();

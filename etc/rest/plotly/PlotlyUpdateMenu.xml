@@ -10,6 +10,8 @@
 		<column name="direction" java-type="String" />
 		<column name="showactive" java-type="boolean" />
 		<column name="active" java-type="int" />
+		<!--  buttons -->
+		<column name="type" java-type="String" />
 		<column name="pad" java-type="com.viper.database.rest.model.PlotlyMargin" />
 		<column name="buttons" java-type="java.util.List" generic-type="com.viper.database.rest.model.PlotlyUpdateButton" />
 	</table>

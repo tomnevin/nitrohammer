@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyLabel" table-type="bean">
+		<column name="bgcolor" java-type="String" />
+		<column name="bordercolor" java-type="String" />
+		<column name="bgcolorsrc" java-type="Object" />
+		<column name="bordercolorsrc" java-type="Object" />
+		<column name="font" java-type="com.viper.database.rest.model.PlotlyFont" />
+	</table>
+</database>

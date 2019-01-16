@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyMarker" table-type="bean">
+		<column name="color" java-type="String" />
+		<column name="symbol" java-type="String" />
+		<column name="opacity" java-type="double" />
+		<column name="size" java-type="int" />
+		<column name="maxdisplayed" java-type="int" default-value="0" />
+		<column name="sizeref" java-type="int" default-value="1" />
+		<column name="sizemin" java-type="int" default-value="0" />
+		<column name="sizemode" java-type="String" />
+		<column name="line" java-type="com.viper.database.rest.model.PlotlyLine" />
+	</table>
+</database>

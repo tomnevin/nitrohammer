@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <database name="NA">
 	<table name="PlotlyUpdateButton" table-type="bean">
+	<!--  restyle -->
 		<column name="method" java-type="String" />
 		<column name="label" java-type="String" />
 		<column name="name" java-type="String" />

@@ -157,10 +157,18 @@ public class InterceptorAdapter implements DatabaseSQLInterface {
      * {@inheritDoc}
      * 
      */
-    @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam) throws Exception {
+    public <T> List<T> queryList(Class<T> clazz, Map<String, String> parameters) throws Exception {
+        return loadAdapterClass(clazz).queryList(clazz, parameters);
+    }
 
-        return loadAdapterClass(clazz).queryList(clazz, filter, columnParams, limitParam);
+    /**
+     * {@inheritDoc}
+     * 
+     */
+    @Override
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam, Map<String, String> parameters) throws Exception {
+
+        return loadAdapterClass(clazz).queryList(clazz, filter, columnParams, limitParam, parameters);
     }
 
     /**

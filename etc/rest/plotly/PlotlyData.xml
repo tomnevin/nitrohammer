@@ -2,22 +2,37 @@
 <database name="NA">
 	<table name="PlotlyData" table-type="bean">
 		<column name="type" java-type="String" />
+		<!--  "lines", "markers", "lines+markers", "lines+markers+text", "none"  -->
 		<column name="mode" java-type="String" />
 		<column name="name" java-type="String" />
+		<column name="namelength" java-type="Integer" />
 		<column name="x" java-type="java.util.List" />
 		<column name="y" java-type="java.util.List" />
 		<column name="values" java-type="java.util.List" />
 		<column name="labels" java-type="java.util.List" />
 		<column name="text" java-type="java.util.List" />
-		<column name="overlayUrl" java-type="String" />
-		<column name="line" java-type="Object" />
-		<column name="visible" java-type="boolean" default-value="true" />
-		<!--  Any combination of "label", "text", "value", "percent", "name" joined with a "+" OR "all" or "none" or "skip".  -->
+		<column name="opacity" java-type="String" />
+		<column name="line" java-type="com.viper.database.rest.model.PlotlyLine" is-nullable="true" />
+		<column name="marker" java-type="com.viper.database.rest.model.PlotlyMarker" is-nullable="true" />
+		<column name="showlegend" java-type="boolean" default-value="true" /> 
+		<column name="legendgroup" java-type="String" />
+		<!--  true, false, legendonly -->
+		<column name="visible" java-type="Object" default-value="true" /> 
+		<!--  Any combination of "x", "y", "z", "label", "text", "value", "percent", "name" joined with a "+" OR "all" or "none" or "skip".  -->
 		<column name="hoverinfo" java-type="String" />
 		<!--  Any combination of "label", "text", "value", "percent" joined with a "+" OR "none".  -->
 		<column name="textinfo" java-type="String" />
 		<!--  "inside" | "outside" | "auto" | "none" -->
-		<column name="textposition" java-type="String" />
+		<column name="textposition" java-type="String" />'
+		<!--  "points", "fills", "points+fills"  -->
+		<column name="hoveron" java-type="String" />
+		<!--  string or array of strings -->
+		<column name="hovertext"  java-type="java.util.List" generic-type="String" />
+		<column name="customdata" java-type="java.util.List" />
 		<column name="clientData" java-type="Object" />
+		<!--  id is not part of the plotly -->
+		<column name="id" java-type="String" />
+		<!--  overlayUrl is not part of the plotly -->
+		<column name="overlayUrl" java-type="String" />
 	</table>
 </database>

@@ -31,6 +31,7 @@
 package com.viper.database.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.viper.database.filters.Predicate;
 import com.viper.database.model.ColumnParam;
@@ -213,6 +214,8 @@ public interface DatabaseInterface {
 
     public <T> List<T> queryAll(Class<T> tableClass) throws Exception;
 
+   
+
     /**
      * Given the java table model, and the vararg of key value pairs, query the
      * database, return matching list of java bean objects. Can be single or
@@ -248,6 +251,41 @@ public interface DatabaseInterface {
      */
     public <T> List<T> queryList(Class<T> tableClass, Object... keyValue) throws Exception;
 
+
+    /**
+     * Given the java table model, and the vararg of key value pairs, query the
+     * database, return matching list of java bean objects. Can be single or
+     * multiple matches. The vararg pairs represent "and" operations in the
+     * underlying SQL where clause.
+     * 
+     * @param tableClass
+     *            java table model, with annotations.
+     * @param keyValue
+     *            set of key value pairs. 1. key name __pageno__ is the number of
+     *            page starting at zero 2. key_name __pagesize__ is the size of the
+     *            page in records.
+     * 
+     * @param <T>
+     *            the class of the pojo database bean, annotated with classes from
+     *            package com.viper.database.annotations
+     * @return the list of the java beans found, the list will always be NON-NULL,
+     *         but can be of zero length.
+     * 
+     * @throws Exception
+     *             failure to get table data, no database, no table, bad connection,
+     *             etc. Note The following code will return the employees who work
+     *             in department 257, and are full time employees.
+     * 
+     *             <pre>
+     * {@code
+     *  DatabaseInterface dao = DatabaseFactory.getInstance(dbc);
+     *  Employee emp = dao.query(Employee.class, "dept", 257, "fulltime", true);
+     * }
+     *             </pre>
+     * 
+     */
+    public <T> List<T> queryList(Class<T> tableClass, Map<String, String> parameters) throws Exception;
+
     /**
      * Given the java table model, the pageno, the number of rows in a page, and the
      * vararg of key value pairs, query the database, return matching list of java
@@ -282,7 +320,7 @@ public interface DatabaseInterface {
      *             </pre>
      */
     public <T> List<T> queryList(Class<T> tableClass, Predicate<T> filter, List<ColumnParam> columnParams,
-            LimitParam limitParam) throws Exception;
+            LimitParam limitParam, Map<String, String> parameters) throws Exception;
 
     /**
      * Given the java table model bean, insert or update the bean into the database.

@@ -4,12 +4,23 @@
 		<column name="title" java-type="String" />
 		<column name="showlegend" java-type="boolean" />
 		<column name="autosize" java-type="boolean" />
+		<!-- "event", "select", "event+select", "none" -->
+		<column name="clickmode" java-type="String" />
+		<!-- enumerated : "zoom" | "pan" | "select" | "lasso" | "orbit" | "turntable" ) -->
+		<column name="dragmode" java-type="String" />
+		<!-- hovermode ( enumerated : "x" | "y" | "closest" | false ) -->
+		<column name="hovermode" java-type="String" />
+		<column name="hoverdistance" java-type="int" />
+		<!--  hoverinfo "x", "y", "x+y", "x+y+z", "all"  -->
+		<column name="hoverinfo" java-type="String" />
+		<column name="hoverlabel" java-type="com.viper.database.rest.model.PlotlyLabel" />
 		<column name="width" java-type="int" />
 		<column name="height" java-type="int" />
+		<column name="barmode" java-type="String" />
 		<column name="xaxis" java-type="com.viper.database.rest.model.PlotlyAxis" />
 		<column name="yaxis" java-type="com.viper.database.rest.model.PlotlyAxis" />
 		<column name="margin" java-type="com.viper.database.rest.model.PlotlyMargin" />
 		<column name="legend" java-type="com.viper.database.rest.model.PlotlyLegend" />
-		<column name="updatemenus" java-type="java.util.List"  generic-type="com.viper.database.rest.model.PlotlyUpdateMenu" />
+		<column name="updatemenus" java-type="java.util.List" generic-type="com.viper.database.rest.model.PlotlyUpdateMenu" />
 	</table>
 </database>

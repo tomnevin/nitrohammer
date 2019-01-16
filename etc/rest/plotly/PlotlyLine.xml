@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="PlotlyLine" table-type="bean">
+		<column name="color" java-type="String" />
+		<column name="width" java-type="int" default-value="2" />
+		<!--   enumerated : "linear" | "spline" | "hv" | "vh" | "hvh" | "vhv"  -->
+		<column name="shape" java-type="String" />
+		<!--  between 0 and 1.3 -->
+		<column name="smoothing" java-type="double"  default-value="1.0" />
+		<!--  "solid", "dot", "dash", "longdash", "dashdot", or "longdashdot" -->
+		<column name="dash" java-type="String" />
+		<column name="simplify" java-type="boolean"  default-value="true" />
+	</table>
+</database>

@@ -339,6 +339,7 @@ public class DatabaseHBase implements DatabaseInterface {
      * 
      */
     @Override
+    @Deprecated
     public final <T> List<T> queryList(Class<T> clazz, Object... keyValue) throws Exception {
         List<String> list = read(clazz, keyValue);
         return ConverterUtils.readJsonListToList(list, clazz);
@@ -348,8 +349,16 @@ public class DatabaseHBase implements DatabaseInterface {
      * {@inheritDoc}
      * 
      */
+    public <T> List<T> queryList(Class<T> tableClass, Map<String, String> parameters) throws Exception {
+        return null; // TODO
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam) throws Exception {
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam, Map<String, String> parameters) throws Exception {
 
         List<T> results = new ArrayList<T>();
 

@@ -49,7 +49,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
 
     private final static Logger log = Logger.getLogger(MemoryAdapter.class.getName());
 
-    private long TIMEOUT = 2 * 60 * 1000;
+    private long TIMEOUT = 1 * 60 * 1000;
     private int NUMBER_OF_ROWS = 10000;
 
     private static final Map<Class, Long> accessTime = new HashMap<Class, Long>();
@@ -90,7 +90,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
      */
     @Override
     public <T> long size(Class<T> clazz) throws Exception {
-        if (isNotCached(clazz)) {
+        if (!isCached(clazz)) {
             return dao.size(clazz);
         }
         load(clazz, false);
@@ -158,7 +158,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
      */
     @Override
     public <T> T query(Class<T> clazz, Object... pairs) throws Exception {
-        if (isNotCached(clazz)) {
+        if (!isCached(clazz)) {
             return dao.query(clazz, pairs);
         }
         load(clazz, false);
@@ -172,7 +172,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
      */
     @Override
     public <T> List<T> queryList(Class<T> clazz, Object... pairs) throws Exception {
-        if (isNotCached(clazz)) {
+        if (!isCached(clazz)) {
             return dao.queryList(clazz, pairs);
         }
         load(clazz, false);
@@ -183,12 +183,21 @@ public class MemoryAdapter implements DatabaseSQLInterface {
      * {@inheritDoc}
      * 
      */
+    // CALLS TO HERE ARE NOT CACHED.
+    public <T> List<T> queryList(Class<T> clazz, Map<String, String> parameters) throws Exception {
+        return dao.queryList(clazz, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
     @Override
     public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams,
-            LimitParam limitParam) throws Exception {
+            LimitParam limitParam, Map<String, String> parameters) throws Exception {
 
-        if (isNotCached(clazz)) {
-            return dao.queryList(clazz, filter, columnParams, limitParam);
+        if (!isCached(clazz)) {
+            return dao.queryList(clazz, filter, columnParams, limitParam, parameters);
         }
 
         load(clazz, false);
@@ -206,7 +215,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
      */
     @Override
     public <T> List<T> queryAll(Class<T> clazz) throws Exception {
-        if (isNotCached(clazz)) {
+        if (!isCached(clazz)) {
             return dao.queryAll(clazz);
         }
         load(clazz, false);
@@ -230,7 +239,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
     public <T> T insert(T bean) throws Exception {
         dao.insert(bean);
 
-        if (!isNotCached(bean.getClass())) {
+        if (!isCached(bean.getClass())) {
             load(bean.getClass(), true);
         }
         return bean;
@@ -247,7 +256,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
         }
         dao.insertAll(beans);
 
-        if (!isNotCached(beans.get(0).getClass())) {
+        if (!isCached(beans.get(0).getClass())) {
             load(beans.get(0).getClass(), true);
         }
     }
@@ -260,7 +269,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
     public <T> void delete(T bean) throws Exception {
         dao.delete(bean);
 
-        if (!isNotCached(bean.getClass())) {
+        if (!isCached(bean.getClass())) {
             getCache(bean.getClass()).remove(bean);
         }
     }
@@ -273,7 +282,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
     public <T> void deleteAll(Class<T> clazz) throws Exception {
         dao.deleteAll(clazz);
 
-        if (!isNotCached(clazz)) {
+        if (!isCached(clazz)) {
             getCache(clazz).clear();
         }
     }
@@ -286,7 +295,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
     public <T> void delete(Class<T> clazz, Object... keyValue) throws Exception {
         dao.delete(clazz, keyValue);
 
-        if (!isNotCached(clazz)) {
+        if (!isCached(clazz)) {
             load(clazz, true);
         }
     }
@@ -384,7 +393,7 @@ public class MemoryAdapter implements DatabaseSQLInterface {
     }
 
     private final <T> boolean isCacheInvalid(Class<T> clazz, boolean force) {
-        boolean invalid = (force || isTimedOut(clazz) || dao.hasChanged(clazz));
+        boolean invalid = (!cache.containsKey(clazz) || force || isTimedOut(clazz) || dao.hasChanged(clazz));
         if (invalid) {
             log.fine("CACHE RELOADING: " + clazz.getName() + "," + force + ":" + isTimedOut(clazz));
         }
@@ -417,21 +426,18 @@ public class MemoryAdapter implements DatabaseSQLInterface {
         return subset;
     }
 
-    private <T> boolean isLargeTable(Class<T> clazz) {
+    private <T> boolean isCached(Class<T> clazz) throws Exception {
+      
         Table table = DatabaseUtil.getTableAnnotation(clazz);
-        return table.isLargeTable();
-    }
-
-    private <T> boolean isNotCached(Class<T> clazz)throws Exception {
-        if (!isLargeTable(clazz)) {
+        if (table.isLargeTable()) {
             return false;
         }
-        if (cache.containsKey(clazz)) {
+        if ("bean".equalsIgnoreCase(table.tableType())) {
             return false;
         }
-        if (dao.size(clazz) <= 100000) {
-            return false;
-        }
+//        if (dao.size(clazz) > 100000) {
+//            return false;
+//        }
         return true;
     }
 

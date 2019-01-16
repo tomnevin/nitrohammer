@@ -156,7 +156,7 @@ public class DatabaseMgr {
     public static Privilege findPrivilege(List<Privilege> list, String grantee, String name) {
         if (list != null && name != null) {
             for (Privilege item : list) {
-                if (name.equalsIgnoreCase(item.getPrivilege())) {
+                if (name.equalsIgnoreCase(item.getName())) {
                     if (grantee.equalsIgnoreCase(item.getGrantee())) {
                         return item;
                     }

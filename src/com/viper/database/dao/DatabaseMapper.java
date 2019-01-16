@@ -202,7 +202,6 @@ public class DatabaseMapper {
     public final static <T> void importTableAsCSV(Class<T> clazz, DatabaseInterface dao, String filename)
             throws Exception {
 
-        log.info("importTableAsCSV#1: " + filename);
         List<String> header = new ArrayList<String>();
 
         try {
@@ -212,12 +211,9 @@ public class DatabaseMapper {
             }
             StringReader reader = new StringReader(str);
 
-            log.info("importTableAsCSV#2: " + filename);
             Iterator<CSVRecord> iterator = CSVFormat.DEFAULT.withIgnoreSurroundingSpaces().parse(reader).iterator();
             while (iterator.hasNext()) {
                 CSVRecord result = iterator.next();
-
-                log.info("importTableAsCSV#2B: " + result.size());
 
                 if (header.size() == 0) {
                     for (int i = 0; i < result.size(); i++) {
@@ -226,17 +222,13 @@ public class DatabaseMapper {
                     continue;
                 }
 
-                log.info("importTableAsCSV#2C: " + clazz.getName());
-
                 T bean = clazz.newInstance();
                 for (int i = 0; i < result.size(); i++) {
-                    log.info("importTableAsCSV#2D: " + i + "]:" + header.get(i));
                     DatabaseUtil.setValue(bean, header.get(i), result.get(i));
                 }
                 dao.insert(bean);
             }
 
-            log.info("importTableAsCSV#3: " + filename + "," + header.size());
         } catch (Throwable ex) {
             ex.printStackTrace();
             throw ex;
@@ -321,9 +313,9 @@ public class DatabaseMapper {
 
         String databasename = DatabaseUtil.getDatabaseName(clazz);
         String tablename = DatabaseUtil.getTableName(clazz);
-        
+
         String sql = "select * from " + databasename + "." + tablename;
-        
+
         List<Row> items = dao.readRows(sql);
 
         new File(filename).getAbsoluteFile().getParentFile().mkdirs();
@@ -343,7 +335,7 @@ public class DatabaseMapper {
                 out.println(CSVFormat.EXCEL.withIgnoreSurroundingSpaces().format(header.toArray()));
             }
             isFirst = false;
-           
+
             List data = new ArrayList<>();
             for (Cell cell : row.getCells()) {
                 data.add(cell.getValue());

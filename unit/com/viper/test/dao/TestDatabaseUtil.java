@@ -34,6 +34,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -163,26 +164,26 @@ public class TestDatabaseUtil extends AbstractTestCase {
         assertNotNull(getCallerMethodName() + " : did not get value ", connection.getName());
         assertEquals(getCallerMethodName() + " : value do not match ", expected, connection.getName());
     }
-    
+
     @Test
     public void testCopy() throws Exception {
 
         Bean connection1 = new Bean();
         connection1.setId(20);
-        
+
         Bean connection2 = new Bean();
 
         DatabaseUtil.copy(connection1, connection2);
 
         assertEquals(getCallerMethodName() + " : value do not match ", connection1.getId(), connection2.getId());
     }
-    
+
     @Test
     public void testCopyFields() throws Exception {
 
         Bean connection1 = new Bean();
         connection1.setId(20);
-        
+
         Bean connection2 = new Bean();
 
         DatabaseUtil.copyFields(connection1, connection2);
@@ -195,14 +196,13 @@ public class TestDatabaseUtil extends AbstractTestCase {
 
         DatabaseConnection connection1 = new DatabaseConnection();
         connection1.setName("mysql");
-        
+
         DatabaseConnection connection2 = new DatabaseConnection();
 
         DatabaseUtil.copyProperties(connection1, connection2);
 
         assertEquals(getCallerMethodName() + " : value do not match ", connection1.getName(), connection2.getName());
     }
-
 
     @Test
     public void testToPropertyName() throws Exception {
@@ -321,7 +321,8 @@ public class TestDatabaseUtil extends AbstractTestCase {
         DatabaseConnection connection = DatabaseUtil.findOneItem(connections.getConnections(), "name", name);
 
         assertNotNull(getCallerMethodName() + " : connections were not found ", connections.getConnections());
-        assertTrue(getCallerMethodName() + " : not enought connections were not found ", connections.getConnections().size() > 0);
+        assertTrue(getCallerMethodName() + " : not enought connections were not found ",
+                connections.getConnections().size() > 0);
         assertNotNull(getCallerMethodName() + " : connection was not found ", connection);
     }
 
@@ -333,7 +334,8 @@ public class TestDatabaseUtil extends AbstractTestCase {
         System.err.println("Databases.xml: connections size: " + connections.getConnections().size() + ":" + name);
 
         assertNotNull(getCallerMethodName() + " : connections were not found ", connections.getConnections());
-        assertTrue(getCallerMethodName() + " : not enought connections were not found ", connections.getConnections().size() > 0);
+        assertTrue(getCallerMethodName() + " : not enought connections were not found ",
+                connections.getConnections().size() > 0);
 
         DatabaseConnection connection = DatabaseUtil.findOneItem(connections.getConnections(), "name", name);
 
@@ -346,8 +348,8 @@ public class TestDatabaseUtil extends AbstractTestCase {
         String name = "test";
         DatabaseConnections connections = DatabaseMapper.readConnections("res:/databases.xml");
         assertNotNull(getCallerMethodName() + " : connections were not found ", connections.getConnections());
-        assertTrue(getCallerMethodName() + " : not enought connections were not found " + connections.getConnections().size(),
-                connections.getConnections().size() > 0);
+        assertTrue(getCallerMethodName() + " : not enought connections were not found "
+                + connections.getConnections().size(), connections.getConnections().size() > 0);
 
         List<String> list = new ArrayList<String>();
         list.add("mysql");
@@ -628,7 +630,6 @@ public class TestDatabaseUtil extends AbstractTestCase {
         assertEquals(getCallerMethodName() + " : values not matched ", expected, item.getCharType());
     }
 
-
     @Test
     public void testGetValueCharacter() throws Exception {
 
@@ -890,29 +891,29 @@ public class TestDatabaseUtil extends AbstractTestCase {
     /*
      * private java.math.BigDecimal decimalType;
      * 
-     * @Column(field = "DECIMAL_TYPE", name = "decimalType", type = "java.math.BigDecimal") public
-     * java.math.BigDecimal getDecimalType() {
+     * @Column(field = "DECIMAL_TYPE", name = "decimalType", type =
+     * "java.math.BigDecimal") public java.math.BigDecimal getDecimalType() {
      * 
      * return decimalType; }
      * 
      * private byte[] binaryType;
      * 
-     * @Column(field = "BINARY_TYPE", name = "binaryType", type = "byte[]") public byte[]
-     * getBinaryType() {
+     * @Column(field = "BINARY_TYPE", name = "binaryType", type = "byte[]") public
+     * byte[] getBinaryType() {
      * 
      * return binaryType; }
      * 
      * private int[] varbinaryType;
      * 
-     * @Column(field = "VARBINARY_TYPE", name = "varbinaryType", type = "int[]") public int[]
-     * getVarbinaryType() {
+     * @Column(field = "VARBINARY_TYPE", name = "varbinaryType", type = "int[]")
+     * public int[] getVarbinaryType() {
      * 
      * return varbinaryType; }
      * 
      * private long[] longvarbinaryType;
      * 
-     * @Column(field = "LONGVARBINARY_TYPE", name = "longvarbinaryType", type = "long[]") public
-     * long[] getLongvarbinaryType() {
+     * @Column(field = "LONGVARBINARY_TYPE", name = "longvarbinaryType", type =
+     * "long[]") public long[] getLongvarbinaryType() {
      * 
      * return longvarbinaryType; }
      */
@@ -956,7 +957,7 @@ public class TestDatabaseUtil extends AbstractTestCase {
     public void testStaticInvoke() throws Exception {
 
         Object expected = NamingField.A_1;
-        
+
         NamingField actual1 = NamingField.valueOf("A.1");
         NamingField actual2 = NamingField.valueOf("A.1");
 
@@ -983,7 +984,7 @@ public class TestDatabaseUtil extends AbstractTestCase {
 
         Object expected = NamingField.B_2;
 
-    	Bean item = new Bean();
+        Bean item = new Bean();
         DatabaseUtil.setValue(item, "namingField", expected);
 
         assertEquals(getCallerMethodName() + " : S/B B.2 ", "B.2", item.getNamingField().toString());
@@ -1046,7 +1047,7 @@ public class TestDatabaseUtil extends AbstractTestCase {
 
     @Test
     public void testGetAllColumnAnnotationsPlotly() throws Exception {
-        
+
         List<Column> items = DatabaseUtil.getAllColumnAnnotations(Plotly.class);
 
         assertNotNull(getCallerMethodName() + " : items is null ", items);
@@ -1055,11 +1056,49 @@ public class TestDatabaseUtil extends AbstractTestCase {
 
     @Test
     public void testGetAllColumnAnnotationsFormResponse() throws Exception {
-        
+
         List<Column> items = DatabaseUtil.getAllColumnAnnotations(FormResponse.class);
 
         assertNotNull(getCallerMethodName() + " : items is null ", items);
         assertEquals(getCallerMethodName() + " : all annotations not found ", 5, items.size());
+    }
+
+    @Test
+    public void testReplaceTokens() throws Exception {
+        Map<String, String> replacements = new HashMap<String, String>();
+        replacements.put("TEMPLATE", "test");
+        
+        String contents = "foo #{TEMPLATE} bar";
+        String expected = "foo test bar";
+        String results = DatabaseUtil.replaceTokens(contents, replacements);
+
+        assertNotNull(getCallerMethodName() + " : results is null ", results);
+        assertEquals(getCallerMethodName() + " : results not equals ", expected, results);
+    }
+
+    @Test
+    public void testReplaceTokens1() throws Exception {
+        Map<String, String> replacements = new HashMap<String, String>();
+        replacements.put("TEMPLATE", "test");
+        
+        String contents = "foo #{TEMPLATE1} bar";
+        String expected = "foo #{TEMPLATE1} bar";
+        String results = DatabaseUtil.replaceTokens(contents, replacements);
+
+        assertNotNull(getCallerMethodName() + " : results is null ", results);
+        assertEquals(getCallerMethodName() + " : results not equals ", expected, results);
+    }
+    
+    @Test
+    public void testReplaceRegex() throws Exception {
+       
+        String inputSQL = " select *, CONCAT(CO.ENTRYDATE, ' ', CO.ENTRYTIME) AS ENTRYDATETIME,  CONCAT(AFWT.PROVDATE, ' ', AFWT.PROVTIME) AS PROVDATETIME,  CONCAT(AFWT.DEPROVDATE, ' ', AFWT.DEPROVTIME) AS DEPROVDATETIME,  CONCAT(SURVEILLANCE.STARTDATE, ' ', SURVEILLANCE.STARTTIME) AS STARTDATETIME, CONCAT(SURVEILLANCE.STOPDATE, ' ', SURVEILLANCE.STOPTIME) AS STOPDATETIME, CONCAT(CO.RCVDATE, ' ', CO.RCVTIME) AS RCVDATETIME, IF (COGRP.NAME IS NULL or COGRP.name = '', CO.COID, COGRP.name) as COURT_ORDER_NAME FROM XCDB.AFWT as AFWT LEFT JOIN XCDB.SURVEILLANCE as SURVEILLANCE on (SURVEILLANCE.COID = AFWT.COID) LEFT JOIN XCDB.TARGET as TARGET on (TARGET.COID = AFWT.COID and TARGET.TID = AFWT.TID) LEFT JOIN XCDB.CO as CO on (CO.COID = AFWT.COID) LEFT JOIN XCDB.COGRP as COGRP on (COGRP.GID = CO.GID)";
+        String expected = "SELECT COUNT(*) FROM XCDB.AFWT as AFWT LEFT JOIN XCDB.SURVEILLANCE as SURVEILLANCE on (SURVEILLANCE.COID = AFWT.COID) LEFT JOIN XCDB.TARGET as TARGET on (TARGET.COID = AFWT.COID and TARGET.TID = AFWT.TID) LEFT JOIN XCDB.CO as CO on (CO.COID = AFWT.COID) LEFT JOIN XCDB.COGRP as COGRP on (COGRP.GID = CO.GID)";
+      
+        String results = inputSQL.trim().replaceAll("(?i)SELECT (.*) FROM ", "SELECT COUNT(*) FROM ");
+        
+        assertNotNull(getCallerMethodName() + " : results is null ", results);
+        assertEquals(getCallerMethodName() + " : results not equals ", expected, results);
     }
     
 }

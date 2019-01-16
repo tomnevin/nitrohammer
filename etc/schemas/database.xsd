@@ -138,6 +138,7 @@
 			<xsd:element name="bean-generator" type="xsd:string" />
 			<xsd:element name="filter" type="xsd:string" />
 			<xsd:element name="seed-filename" type="xsd:string" />
+			<xsd:element name="access" type="AccessPrivilege" />
 			<xsd:element name="index" type="Index" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="sql-select" type="xsd:string" minOccurs="0" maxOccurs="1" />
 			<xsd:element name="sql-update" type="xsd:string" minOccurs="0" maxOccurs="1" />
@@ -190,7 +191,7 @@
 		<xsd:attribute name="is-default" type="xsd:boolean" default="false" />
 		<xsd:attribute name="is-final" type="xsd:boolean" default="true" />
 		<xsd:attribute name="is-large-table" type="xsd:boolean" default="false" />
-		<xsd:attribute name="is-monitor-changes" type="xsd:boolean" default="false" />
+		<xsd:attribute name="is-monitor-changes" type="xsd:boolean" default="false" /> 
 		<xsd:attribute name="fields-all-nullable" type="xsd:boolean" default="false" />
 		<xsd:attribute name="maximum-rows" type="xsd:int" />
 		<xsd:attribute name="minimum-rows" type="xsd:int" />
@@ -288,9 +289,16 @@
 	<!-- -->
 	<xsd:complexType name="Privilege">
 		<xsd:attribute name="grantor" type="xsd:string" />
-		<xsd:attribute name="grantee" type="xsd:string" use="required" />
-		<xsd:attribute name="privilege" type="xsd:string" use="required" />
+		<xsd:attribute name="grantee" type="xsd:string" />
+		<xsd:attribute name="name" type="xsd:string" use="required" />
 		<xsd:attribute name="is-grantable" type="xsd:boolean" default="false" />
+	</xsd:complexType>
+
+	<xsd:complexType name="AccessPrivilege">
+		<xsd:attribute name="read" type="xsd:string" />
+		<xsd:attribute name="create" type="xsd:string" />
+		<xsd:attribute name="update" type="xsd:string" />
+		<xsd:attribute name="delete" type="xsd:string" />
 	</xsd:complexType>
 	<!-- -->
 	<xsd:element name="user" type="User" />
@@ -680,5 +688,5 @@
 				<xsd:attribute name="name" type="xsd:string" />
 			</xsd:extension>
 		</xsd:simpleContent>
-	</xsd:complexType>
+	</xsd:complexType> 
 </xsd:schema>

@@ -755,7 +755,7 @@ public class SQLDriver {
 
 	public String createPrivilege(User user, Privilege priv) {
 		write("GRANT ");
-		write(priv.getPrivilege());
+		write(priv.getName());
 		write(" ON * TO ");
 		write(user.getName());
 		return getBuffer();
@@ -772,7 +772,7 @@ public class SQLDriver {
 
 	public String dropPrivilege(User user, Privilege priv) {
 		write("REVOKE ");
-		write(priv.getPrivilege());
+		write(priv.getName());
 		write(" ON * FROM ");
 		write(user.getName());
 		return getBuffer();
@@ -2025,7 +2025,7 @@ public class SQLDriver {
 
 			Privilege item = new Privilege();
 			item.setGrantee(grantee);
-			item.setPrivilege(privilege);
+			item.setName(privilege);
 			item.setIsGrantable(toBoolean(getValue(row, "is_grantable")));
 
 			privileges.add(item);

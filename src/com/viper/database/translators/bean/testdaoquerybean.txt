@@ -1,0 +1,107 @@
+## for (var table : root.tables) {
+## if (table.tableType.value() == 'bean') {
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/dao/test/query/TestQuery" + classname + ".java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.dao.test.query;
+
+import java.util.List;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.viper.database.dao.DatabaseInterface;
+import com.viper.database.dao.DatabaseFactory;
+import com.viper.database.dao.DatabaseUtil;
+import #{database.packageName}.#{classname};
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+import com.viper.database.dao.DynamicEnum;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+
+public class TestQuery#{classname} extends AbstractTestCase {
+
+    private static final int Iterations = 100;
+    private static final int PageNo = 2;
+    private static final int PageSize = 75;
+    private static DatabaseInterface database;
+
+    @Test
+    public void testQueryOneFilter() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
+        database.insert(expected);
+
+        #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName(), expected, actual);
+    }
+
+    @Test
+    public void testQueryAll() throws Exception {
+
+        List<#{classname}> items = database.queryList(#{classname}.class);
+        assertNotEmpty(getCallerMethodName() + ", Nothing returned: ", items);
+
+        for (#{classname} item : items) {
+            assertNotNull(getCallerMethodName() + ", id:" + item.get#{java.toPrimaryKeyName(table)}(), item.get#{java.toPrimaryKeyName(table)}());
+        }
+    }
+
+    @Test
+    public void testQuery() throws Exception {
+
+       #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
+        database.insert(expected);
+
+        #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName(), expected, actual);
+    }
+
+    @Test
+    public void testQueryList() throws Exception {
+
+        List<#{classname}> list = database.queryList(#{classname}.class);
+        assertNotEmpty(getCallerMethodName() + ", Nothing returned: ", list);
+
+        for (#{classname} item : list) {
+            assertNotNull(getCallerMethodName() + ", id:" + item.get#{java.toPrimaryKeyName(table)}(), item.get#{java.toPrimaryKeyName(table)}());
+        }
+    }
+
+    @Test
+    public void testQueryListFilter() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
+        database.insert(expected);
+
+        List<#{classname}> list = database.queryList(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
+        assertBeanEquals(getCallerMethodName(), expected, list.get(0));
+    }
+    
+    @Test
+    public void testQueryPage() throws Exception {
+    
+        long size = database.size(#{classname}.class);
+        
+        long pagesize = 50;
+        long pageno = 1;
+        
+        List<#{classname}> list = database.queryList(#{classname}.class, database.PAGENO_KEY, pageno, database.PAGESIZE_KEY, pagesize);
+        assertNotNull(getCallerMethodName(), list);
+        assertEquals(getCallerMethodName() + ":" + size, pagesize, list.size()); 
+    }
+}
+## util.write(filename, writer);
+## }
+## }

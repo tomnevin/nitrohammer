@@ -296,9 +296,17 @@ public class DatabaseMongoDB implements DatabaseInterface {
      * {@inheritDoc}
      * 
      */
+    public <T> List<T> queryList(Class<T> tableClass, Map<String, String> parameters) throws Exception {
+        return null; // TODO
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     */
     @Override
     public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams,
-            LimitParam limitParam) throws Exception {
+            LimitParam limitParam, Map<String, String> parameters) throws Exception {
 
         List<T> beans = queryAll(clazz);
         return DatabaseUtil.applyFilter(beans, filter);

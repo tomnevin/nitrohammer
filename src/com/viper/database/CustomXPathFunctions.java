@@ -594,7 +594,7 @@ public final class CustomXPathFunctions {
         append(buf, "isSchemaUpdatable", table.isIsSchemaUpdatable());
         append(buf, "isLargeTable", table.isIsLargeTable());
         append(buf, "isReportTable", table.isIsReportTable());
-        append(buf, "isMonitorChanges", table.isIsMonitorChanges());
+        append(buf, "isMonitorChanges", table.isIsMonitorChanges()); 
 
         if (!isEmpty(table.getValidator())) {
             append(buf, "validator", table.getValidator().replaceAll("(\\r|\\n)", " "));
@@ -681,6 +681,9 @@ public final class CustomXPathFunctions {
         }
         if (column.isRequired()) {
             append(buf, "required", true);
+        }
+        if (column.isIsNullable()) {
+            append(buf, "isNullable", true);
         }
         if (column.isSecure()) {
             append(buf, "secure", true);

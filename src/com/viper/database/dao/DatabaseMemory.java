@@ -179,6 +179,14 @@ public class DatabaseMemory implements DatabaseInterface {
      * {@inheritDoc}
      * 
      */
+    public <T> List<T> queryList(Class<T> tableClass, Map<String, String> parameters) throws Exception {
+        return null; // TODO
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     */
     @Override
     public <T> List<T> queryList(Class<T> clazz, Object... pairs) throws Exception {
 
@@ -191,7 +199,8 @@ public class DatabaseMemory implements DatabaseInterface {
      * 
      */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter,  List<ColumnParam> columnParams, LimitParam limitParam) throws Exception {
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams,
+            LimitParam limitParam, Map<String, String> parameters) throws Exception {
 
         List<T> beans = queryAll(clazz);
         return DatabaseUtil.applyFilter(beans, filter);

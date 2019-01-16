@@ -38,6 +38,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.naming.Context;
@@ -255,8 +256,16 @@ public class DatabaseJTA implements DatabaseInterface, DatabaseSQLInterface {
      * {@inheritDoc}
      * 
      */
+    public <T> List<T> queryList(Class<T> tableClass, Map<String, String> parameters) throws Exception {
+        return null; // TODO
+    }
+    
+    /**
+     * {@inheritDoc}
+     * 
+     */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter,  List<ColumnParam> columnParams, LimitParam limitParam) throws Exception {
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter,  List<ColumnParam> columnParams, LimitParam limitParam, Map<String, String> parameters) throws Exception {
 
         return null;
     }
