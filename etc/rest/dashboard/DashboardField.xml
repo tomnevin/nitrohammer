@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="DashboardField" table-type="bean"> 
+		<column name="id" java-type="String" />
+		<column name="title" java-type="String" />
+		<column name="x" java-type="String" />
+		<column name="y" java-type="java.util.List" generic-type="String" />
+		  
+	</table>
+</database>

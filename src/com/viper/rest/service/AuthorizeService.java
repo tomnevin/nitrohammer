@@ -38,8 +38,9 @@ import javax.ws.rs.core.Response;
 
 @Path("authorize")
 public class AuthorizeService {
-
+  
 	@GET
+    @Path("login")
 	@Produces("text/plain")
 	public Response authorize(@QueryParam("username") String username, @QueryParam("password") String password) {
 

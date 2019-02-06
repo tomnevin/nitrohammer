@@ -868,7 +868,7 @@ public class DatabaseUtil {
                 }
             }
         }
-        System.err.println("No primary key name defined for : " + tableClazz);
+        System.err.println("No primary key name defined for : " + tableClazz); 
         return null;
     }
 
@@ -1060,15 +1060,7 @@ public class DatabaseUtil {
     public static <T> Column getColumnAnnotation(Class<T> clazz, String fieldname) {
         if (clazz == null || fieldname == null) {
             return null;
-        }
-        try {
-            Column column = getFieldsColumnAnnotation(clazz, fieldname);
-            if (column != null) {
-                return column;
-            }
-        } catch (Exception ex) {
-            ; // intentionally blank
-        }
+        } 
         Method[] methods = clazz.getMethods();
         if (methods != null) {
             for (Method method : methods) {
@@ -1083,14 +1075,7 @@ public class DatabaseUtil {
         }
         return null;
     }
-
-    public static final Column getFieldsColumnAnnotation(Class<?> clazz, String fieldname) throws Exception {
-        Field field = clazz.getDeclaredField(fieldname);
-        if (field != null) {
-            return field.getAnnotation(Column.class);
-        }
-        return null;
-    }
+ 
 
     /**
      * Given the table class, and the database field name, return the column
@@ -1106,6 +1091,23 @@ public class DatabaseUtil {
      */
     public static <T> Table getTableAnnotation(Class<T> tableClazz) {
         return tableClazz.getAnnotation(Table.class);
+    }
+
+
+    /**
+     * Given the table class, and the database field name, return the column
+     * annotation object.
+     * 
+     * @param tableClazz
+     *            java table model, with annotations.
+     * @param <T>
+     *            the class of the pojo database bean, annotated with classes from
+     *            package com.viper.database.annotations
+     * @return the table annotation if defined with the class, null otherwise.
+     * 
+     */
+    public static <T> boolean isTableClass(Class<T> tableClazz) {
+        return (tableClazz.getAnnotation(Table.class) != null);
     }
 
     /**
@@ -1134,31 +1136,7 @@ public class DatabaseUtil {
         }
         return columns;
     }
-
-    /**
-     * Given the table class, and the database field name, return the column
-     * annotation object.
-     * 
-     * @param tableClazz
-     *            java table model, with annotations.
-     * @param <T>
-     *            the class of the pojo database bean, annotated with classes from
-     *            package com.viper.database.annotations
-     * @return the list of column annotations if defined with the class, zero size
-     *         list otherwise.
-     */
-    public static <T> List<Field> getColumnAnnotatedFields(Class<T> clazz) {
-        List<Field> items = new ArrayList<Field>();
-        for (Class<?> c = clazz; c != null; c = c.getSuperclass()) {
-            Field[] fields = c.getDeclaredFields();
-            for (Field field : fields) {
-                if (field.isAnnotationPresent(Column.class)) {
-                    items.add(field);
-                }
-            }
-        }
-        return items;
-    }
+ 
 
     /**
      * Given the table class, and the database field name, return the column

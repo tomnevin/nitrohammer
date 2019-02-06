@@ -1008,11 +1008,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                         } else if (fieldColumn.converter() != null && !fieldColumn.converter().isEmpty()) {
                             Object value = DatabaseUtil.convert(fieldColumn, fieldClazz, inputValue);
                             DatabaseUtil.set(bean, propertyName, value);
-
-                        } else if (fieldClazz.isAssignableFrom(String.class) && !isEmpty(fieldColumn.converter())) {
-                            Object value = DatabaseUtil.convert(fieldColumn, fieldClazz, inputValue);
-                            DatabaseUtil.set(bean, propertyName, value);
-
+  
                         } else if (java.util.List.class.isAssignableFrom(fieldClazz)
                                 && !fieldColumn.genericType().isEmpty()) {
                             Object value = Converters.convertToList(toClass(fieldColumn.genericType()), inputValue);
@@ -1135,11 +1131,11 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
 
                 // TODO FIX this should handle any time, int, long string.
                 if (PAGENO_KEY.equalsIgnoreCase(key)) {
-                    pageno = new Long((int) value);
+                    pageno = Converters.convert(long.class, value);
                     continue;
                 }
                 if (PAGESIZE_KEY.equalsIgnoreCase(key)) {
-                    pagesize = new Long((int) value);
+                    pagesize = Converters.convert(long.class, value);
                     continue;
                 }
 

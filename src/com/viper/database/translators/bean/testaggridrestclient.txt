@@ -1,0 +1,167 @@
+## for (var table : root.tables) {
+## if (table.isRestService) { 
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/rs/client/aggrid/test/Test" + classname + "AgGridRestClient.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.rs.client.aggrid.test;
+
+import java.util.List;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import #{database.packageName}.#{classname};
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+import com.viper.database.dao.DatabaseUtil;
+import com.viper.rest.client.RestStringClient;
+import com.viper.database.dao.DynamicEnum;
+import com.viper.database.utils.JSONUtil;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+public class Test#{classname}AgGridRestClient extends AbstractTestCase {
+
+    private static final String RestServiceUsername = System.getProperty("rest.service.username", "tom@bliss.com");
+    private static final String RestServicePassword = System.getProperty("rest.service.password", "password");
+    private static final String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost/rest/classes/");
+    private static final String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
+    private static final RestStringClient client = new RestStringClient(AuthorizeServiceUrl, RestServiceUrl);
+
+    @BeforeClass
+    public static final void initializeClass() throws Exception {
+        Logger.getGlobal().setLevel(Level.FINEST);
+        
+        client.setAcceptMediaType("application", "json", "subtype", "ag");
+    }
+    
+    public final void setAgGridAcceptType() {
+     	client.setAcceptMediaType("application", "json", "subtype", "ag");
+    }
+    
+    public final void setRestAcceptType() {
+     	client.setAcceptMediaType("application", "json", "subtype", "rest");
+    } 
+
+    @Test
+    public final void testLogin() throws Exception {
+       
+        boolean response = client.authorize(RestServiceUsername, RestServicePassword);
+
+        assertEquals(getCallerMethodName() + ", status ", true, response);
+    }
+
+    @Test
+    public final void testQueryOne() throws Exception { 
+	 
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        String str = client.insert(expected);
+        assertNotNull(getCallerMethodName() + ", str= ", str);
+        
+        #{classname}  result = JSONUtil.fromJSON (#{classname}.class, str);
+        
+        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result);
+         
+        String actual = client.query(#{classname}.class, name, value);
+
+        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+    }
+    
+    @Test
+    public final void testQueryTwo() throws Exception {
+ 
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        String str = client.insert(expected);
+        assertNotNull(getCallerMethodName() + ", str= ", str);
+     
+        #{classname}  result = JSONUtil.fromJSON (#{classname}.class, str);
+           
+        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result);
+         
+        String actual = client.query(#{classname}.class,  name, value);
+
+        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+    }
+
+    @Test
+    public final void testQueryList() throws Exception {
+
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 100);
+        client.insertAll(expected);
+        
+        String beans = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", null beans", beans); 
+    }
+    
+    @Test
+    public final void testQueryAll() throws Exception {
+
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 100);
+        client.insertAll(expected);
+        
+        String beans = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", null beans", beans); 
+    } 
+
+    @Test
+    public final void testUpdate() throws Exception {
+        
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
+        String result = client.update(bean);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+
+    @Test
+    public final void testCreate() throws Exception {
+
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 6);
+        String result = client.insert(bean);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+    
+    @Test
+    public final void testCreateList() throws Exception {
+
+        int numberOfBeans = 100;
+        List<#{classname}> beans = RandomBean.getRandomBeans(#{classname}.class, 6, numberOfBeans);
+        client.insertAll(beans);
+        
+        String actual = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", actual beans", actual); 
+    }
+
+    @Test
+    public final void testDelete() throws Exception {
+
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 7);
+        String str = client.insert(bean);
+        
+        #{classname}  result = JSONUtil.fromJSON (#{classname}.class, str);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+        
+        client.delete(result);
+    }
+}
+## util.write(filename, writer);
+## } 
+## }

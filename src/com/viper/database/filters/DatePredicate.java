@@ -35,7 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.viper.database.dao.DatabaseUtil;
-import com.viper.database.dao.converters.DateConverter;
+import com.viper.database.dao.converters.Converters;
 
 public class DatePredicate<T> implements Predicate<T> {
 
@@ -82,7 +82,7 @@ public class DatePredicate<T> implements Predicate<T> {
             date = (Date) o;
         } else if (o instanceof String) {
             try {
-                date = DateConverter.convertFromString((String) o);
+                date = Converters.convert(Date.class, (String) o);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -152,10 +152,10 @@ public class DatePredicate<T> implements Predicate<T> {
         case LAST_N_HOURS: {
             Calendar today = Calendar.getInstance();
             today.setTime(new Date());
-            
+
             Calendar lastNHours = Calendar.getInstance();
             lastNHours.setTime(new Date());
-            
+
             lastNHours.add(Calendar.HOUR, -ncount);
             return ((cal.equals(lastNHours) || cal.after(lastNHours)) && (cal.equals(today) || cal.before(today)));
         }
@@ -183,7 +183,7 @@ public class DatePredicate<T> implements Predicate<T> {
             today.setTime(new Date());
             Calendar nextNHours = Calendar.getInstance();
             nextNHours.setTime(new Date());
-            nextNHours.add(Calendar.HOUR, ncount);           
+            nextNHours.add(Calendar.HOUR, ncount);
             return ((cal.equals(nextNHours) || cal.before(nextNHours)) && (cal.equals(today) || cal.after(today)));
         }
         case NEXT_N_DAYS: {
@@ -241,8 +241,8 @@ public class DatePredicate<T> implements Predicate<T> {
             if (filterValue2 == null) {
                 filterValue2 = filterValue;
             }
-            return "DATE(" + fieldname + ") between  '" + format.format(filterValue) + "' AND '"
-                    + format.format(filterValue2) + "'";
+            return "DATE(" + fieldname + ") between  '" + format.format(filterValue) + "' AND '" + format.format(filterValue2)
+                    + "'";
         }
         case TODAY: {
             return "DATE(" + fieldname + ") = DATE(NOW())";

@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <database name="NA">
 	<table name="Dashboard" table-type="bean">
-		<column name="columnsToHide" java-type="java.util.List" />
-		<column name="columnsToIgnore" java-type="java.util.List" />
-		<column name="dashboard" java-type="java.util.List" />
-		<column name="directory" java-type="java.util.List" />
-		<column name="map" java-type="Object" />
-		<column name="reports" java-type="Object" />
-		<column name="system" java-type="Object" />
-		<column name="systemDashboard" java-type="Object" />
-		<column name="systemPreferencesTree" java-type="Object" />
-		<column name="table" java-type="Object" />
-		<column name="vtable" java-type="Object" />
+		<column name="items" java-type="java.util.List" generic-type="com.viper.database.rest.model.DashboardItem" /> 
 	</table>
 </database>

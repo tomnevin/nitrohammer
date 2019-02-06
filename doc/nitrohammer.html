@@ -18,9 +18,42 @@ h1 {
 	font-weight: bold
 }
 
+li {
+	padding-bottom: 20px;
+}
+
 .w3-bar-block .w3-bar-item {
 	padding: 16px;
 	font-weight: bold
+}
+
+.schema-header {
+	font-weight: bold;
+}
+
+.element {
+	color: green;
+	font-weight: bold;
+	font-size: large;
+}
+
+.attribute {
+	color: green;
+	font-weight: bold;
+	font-size: large;
+}
+
+.node-type {
+	
+}
+
+.node-kind {
+	
+}
+
+.node-type::after {
+	content: "\A";
+	white-space: pre;
 }
 </style>
 <body>
@@ -28,20 +61,20 @@ h1 {
 	<nav
 		class="w3-sidebar w3-bar-block w3-collapse w3-animate-left w3-card"
 		style="z-index: 3; width: 250px;" id="mySidebar">
-		<a class="w3-bar-item w3-button w3-border-bottom w3-large"
+		<a class=" w3-button w3-border-bottom w3-large"
 			href="http://www.tnevin.com/"><img src="images/viper-logo.gif"
 			style="width: 100%; height: 100%; background-size: cover"></a> <br />
 		<a class="w3-bar-item w3-button w3-hide-large w3-large"
 			href="javascript:void(0)" onclick="w3_close()">Close <i
-			class="fa fa-remove"></i></a> <br /> <a
-			class="w3-bar-item w3-button w3-teal" href="#">Home</a> <br /> <a
-			class="w3-bar-item w3-button" href="#Introduction">Introduction</a> <br />
-		<a class="w3-bar-item w3-button" href="#">Download</a> <br /> <a
+			class="fa fa-remove"></i></a> <br /> <a class="w3-bar-item w3-button "
+			href="#">Home</a> <br /> <a class="w3-bar-item w3-button"
+			href="#Introduction">Introduction</a> <br /> <a
+			class="w3-bar-item w3-button" href="#">Download</a> <br /> <a
 			class="w3-bar-item w3-button" href="#">Setup</a> <a
-			class="w3-bar-item w3-button" href="#">Database Model</a> <br /> <a
-			class="w3-bar-item w3-button" href="#">Nitrohammer tool</a> <br /> <a
-			class="w3-bar-item w3-button" href="#">DAO</a> <a
-			class="w3-bar-item w3-button" href="#">Example</a> <br />
+			class="w3-bar-item w3-button" href="#DatabaseModel">Database
+			Model</a> <br /> <a class="w3-bar-item w3-button" href="#">Nitrohammer
+			tool</a> <br /> <a class="w3-bar-item w3-button" href="#">DAO</a> <a
+			class="w3-bar-item w3-button" href="#SampleCode">Example</a> <br />
 	</nav>
 
 	<div class="w3-overlay w3-hide-large w3-animate-opacity"
@@ -95,13 +128,13 @@ h1 {
 			<p>Nitrohammer is a command line tool which has the following
 				main arguments.</p>
 
-			<ul class="w3-leftbar w3-theme-border" style="list-style: none">
+			<ul style="list-style: none">
 				<li><b>-model2database</b> Given the database model, generate
 					the database schema into the database.<br> <code>schematool
 						-model2database &lt;database-url&gt; &lt;packagename&gt;
 						&lt;vendor&gt; &lt;outfile&gt; &lt;model filename/directory&gt;
 						...</code>
-					<ol>
+					<ol class="w3-leftbar w3-theme-border">
 						<li>&lt;database-url&gt; The database url, see the database
 							provider, MySql, Oracle, etc. Typically starts with jdbc:</li>
 						<li>&lt;packagename&gt; The full name of the java package
@@ -117,7 +150,7 @@ h1 {
 					database instance, similiar to using the mysql &lt; input.sql
 					command.<br /> <code>schematool -sql &lt;source&gt;
 						&lt;directory/filename&gt;</code>
-					<ol>
+					<ol class="w3-leftbar w3-theme-border">
 						<li>&lt;source&gt; Either the name of the source database
 							located in the databases.xml file or the database url, see the
 							database provider, MySql, Oracle, etc. Typically starts with
@@ -129,7 +162,7 @@ h1 {
 				<li><b>-database2sql</b> Access the database and generate SQL
 					files, similiar to <i>mysqldump</i><br /> <code>schematool
 						-database2sql &lt;source&gt; &lt;schema&gt; &lt;filename&gt;</code>
-					<ol>
+					<ol class="w3-leftbar w3-theme-border">
 						<li>&lt;source&gt; Either the name of the source database
 							located in the databases.xml file or the database url, see the
 							database provider, MySql, Oracle, etc. Typically starts with
@@ -138,12 +171,13 @@ h1 {
 							from which the SQL is to be generated.</li>
 						<li>&lt;filename&gt; filename where the sql commands are to
 							be written.</li>
-					</ol> <br /></li>
+					</ol></li>
+				<br />
 
 				<li><b>-database2model</b> Read the database and generate the
 					model into a single mode file .xml<br /> <code>schematool
 						-database2model &lt;source&gt; &lt;schema&gt; &lt;filename&gt;</code>
-					<ol>
+					<ol class="w3-leftbar w3-theme-border">
 						<li>&lt;source&gt; Either the name of the source database
 							located in the databases.xml file or the database url, see the
 							database provider, MySql, Oracle, etc. Typically starts with
@@ -158,7 +192,7 @@ h1 {
 					sqlfile to build the database<br /> <code>schematool
 						-model2sql &lt;model directory&gt; &lt;schema&gt; &lt;vendor&gt;
 						&lt;outfile&gt;</code>
-					<ol>
+					<ol class="w3-leftbar w3-theme-border">
 						<li>&lt;model directory&gt; The directory where the model
 							files exists, ending im .xml.</li>
 						<li>&lt;schema&gt; the name of the schema in the database for
@@ -172,7 +206,7 @@ h1 {
 					translation template, generate source coce<br /> <code>schematool
 						-generate &lt;model directory&gt; &lt;output directory&gt;
 						&lt;templagte&gt; &lt;packageName&gt;</code>
-					<ol>
+					<ol class="w3-leftbar w3-theme-border">
 						<li>&lt;model directory&gt; The directory where the model
 							files exists, ending im .xml.</li>
 						<li>&lt;output directory&gt; directory where the resulant
@@ -186,20 +220,769 @@ h1 {
 			</ul>
 
 			<hr>
-			<h2>Sample Code</h2>
-			<div class="w3-container w3-sand w3-leftbar">
-				<p>
-					<i>Make it as simple as possible, but not simpler.</i><br>
-					Albert Einstein
-				</p>
+			<h2 id='DatabaseModel'>Database Model</h2>
+			<p>The Database Model is defined by a collection of XML tags
+				which define the database connections, the database, the database
+				tables, and all objects which make up the database. The database
+				model can be entered manually by text editing or by the Nitrogen
+				tool (schematool) which will read an existing database and generate
+				the XML model.</p>
+			<p>The following is a basic model of a database table for "users"
+				data.</p>
+			<!-- HTML generated using hilite.me -->
+			<div
+				style="background: #ffffff; overflow: auto; width: auto; border: solid gray; border-width: .1em .1em .1em .8em; padding: .2em .6em;">
+				<table>
+					<tr>
+						<td><pre style="margin: 0; line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></td>
+						<td><pre style="margin: 0; line-height: 125%">
+								<span style="color: #4c8317">&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;</span>
+<span style="color: #1e90ff; font-weight: bold">&lt;database</span> <span
+									style="color: #1e90ff">xmlns:xsi=</span><span
+									style="color: #aa5500">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span
+									style="color: #1e90ff">xsi:noNamespaceSchemaLocation=</span><span
+									style="color: #aa5500">&quot;http://www.vipersoftwareservices.com/schemas/database.xsd&quot;</span>
+  <span style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;test&#39;</span>  <span
+									style="color: #1e90ff">package-name=</span><span
+									style="color: #aa5500">&quot;com.viper.unit.model&quot;</span><span
+									style="color: #1e90ff; font-weight: bold">&gt;</span>
+  <span style="color: #1e90ff; font-weight: bold">&lt;table</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;User&#39;</span> <span
+									style="color: #1e90ff">table-type=</span><span
+									style="color: #aa5500">&#39;table&#39;</span> <span
+									style="color: #1e90ff">is-rest-service=</span><span
+									style="color: #aa5500">&quot;true&quot;</span> <span
+									style="color: #1e90ff">is-schema-updatable=</span><span
+									style="color: #aa5500">&quot;true&quot;</span><span
+									style="color: #1e90ff; font-weight: bold">&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;username&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;32&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;true&#39;</span> <span
+									style="color: #1e90ff">primary-key=</span><span
+									style="color: #aa5500">&#39;true&#39;</span> <span
+									style="color: #1e90ff">id-method=</span><span
+									style="color: #aa5500">&quot;assigned&quot;</span> <span
+									style="color: #1e90ff">logical-type=</span><span
+									style="color: #aa5500">&quot;email:email.txt&quot;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;password&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;32&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;false&#39;</span> <span
+									style="color: #1e90ff">logical-type=</span><span
+									style="color: #aa5500">&quot;password:&quot;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;name&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;255&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;false&#39;</span> <span
+									style="color: #1e90ff">logical-type=</span><span
+									style="color: #aa5500">&quot;name:firstnames.txt&quot;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;rolw&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;32&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;false&#39;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;job&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;32&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;false&#39;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;school&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;255&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;false&#39;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;email&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;255&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;false&#39;</span> <span
+									style="color: #1e90ff">logical-type=</span><span
+									style="color: #aa5500">&quot;email:email.txt&quot;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;lastProblem&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;String&#39;</span> <span
+									style="color: #1e90ff">size=</span><span style="color: #aa5500">&#39;255&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;false&#39;</span> <span
+									style="color: #1e90ff">logical-type=</span><span
+									style="color: #aa5500">&quot;name:nouns.csv&quot;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;grade&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;int&#39;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;true&#39;</span>  <span
+									style="color: #1e90ff">logical-type=</span><span
+									style="color: #aa5500">&quot;int:0,12&quot;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+    <span style="color: #1e90ff; font-weight: bold">&lt;column</span> <span
+									style="color: #1e90ff">name=</span><span style="color: #aa5500">&#39;friends&#39;</span> <span
+									style="color: #1e90ff">java-type=</span><span
+									style="color: #aa5500">&#39;java.util.List&#39;</span> <span
+									style="color: #1e90ff">generic-type=</span><span
+									style="color: #aa5500">&quot;String&quot;</span> <span
+									style="color: #1e90ff">required=</span><span
+									style="color: #aa5500">&#39;true&#39;</span> <span
+									style="color: #1e90ff">logical-type=</span><span
+									style="color: #aa5500">&quot;email:email.txt&quot;</span> <span
+									style="color: #1e90ff; font-weight: bold">/&gt;</span>
+  <span style="color: #1e90ff; font-weight: bold">&lt;/table&gt;</span>
+<span style="color: #1e90ff; font-weight: bold">&lt;/database&gt;</span>
+</pre></td>
+					</tr>
+				</table>
 			</div>
+
+
+			<span class='schema-header'>Databases</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>database</span> <span
+					class='node-kind'>(element) </span>Database</li>
+				<li><span class='element'>user</span> <span class='node-kind'>(element)
+				</span>User</li>
+				<li><span class='element'>privilege</span> <span
+					class='node-kind'>(element) </span>Privilege</li>
+			</ul>
+			<span class='schema-header'>Database</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span><span class='node-type'>xsd:string</span> The name of the database,
+					used in code and database creation.</li>
+				<li><span class='attribute'>catalog</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>xsd:string</span>
+					An alternate name for the database, but not used when generating
+					code.</li>
+				<li><span class='attribute'>charset-name</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>xsd:string</span>
+					The default character set name for the database, see the actual
+					database MySql, Oracle, etc for the actual possible character set
+					values.</li>
+				<li><span class='attribute'>collation-name</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>xsd:string</span>
+					The default collation name for the database, see the actual
+					database MySql, Oracle, etc for the actual possible collation
+					values.</li>
+				<li><span class='attribute'>default-base-class</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>xsd:string</span>
+					When generating java code use this value for extending the
+					underlying class for the Java beans. This value is optional.</li>
+				<li><span class='attribute'>default-java-naming-method</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>JavaNamingMethodType</span>
+					Various naming conventions are used to convert database names into
+					Java class, and property names.</li>
+				<li><span class='attribute'>filename</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>xsd:string</span>
+					The filename where the xml for this database definition is written.
+					Deprecated.</li>
+				<li><span class='attribute'>package-name</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>xsd:string</span>
+					The base package name tobe used when generating Java code from this
+					database model. The package name can be supplied on the command
+					line of the Nitrogen tool as well, which will replace this value.</li>
+				<li><span class='attribute'>version</span> <span
+					class='node-kind'>(attribute) </span><span class='node-type'>xsd:string</span>
+				</li>
+				<li><span class='element'>table</span> <span class='node-kind'>(element)
+				</span><span class='node-type'>Table</span> An nested element defining a
+					table within this database. See below, for the complete definition
+					of the table element.</li>
+				<li><span class='element'>procedure</span> <span
+					class='node-kind'>(element) </span><span class='node-type'>Procedure</span>
+				</li>
+				<li><span class='element'>trigger</span> <span
+					class='node-kind'>(element) </span><span class='node-type'>Trigger</span>
+				</li>
+			</ul>
+			<span class='schema-header'>Table</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>table-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>java-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>database-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>table-type</span> <span
+					class='node-kind'>(attribute) </span>TableType</li>
+				<li><span class='attribute'>base-class</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>charset-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>collation-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>data-directory</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>description</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>delay-key-write</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>engine</span> <span
+					class='node-kind'>(attribute) </span>EngineType</li>
+				<li><span class='attribute'>has-checksum</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>index-directory</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>interface</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>is-schema-updatable</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-rest-service</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-report-table</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-abstract</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-default</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-final</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-large-table</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-monitor-changes</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>fields-all-nullable</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>maximum-rows</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+				<li><span class='attribute'>minimum-rows</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+				<li><span class='attribute'>pack-keys</span> <span
+					class='node-kind'>(attribute) </span>PackKeysType</li>
+				<li><span class='attribute'>password</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>raid-type</span> <span
+					class='node-kind'>(attribute) </span>RaidType</li>
+				<li><span class='attribute'>raid-chunks</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>raid-chunk-size</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+				<li><span class='attribute'>row-format</span> <span
+					class='node-kind'>(attribute) </span>RowFormatType</li>
+				<li><span class='attribute'>skip-sql</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>union</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>iterations</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+				<li><span class='element'>column</span> <span class='node-kind'>(element)
+				</span>Column</li>
+				<li><span class='element'>import-table</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>foreign-key</span> <span
+					class='node-kind'>(element) </span>ForeignKey</li>
+				<li><span class='element'>validator</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>converter</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>sql-generator</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>bean-generator</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>filter</span> <span class='node-kind'>(element)
+				</span>xsd:string</li>
+				<li><span class='element'>seed-filename</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>access</span> <span class='node-kind'>(element)
+				</span>AccessPrivilege</li>
+				<li><span class='element'>index</span> <span class='node-kind'>(element)
+				</span>Index</li>
+				<li><span class='element'>sql-select</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>sql-update</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>sql-insert</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>sql-delete</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>sql-size</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>query-class-name</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>param</span> <span class='node-kind'>(element)
+				</span>Param</li>
+				<li><span class='element'>row</span> <span class='node-kind'>(element)
+				</span>Row</li>
+			</ul>
+			<span class='schema-header'>Column</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>table-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>database-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>description</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>index-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>id-method</span> <span
+					class='node-kind'>(attribute) </span>IdMethodType</li>
+				<li><span class='attribute'>java-type</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>field</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>generic-type</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>logical-type</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>data-type</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>extra-data-type</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>decimal-size</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+				<li><span class='attribute'>default-value</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>size</span> <span class='node-kind'>(attribute)
+				</span>xsd:long</li>
+				<li><span class='attribute'>order</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+				<li><span class='attribute'>columnVisibility</span> <span
+					class='node-kind'>(attribute) </span>ColumnVisibilityType</li>
+				<li><span class='attribute'>pattern</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>natural-key</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>primary-key</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>persistent</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>optional</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>required</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>secure</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>unique</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>unsigned</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>zero-fill</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>binary</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>ascii</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>unicode</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>is-nullable</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='element'>enum-value</span> <span
+					class='node-kind'>(element) </span>EnumItem</li>
+				<li><span class='element'>validator</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>converter</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>renderer</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>action</span> <span class='node-kind'>(element)
+				</span>xsd:string</li>
+				<li><span class='element'>minimum-value</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>maximum-value</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>options</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>component-type</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>values-classname</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>validation-message</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>tooltip-message</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+			</ul>
+			<span class='schema-header'>Privileges</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>privilege</span> <span
+					class='node-kind'>(element) </span>Privilege</li>
+			</ul>
+			<span class='schema-header'>Privilege</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>grantor</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>grantee</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>is-grantable</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+			</ul>
+			<span class='schema-header'>AccessPrivilege</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>read</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>create</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>update</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>delete</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+			</ul>
+			<span class='schema-header'>User</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>password</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>host</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+			</ul>
+			<span class='schema-header'>Rows</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>row</span> <span class='node-kind'>(element)
+				</span>Row</li>
+			</ul>
+			<span class='schema-header'>Row</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>cell</span> <span class='node-kind'>(element)
+				</span>Cell</li>
+			</ul>
+			<span class='schema-header'>Cell</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>type</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+			</ul>
+			<span class='schema-header'>Param</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+			</ul>
+			<span class='schema-header'>ColumnParam</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>orderBy</span> <span
+					class='node-kind'>(attribute) </span>SortType</li>
+				<li><span class='attribute'>aggregation</span> <span
+					class='node-kind'>(attribute) </span>AggregationType</li>
+				<li><span class='attribute'>groupBy</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>visible</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>columnOrder</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+			</ul>
+			<span class='schema-header'>LimitParam</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>pageno</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+				<li><span class='attribute'>pagesize</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+			</ul>
+			<span class='schema-header'>Procedure</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>database-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>filename</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>sql-characteristics</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>sql-security</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>description</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>vendor</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='element'>source</span> <span class='node-kind'>(element)
+				</span>xsd:string</li>
+				<li><span class='element'>column</span> <span class='node-kind'>(element)
+				</span>Column</li>
+			</ul>
+			<span class='schema-header'>ForeignKey</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>local-database</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>local-table</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>foreign-database</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>foreign-table</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>constraint-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>unique</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>deferrability</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>on-update</span> <span
+					class='node-kind'>(attribute) </span>UpdateType</li>
+				<li><span class='attribute'>on-delete</span> <span
+					class='node-kind'>(attribute) </span>UpdateType</li>
+				<li><span class='element'>foreign-key-reference</span> <span
+					class='node-kind'>(element) </span>ForeignKeyReference</li>
+			</ul>
+			<span class='schema-header'>ForeignKeyReference</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>local-column</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>foreign-column</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>sequence-number</span> <span
+					class='node-kind'>(attribute) </span>xsd:int</li>
+			</ul>
+			<span class='schema-header'>Index</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>table-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>database-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>column-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>index-class</span> <span
+					class='node-kind'>(attribute) </span>IndexClassType</li>
+				<li><span class='attribute'>index-type</span> <span
+					class='node-kind'>(attribute) </span>IndexType</li>
+				<li><span class='attribute'>editable</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>primary</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+				<li><span class='attribute'>description</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+			</ul>
+			<span class='schema-header'>Trigger</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>table-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>database-name</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>username</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>time</span> <span class='node-kind'>(attribute)
+				</span>TimeType</li>
+				<li><span class='attribute'>event</span> <span
+					class='node-kind'>(attribute) </span>EventType</li>
+				<li><span class='attribute'>statement</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>drop-if-exists</span> <span
+					class='node-kind'>(attribute) </span>xsd:boolean</li>
+			</ul>
+			<span class='schema-header'>TransactionIsolationLevels</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>TransactionSerializable</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>TransactionRepeatableRead</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>TransactionReadCommitted</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>TransactionReadUncommitted</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>TransactionNone</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+			</ul>
+			<span class='schema-header'>ResultSetType</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>ForwardOnly</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>ScrollInsensitive</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>ScrollSensitive</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+			</ul>
+			<span class='schema-header'>EnumList</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>enum-values</span> <span
+					class='node-kind'>(element) </span>EnumItem</li>
+			</ul>
+			<span class='schema-header'>EnumItem</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+			</ul>
+
+			<span class='schema-header'>DatabaseConnections</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>filename</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>resource</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='attribute'>project-state</span> <span
+					class='node-kind'>(attribute) </span>ProjectStateType</li>
+				<li><span class='element'>definition</span> <span
+					class='node-kind'>(element) </span>Definition</li>
+				<li><span class='element'>connection</span> <span
+					class='node-kind'>(element) </span>DatabaseConnection</li>
+			</ul>
+			<span class='schema-header'>DatabaseConnection</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='element'>ssh</span> <span class='node-kind'>(element)
+				</span>SSHConnection</li>
+				<li><span class='element'>database-timeout</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>show-errors</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>show-drop-errors</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>create-database</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>auto-commit</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>verbose</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>number-of-rows-limit</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>cache-timeout</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>connection-kind</span> <span
+					class='node-kind'>(element) </span>ConnectionKind</li>
+				<li><span class='element'>database-url</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>driver</span> <span class='node-kind'>(element)
+				</span>xsd:string</li>
+				<li><span class='element'>username</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>password</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>model</span> <span class='node-kind'>(element)
+				</span>xsd:string</li>
+				<li><span class='element'>jndi-name</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>datasource</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>datasource-class</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>description</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>server-filename</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>resource-filename</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>initial-sql-filename</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>package-name</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>schema-alias</span> <span
+					class='node-kind'>(element) </span>Param</li>
+				<li><span class='element'>param</span> <span class='node-kind'>(element)
+				</span>Param</li>
+				<li><span class='element'>name-case</span> <span
+					class='node-kind'>(element) </span>CaseType</li>
+				<li><span class='element'>vendor</span> <span class='node-kind'>(element)
+				</span>xsd:string</li>
+				<li><span class='element'>pool-validation-query</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>pool-max-total</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>pool-max-idle</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>pool-min-idle</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>pool-max-wait-millis</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>pool-time-between-eviction-runs-millis</span>
+					<span class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>pool-min-evictable-idle-time-millis</span>
+					<span class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>pool-test-while-idle</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>pool-test-on-borrow</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>pool-remove-abandoned</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+				<li><span class='element'>pool-remove-abandoned-timeout-seconds</span>
+					<span class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>pool-log-abandoned</span> <span
+					class='node-kind'>(element) </span>xsd:boolean</li>
+			</ul>
+			<span class='schema-header'>SSHConnection</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='element'>ssh-username</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>ssh-password</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>ssh-host</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>ssh-port</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>remote-host</span> <span
+					class='node-kind'>(element) </span>xsd:string</li>
+				<li><span class='element'>remote-port</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+				<li><span class='element'>local-port</span> <span
+					class='node-kind'>(element) </span>xsd:int</li>
+			</ul>
+			<span class='schema-header'>Definition</span>
+			<ul class='w3-leftbar w3-theme-border' style='list-style: none'>
+				<li><span class='attribute'>name</span> <span class='node-kind'>(attribute)
+				</span>xsd:string</li>
+				<li><span class='attribute'>filename</span> <span
+					class='node-kind'>(attribute) </span>xsd:string</li>
+				<li><span class='element'>database</span> <span
+					class='node-kind'>(element) </span>Database</li>
+			</ul>
 		</div>
 
-		<footer class="w3-container w3-theme" style="padding: 32px">
-			<h2>Nitrohammer</h2>
-		</footer>
-
+		<hr>
+		<h2 id='SampleCode'>Sample Code</h2>
+		<div class="w3-container w3-sand w3-leftbar">
+			<p>
+				<i>Make it as simple as possible, but not simpler.</i><br>
+				Albert Einstein
+			</p>
+		</div>
 	</div>
+
+	<footer class="w3-container w3-theme" style="padding: 32px">
+		<h2>Nitrohammer</h2>
+	</footer>
+
 
 	<script>
 		// Open and close the sidebar on medium and small screens

@@ -1,55 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-    <xsd:element name="html" type="Html" />
+    <xsd:element name="html" type="Html"/>
     <xsd:complexType name="Html">
         <xsd:sequence>
-            <xsd:element name="body" type="HtmlBody" />
+            <xsd:element name="body" type="HtmlBody"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="HtmlBody">
         <xsd:sequence>
-            <xsd:element name="table" type="HtmlTable" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="table" type="HtmlTable"/>
         </xsd:sequence>
-        <xsd:attribute name="rules" type="xsd:string" default="all" />
-        <xsd:attribute name="border" type="xsd:string" default="3px" />
+        <xsd:attribute default="all" name="rules" type="xsd:string"/>
+        <xsd:attribute default="3px" name="border" type="xsd:string"/>
     </xsd:complexType>
     <xsd:complexType name="HtmlTable">
         <xsd:sequence>
-            <xsd:element name="thead" type="THead" />
-            <xsd:element name="tbody" type="TBody" />
+            <xsd:element name="thead" type="THead"/>
+            <xsd:element name="tbody" type="TBody"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="THead">
         <xsd:sequence>
-            <xsd:element name="tr" type="TRHead" />
+            <xsd:element name="tr" type="TRHead"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="TBody">
         <xsd:sequence>
-            <xsd:element name="tr" type="TR" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="tr" type="TR"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="TRHead">
         <xsd:sequence>
-            <xsd:element name="th" type="TH" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="th" type="TH"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="TR">
         <xsd:sequence>
-            <xsd:element name="td" type="TD" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="td" type="TD"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="TD">
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
-                <xsd:attribute name="name" type="xsd:string" />
+                <xsd:attribute name="name" type="xsd:string"/>
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
     <xsd:complexType name="TH">
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
-                <xsd:attribute name="name" type="xsd:string" />
+                <xsd:attribute name="name" type="xsd:string"/>
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
-<xsd:schema></xsd:schema>
+ </xsd:schema>

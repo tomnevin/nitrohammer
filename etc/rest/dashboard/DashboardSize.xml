@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="DashboardSize" table-type="bean">
+		<column name="width" java-type="int" />
+		<column name="height" java-type="int" /> 
+	</table>
+</database>

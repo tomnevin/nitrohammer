@@ -1,5 +1,4 @@
-## for (var table : root.tables) {
-## if (table.tableType.value() == 'table' || table.tableType.value() == 'view' || table.tableType.value() == 'base-table') {
+## for (var table : root.tables) { 
 ##   var classname = java.toJavaName(table);
 ##   var filename = outdir + "/test/Test" + classname + ".java";
 // =============================================================================
@@ -55,6 +54,5 @@ public class Test#{classname} extends AbstractTestCase {
     ## }
 
 }
-## util.write(filename, writer);
-## }
+## util.write(filename, writer); 
 ## }

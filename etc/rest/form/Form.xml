@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="Form" table-type="bean">
+		<column name="title" java-type="String" />
+		<column name="tables" java-type="java.util.List" generic-type="com.viper.database.rest.model.TableDef" />
+		<column name="components" java-type="java.util.List" generic-type="com.viper.database.rest.model.ComponentDef" />
+	</table>
+</database>

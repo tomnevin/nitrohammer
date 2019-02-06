@@ -63,6 +63,7 @@ import com.viper.demo.beans.model.Bean3;
 import com.viper.demo.beans.model.enums.NamingField;
 import com.viper.demo.unit.model.Employee;
 import com.viper.demo.unit.model.Organization;
+import com.viper.demo.unit.model.States;
 import com.viper.demo.unit.model.Types;
 import com.viper.demo.unit.model.User;
 import com.viper.demo.unit.model.enums.MyColor;
@@ -321,8 +322,7 @@ public class TestDatabaseUtil extends AbstractTestCase {
         DatabaseConnection connection = DatabaseUtil.findOneItem(connections.getConnections(), "name", name);
 
         assertNotNull(getCallerMethodName() + " : connections were not found ", connections.getConnections());
-        assertTrue(getCallerMethodName() + " : not enought connections were not found ",
-                connections.getConnections().size() > 0);
+        assertTrue(getCallerMethodName() + " : not enought connections were not found ", connections.getConnections().size() > 0);
         assertNotNull(getCallerMethodName() + " : connection was not found ", connection);
     }
 
@@ -334,8 +334,7 @@ public class TestDatabaseUtil extends AbstractTestCase {
         System.err.println("Databases.xml: connections size: " + connections.getConnections().size() + ":" + name);
 
         assertNotNull(getCallerMethodName() + " : connections were not found ", connections.getConnections());
-        assertTrue(getCallerMethodName() + " : not enought connections were not found ",
-                connections.getConnections().size() > 0);
+        assertTrue(getCallerMethodName() + " : not enought connections were not found ", connections.getConnections().size() > 0);
 
         DatabaseConnection connection = DatabaseUtil.findOneItem(connections.getConnections(), "name", name);
 
@@ -348,8 +347,8 @@ public class TestDatabaseUtil extends AbstractTestCase {
         String name = "test";
         DatabaseConnections connections = DatabaseMapper.readConnections("res:/databases.xml");
         assertNotNull(getCallerMethodName() + " : connections were not found ", connections.getConnections());
-        assertTrue(getCallerMethodName() + " : not enought connections were not found "
-                + connections.getConnections().size(), connections.getConnections().size() > 0);
+        assertTrue(getCallerMethodName() + " : not enought connections were not found " + connections.getConnections().size(),
+                connections.getConnections().size() > 0);
 
         List<String> list = new ArrayList<String>();
         list.add("mysql");
@@ -374,6 +373,13 @@ public class TestDatabaseUtil extends AbstractTestCase {
 
         assertNotNull(getCallerMethodName() + " : tables not found ", items);
         assertTrue(getCallerMethodName() + " :  no tables not found ", items.size() > 0);
+    }
+
+    @Test
+    public void testGetAssignedColumn() throws Exception {
+
+        Column assignedColumn = DatabaseUtil.getAssignedColumn(States.class);
+        assertNotNull(getCallerMethodName() + " : tables not found ", assignedColumn);
     }
 
     @Test
@@ -891,29 +897,29 @@ public class TestDatabaseUtil extends AbstractTestCase {
     /*
      * private java.math.BigDecimal decimalType;
      * 
-     * @Column(field = "DECIMAL_TYPE", name = "decimalType", type =
-     * "java.math.BigDecimal") public java.math.BigDecimal getDecimalType() {
+     * @Column(field = "DECIMAL_TYPE", name = "decimalType", type = "java.math.BigDecimal") public
+     * java.math.BigDecimal getDecimalType() {
      * 
      * return decimalType; }
      * 
      * private byte[] binaryType;
      * 
-     * @Column(field = "BINARY_TYPE", name = "binaryType", type = "byte[]") public
-     * byte[] getBinaryType() {
+     * @Column(field = "BINARY_TYPE", name = "binaryType", type = "byte[]") public byte[]
+     * getBinaryType() {
      * 
      * return binaryType; }
      * 
      * private int[] varbinaryType;
      * 
-     * @Column(field = "VARBINARY_TYPE", name = "varbinaryType", type = "int[]")
-     * public int[] getVarbinaryType() {
+     * @Column(field = "VARBINARY_TYPE", name = "varbinaryType", type = "int[]") public int[]
+     * getVarbinaryType() {
      * 
      * return varbinaryType; }
      * 
      * private long[] longvarbinaryType;
      * 
-     * @Column(field = "LONGVARBINARY_TYPE", name = "longvarbinaryType", type =
-     * "long[]") public long[] getLongvarbinaryType() {
+     * @Column(field = "LONGVARBINARY_TYPE", name = "longvarbinaryType", type = "long[]") public
+     * long[] getLongvarbinaryType() {
      * 
      * return longvarbinaryType; }
      */
@@ -1067,7 +1073,7 @@ public class TestDatabaseUtil extends AbstractTestCase {
     public void testReplaceTokens() throws Exception {
         Map<String, String> replacements = new HashMap<String, String>();
         replacements.put("TEMPLATE", "test");
-        
+
         String contents = "foo #{TEMPLATE} bar";
         String expected = "foo test bar";
         String results = DatabaseUtil.replaceTokens(contents, replacements);
@@ -1080,7 +1086,7 @@ public class TestDatabaseUtil extends AbstractTestCase {
     public void testReplaceTokens1() throws Exception {
         Map<String, String> replacements = new HashMap<String, String>();
         replacements.put("TEMPLATE", "test");
-        
+
         String contents = "foo #{TEMPLATE1} bar";
         String expected = "foo #{TEMPLATE1} bar";
         String results = DatabaseUtil.replaceTokens(contents, replacements);
@@ -1088,17 +1094,17 @@ public class TestDatabaseUtil extends AbstractTestCase {
         assertNotNull(getCallerMethodName() + " : results is null ", results);
         assertEquals(getCallerMethodName() + " : results not equals ", expected, results);
     }
-    
+
     @Test
     public void testReplaceRegex() throws Exception {
-       
+
         String inputSQL = " select *, CONCAT(CO.ENTRYDATE, ' ', CO.ENTRYTIME) AS ENTRYDATETIME,  CONCAT(AFWT.PROVDATE, ' ', AFWT.PROVTIME) AS PROVDATETIME,  CONCAT(AFWT.DEPROVDATE, ' ', AFWT.DEPROVTIME) AS DEPROVDATETIME,  CONCAT(SURVEILLANCE.STARTDATE, ' ', SURVEILLANCE.STARTTIME) AS STARTDATETIME, CONCAT(SURVEILLANCE.STOPDATE, ' ', SURVEILLANCE.STOPTIME) AS STOPDATETIME, CONCAT(CO.RCVDATE, ' ', CO.RCVTIME) AS RCVDATETIME, IF (COGRP.NAME IS NULL or COGRP.name = '', CO.COID, COGRP.name) as COURT_ORDER_NAME FROM XCDB.AFWT as AFWT LEFT JOIN XCDB.SURVEILLANCE as SURVEILLANCE on (SURVEILLANCE.COID = AFWT.COID) LEFT JOIN XCDB.TARGET as TARGET on (TARGET.COID = AFWT.COID and TARGET.TID = AFWT.TID) LEFT JOIN XCDB.CO as CO on (CO.COID = AFWT.COID) LEFT JOIN XCDB.COGRP as COGRP on (COGRP.GID = CO.GID)";
         String expected = "SELECT COUNT(*) FROM XCDB.AFWT as AFWT LEFT JOIN XCDB.SURVEILLANCE as SURVEILLANCE on (SURVEILLANCE.COID = AFWT.COID) LEFT JOIN XCDB.TARGET as TARGET on (TARGET.COID = AFWT.COID and TARGET.TID = AFWT.TID) LEFT JOIN XCDB.CO as CO on (CO.COID = AFWT.COID) LEFT JOIN XCDB.COGRP as COGRP on (COGRP.GID = CO.GID)";
-      
+
         String results = inputSQL.trim().replaceAll("(?i)SELECT (.*) FROM ", "SELECT COUNT(*) FROM ");
-        
+
         assertNotNull(getCallerMethodName() + " : results is null ", results);
         assertEquals(getCallerMethodName() + " : results not equals ", expected, results);
     }
-    
+
 }

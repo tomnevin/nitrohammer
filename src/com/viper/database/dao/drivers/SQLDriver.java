@@ -1559,9 +1559,7 @@ public class SQLDriver {
 			Table item = new Table();
 			item.setName(getValue(row, "table_name"));
 			item.setDatabaseName(getDatabaseName(row));
-            item.setDatabaseName(databaseName); // TEMPORARY mysql case sensitivity reade table_schema values as lower case always
-			
-			System.err.println("**** TABLE_NAME= " + item.getName() + "," + item.getDatabaseName() + "," + getValue(row, "table_schema"));
+            item.setDatabaseName(databaseName); // TEMPORARY mysql case sensitivity reade table_schema values as lower case alway			 
 
 			item.setTableType(toTableType(getValue(row, "table_type")));
 			item.setDescription(getDescription(row));

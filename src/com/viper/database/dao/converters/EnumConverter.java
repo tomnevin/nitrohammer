@@ -30,69 +30,40 @@
 
 package com.viper.database.dao.converters;
 
-import com.viper.database.annotations.Column;
-import com.viper.database.dao.DatabaseUtil;
+public class EnumConverter {
 
-public class EnumConverter implements ConverterInterface {
+    public static final void initialize() {
+        Converters.register(String.class, Enum.class, EnumConverter::convertStringToEnum);
+        Converters.register(Enum.class, String.class, EnumConverter::convertEnumToString);
 
-	private Class<?> defaultType = null;
+        Converters.register(String.class, Enum[].class, EnumConverter::convertStringToEnumArray);
+        Converters.register(Enum[].class, String.class, EnumConverter::convertEnumArrayToString);
 
-	public EnumConverter(Class<?> defaultType) {
-		this.defaultType = defaultType;
-	}
+        Converters.register(Enum.class, Enum.class, EnumConverter::convertEnumToEnum);
+    }
 
-	@Override
-	public Class<?> getDefaultType() {
-		return defaultType;
-	}
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertStringToEnum(Class<T> toType, S fromValue) throws Exception {
+        return (T) Enum.valueOf((Class) toType, (String) fromValue);
+    }
 
-	@Override
-	public Object convertToType(Class toType, Object fromValue) throws Exception {
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertEnumToEnum(Class<T> toType, S fromValue) throws Exception {
+        return toType.cast((Enum) fromValue);
+    }
 
-		if (fromValue == null) {
-			return null;
-		}
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertEnumToString(Class<T> toType, S fromValue) throws Exception {
+        return (T) ((Enum) fromValue).name();
+    }
 
-		if (toType.isEnum() && fromValue.getClass().isEnum()) {
-			return valueOf(toType, ((Enum) fromValue).name());
-		}
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertStringToEnumArray(Class<T> toType, S fromValue) throws Exception {
+        return null;
+    }
 
-		if (toType.isEnum()) {
-			return valueOf(toType, fromValue.toString());
-		}
-
-		if (fromValue.getClass().isEnum()) {
-			return ((Enum) fromValue).toString();
-		}
-
-		throw new Exception("EnumConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
-	}
-
-	@Override
-	public Object convertToArray(Class toType, Object fromValue) throws Exception {
-		if (fromValue == null) {
-			return null;
-		}
-
-		throw new Exception("EnumConverter: Unhandled conversion from " + fromValue + " to " + toType + ".");
-	}
-
-	@Override
-	public <T> String convertToString(Column column, T fromValue, String[] qualifiers) throws Exception {
-		return ((Enum) fromValue).name();
-	}
-	
-	private <T extends Enum<T>> T valueOf(Class<T> enumType,  String name) {
-		try {
-			return Enum.valueOf(enumType, name);
-		} catch (Throwable t) {
-			; // Intentionally not handled
-		}
-		try {
-			return DatabaseUtil.invoke(enumType, "findEnumValue", name);
-		} catch (Throwable t) {
-			; // Intentionally not handled
-		}
-		return null;
-	}
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertEnumArrayToString(Class<T> toType, S fromValue) throws Exception {
+        return null;
+    }
 }

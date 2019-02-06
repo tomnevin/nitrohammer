@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="HeaderDef" table-type="bean">
+		<column name="columnDefs" java-type="java.util.List" generic-type="com.viper.database.rest.model.ColumnDef" />
+		<column name="rowData" java-type="java.util.List"  />
+		<column name="lastRow" java-type="int" /> 
+	</table>
+</database>

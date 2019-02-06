@@ -30,131 +30,24 @@
 
 package com.viper.database.dao.converters;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
-import java.sql.Blob;
-import java.sql.Clob;
 
-import com.viper.database.annotations.Column;
+public final class URLConverter {
 
-public final class URLConverter implements ConverterInterface {
+    public static final void initialize() {
 
-    public Class<URL> getDefaultType() {
-        return URL.class;
+        Converters.register(String.class, URL.class, URLConverter::convertStringToUrl);
+        Converters.register(URL.class, String.class, URLConverter::convertUrlToString);
     }
 
-    @Override
-    public Object convertToType(Class toType, Object fromValue) throws Exception {
-
-        if (toType.equals(URL.class)) {
-            return convertToURL(fromValue);
-
-        } else if (fromValue instanceof URL) {
-            return convertFromURL(toType, (URL) fromValue);
-        }
-
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertStringToUrl(Class<T> toType, S fromValue) throws Exception {
+        return (T) new URL((String) fromValue);
     }
 
-    @Override
-    public Object convertToArray(Class toType, Object fromValue) throws Exception {
-        if (fromValue == null) {
-            return null;
-        }
-
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertUrlToString(Class<T> toType, S fromValue) throws Exception {
+        return (T) toType.cast(((URL) fromValue).toString());
     }
 
-    @Override
-    public <T> String convertToString(Column column, T fromValue, String[] qualifiers) throws Exception {
-        if (fromValue instanceof URL) {
-            return (fromValue == null) ? "" : fromValue.toString();
-        }
-
-        throw new Exception("Unhandled conversion from " + fromValue + " to String.");
-    }
-
-    public URL convertToURL(Object fromValue) throws Exception {
-
-        if (fromValue instanceof Byte) {
-            return null; // TODO
-
-        } else if (fromValue instanceof BigDecimal) {
-            return null; // TODO
-
-        } else if (fromValue instanceof Blob) {
-            return null; // TODO
-
-        } else if (fromValue instanceof Boolean) {
-            return null; // TODO
-
-        } else if (fromValue instanceof BigInteger) {
-            return null; // TODO
-
-        } else if (fromValue instanceof Clob) {
-            return null; // TODO
-
-        } else if (fromValue instanceof Float) {
-            return null; // TODO
-
-        } else if (fromValue instanceof Integer) {
-            return null; // TODO
-
-        } else if (fromValue instanceof Long) {
-            return null; // TODO
-
-        } else if (fromValue instanceof Short) {
-            return null; // TODO
-
-        } else if (fromValue instanceof String) {
-            return new URL((String) fromValue);
-
-        } else {
-            throw new Exception("Unhandled conversion from " + fromValue + " to URL.");
-        }
-    }
-
-    public <T> T convertFromURL(Class<T> targetType, URL fromValue) throws Exception {
-
-        if (targetType.equals(Byte.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(BigDecimal.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(Blob.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(Boolean.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(BigInteger.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(Clob.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(Double.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(Float.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(URL.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(Integer.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(Short.class)) {
-            return null; // TODO
-
-        } else if (targetType.equals(String.class)) {
-            return targetType.cast(((URL) fromValue).toString());
-
-        } else {
-            throw new Exception("Unhandled conversion from Short to " + fromValue + ".");
-        }
-    }
 }

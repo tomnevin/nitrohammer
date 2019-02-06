@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="DashboardItem" table-type="bean">
+		<column name="name" java-type="String" />
+		<column name="title" java-type="String" />
+		<column name="group-title" java-type="String" />
+		<column name="visible" java-type="boolean" />
+		<column name="method" java-type="String" />
+		<column name="type" java-type="String" />
+		<column name="mode" java-type="String" />
+		<column name="kind" java-type="String" />
+		<column name="xunit" java-type="String" />
+		<column name="yunit" java-type="String" />
+		<column name="htmlUrl" java-type="String" />
+		<column name="directory-image" java-type="String" />
+		<column name="onItemHandler" java-type="String" />
+		<column name="onDashboardHandler" java-type="String" />
+		<column name="classname" java-type="String" />
+		<column name="x-label" java-type="String" />
+		<column name="y-label" java-type="String" />
+		<column name="privilege" java-type="String" />
+		<column name="grid" java-type="com.viper.database.rest.model.DashboardGrid" />
+		<column name="size" java-type="com.viper.database.rest.model.DashboardSize" />
+		<column name="fields" java-type="com.viper.database.rest.model.DashboardField" />
+
+		<column name="ncols" java-type="int" />
+		<column name="nrows" java-type="int" />
+		<column name="fill-time-series" java-type="boolean" />
+
+	</table>
+</database>

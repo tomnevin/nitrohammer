@@ -24,11 +24,13 @@ import org.junit.Test;
 import com.viper.database.dao.DatabaseInterface;
 import com.viper.database.dao.DatabaseFactory;
 import com.viper.database.dao.DatabaseUtil;
+import com.viper.database.dao.converters.Converters;
+
 import #{database.packageName}.#{classname};
 import #{database.packageName}.rs.#{classname}Service;
 import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.RandomBean;
-import com.viper.database.rest.model.*;
+import com.viper.database.rest.model.*; 
 
 public class Test#{classname}RestServer extends AbstractTestCase {
 
@@ -37,8 +39,7 @@ public class Test#{classname}RestServer extends AbstractTestCase {
     @BeforeClass
     public static void initializeClass() throws Exception {
 
-		String DatabaseInstanceName = com.viper.database.utils.ResourceUtil.getResource("DATABASE_LOCATOR", "test");
-		System.err.println("Test#{classname}RestServer: database : " + DatabaseInstanceName);
+		String DatabaseInstanceName = com.viper.database.utils.ResourceUtil.getResource("DATABASE_LOCATOR", "test"); 
         database = DatabaseFactory.getInstance(DatabaseInstanceName);
     }
 
@@ -50,69 +51,82 @@ public class Test#{classname}RestServer extends AbstractTestCase {
         assertNotNull(getCallerMethodName() + ", result= ", result);
         
         String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
-        Object value = DatabaseUtil.getPrimaryKeyValue(result);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result); 
         
-        java.util.List<String> items = new java.util.ArrayList<String>();
-        items.add(name);
-        items.add(value.toString());
-        
-        #{classname} actual = new #{classname}Service().query(items);
+        Response response = new #{classname}Service().query(name, value.toString());
 
-        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+        assertNotNull(getCallerMethodName() + ", response ", response);
     }
 
     @Test
     public void testQueryList() throws Exception {
-
-        java.util.List<#{classname}> result = new #{classname}Service().query();
-
-        System.err.println(getCallerMethodName() + ": " + result);
-        assertNotNull(getCallerMethodName() + ", failed:", result);
+    
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        #{classname} result = database.insert(expected);
+        assertNotNull(getCallerMethodName() + ", result= ", result);
+        
+        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result);
+ 
+        Response response = new #{classname}Service().queryList(name, value.toString());
+ 
+        assertNotNull(getCallerMethodName() + ", failed:", response);
     }
     
     @Test
     public void testQueryPage() throws Exception {
+ 
+        Response response = new #{classname}Service().queryList( DatabaseInterface.PAGENO_KEY, "0" /*, "size", 4 */);
+ 
+        assertNotNull(getCallerMethodName() + ", failed:", response);
+    }
+     
+    @Test
+    public void testQueryAll() throws Exception {
 
-        java.util.List<#{classname}> result = new #{classname}Service().queryList("start", "0" /*, "size", 4 */);
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 100);
+        database.insertAll(expected);  
+        
+        Response response = new #{classname}Service().queryAll(  );
 
-        System.err.println(getCallerMethodName() + ": " + result);
-        assertNotNull(getCallerMethodName() + ", failed:", result);
+        assertNotNull(getCallerMethodName() + ", response ", response);
     }
 
     @Test
     public void testUpdate() throws Exception {
 
         #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
-
-        #{classname} result = new #{classname}Service().update(bean);
-
-        System.err.println(getCallerMethodName() + ": " + result);
-        assertNotNull(getCallerMethodName() + ", failed:", result);
+ 
+        
+        Response response = new #{classname}Service().update(Converters.convert (String.class, bean));
+ 
+        assertNotNull(getCallerMethodName() + ", failed:", response);
     }
 
     @Test
     public void testCreate() throws Exception {
 
         #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
-
-        #{classname} result = new #{classname}Service().createItem(bean);
-
-        System.err.println(getCallerMethodName() + ": " + result);
-        assertNotNull(getCallerMethodName() + ", failed:", result);
+ 
+        
+        Response response = new #{classname}Service().createItem(Converters.convert (String.class, bean));
+ 
+        assertNotNull(getCallerMethodName() + ", failed:", response);
     }
 
     @Test
     public void testDelete() throws Exception {
+         
         
         #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
         
-        #{classname} result1 = new #{classname}Service().createItem(bean);
-        assertNotNull(getCallerMethodName() + ", failed:", result1);
+        Response response1 = new #{classname}Service().createItem(Converters.convert (String.class, bean));
+        
+        assertNotNull(getCallerMethodName() + ", failed:", response1);
 
-        String result = new #{classname}Service().deleteItem(bean);
-
-        System.err.println(getCallerMethodName() + ": " + result);
-        assertNotNull(getCallerMethodName() + ", failed:", result);
+        Response response = new #{classname}Service().deleteItem(Converters.convert (String.class, bean));
+ 
+        assertNotNull(getCallerMethodName() + ", failed:", response);
     }
 }
 ## util.write(filename, writer);

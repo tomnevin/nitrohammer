@@ -30,15 +30,16 @@
 
 package com.viper.database.dao.converters;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.util.ArrayList;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
-import com.viper.database.dao.DynamicEnum;
+import org.apache.johnzon.mapper.Mapper;
+import org.apache.johnzon.mapper.MapperBuilder;
 
 /**
  * The converter class is the central conversion class which will support converting a value of one
@@ -68,59 +69,49 @@ import com.viper.database.dao.DynamicEnum;
 
 public class Converters {
 
-    private final static Logger log = Logger.getLogger(Converters.class.getName());
+    private static final Logger log = Logger.getLogger(Converters.class.getName());
 
-    private final static List<ConverterInterface> conversionList = new ArrayList<ConverterInterface>();
+    private static final Mapper mapper = new MapperBuilder().build();
 
-    static {
-        initialize();
+    static class ConverterKey {
+        Class<?> fromClazz;
+        Class<?> toClazz;
+
+        public ConverterKey(Class<?> fromClazz, Class<?> toClazz) {
+            this.fromClazz = fromClazz;
+            this.toClazz = toClazz;
+        }
+
+        private String getKey() {
+            return fromClazz.getName() + '.' + toClazz.getName();
+        }
+
+        public int hashCode() {
+            return getKey().hashCode();
+        }
+
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof ConverterKey)) {
+                return false;
+            }
+            ConverterKey key2 = (ConverterKey) obj;
+            return getKey().equals(key2.getKey());
+        }
     }
 
-    private final static void initialize() {
+    private final static Map<ConverterKey, ConverterInterface> conversionMap = new HashMap<ConverterKey, ConverterInterface>();
 
-        try {
-            register(new BigDecimalConverter(BigDecimal.class));
-            register(new BigIntegerConverter(BigInteger.class));
-            register(new BooleanConverter(Boolean.class));
-            register(new BooleanConverter(boolean.class));
-            register(new ByteConverter(Byte.class));
-            register(new ByteConverter(byte.class));
-            register(new CharacterConverter(Character.class));
-            register(new CharacterConverter(char.class));
-            register(new DoubleConverter(Double.class));
-            register(new DoubleConverter(double.class));
-            register(new FloatConverter(Float.class));
-            register(new FloatConverter(float.class));
-            register(new IntegerConverter(Integer.class));
-            register(new IntegerConverter(int.class));
-            register(new LongConverter(Long.class));
-            register(new LongConverter(long.class));
-            register(new ShortConverter(Short.class));
-            register(new ShortConverter(short.class));
-            register(new StringConverter(String.class));
-            register(new DynamicEnumConverter(DynamicEnum.class));
-
-            register(new ClobConverter(org.h2.jdbc.JdbcClob.class));
-            register(new BlobConverter(org.h2.jdbc.JdbcBlob.class));
-            register(new ClobConverter(javax.sql.rowset.serial.SerialClob.class));
-            register(new BlobConverter(javax.sql.rowset.serial.SerialBlob.class));
-            register(new ClobConverter(Clob.class));
-            register(new BlobConverter(Blob.class));
-            register(new DateConverter(java.sql.Date.class));
-            register(new DateConverter(java.sql.Time.class));
-            register(new DateConverter(java.sql.Timestamp.class));
-            register(new DateConverter(java.util.Date.class));
-            register(new CalendarConverter());
-            register(new ListConverter());
-            register(new MapConverter());
-
-            register(new URLConverter());
-            register(new FileConverter());
-            register(new BeanConverter());
-
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+    static {
+        ArrayConverter.initialize();
+        BeanConverter.initialize();
+        BlobConverter.initialize();
+        ClobConverter.initialize();
+        CalendarConverter.initialize();
+        DynamicEnumConverter.initialize();
+        EnumConverter.initialize();
+        NumberConverter.initialize();
+        StringConverter.initialize();
+        URLConverter.initialize();
     }
 
     /**
@@ -131,31 +122,37 @@ public class Converters {
      *            the conversion class
      * 
      */
-    public static void register(ConverterInterface converter) {
-        conversionList.add(converter);
+    public static final <T, S> void register(Class<T> fromClazz, Class<S> toClazz, ConverterInterface converter) {
+        conversionMap.put(new ConverterKey(fromClazz, toClazz), converter);
     }
 
     /**
-     * Given a target class, this method will lookup a conversion class, which will convert data to
-     * the target class specified here.
      * 
-     * @param clazz
-     *            The target class to which data should be converted.
-     * 
-     * @return the conversion class which implements all conversions (hopefully all) conversions to
-     *         the target class.
-     * 
-     * @throws Exception
-     *             raise an exception if the conversion class can not be found.
+     * @param fromClazz
+     * @param value
+     * @return
      */
-
-    public static ConverterInterface lookup(Class<?> clazz) throws Exception {
-        for (ConverterInterface converter : conversionList) {
-            if (converter.getDefaultType().isAssignableFrom(clazz)) {
-                return converter;
+    public static final <T, S> ConverterInterface lookup(Class<T> toClazz, S value) {
+        Class fromClazz = (Class) value.getClass();
+        for (int i = 0; i < 10; i++) {
+            if (fromClazz == null) {
+                break;
             }
+            Class toClazz1 = toClazz;
+            for (int j = 0; j < 10; j++) {
+                if (toClazz1 == null) {
+                    break;
+                }
+                ConverterKey key = new ConverterKey(fromClazz, toClazz1);
+                if (conversionMap.containsKey(key)) {
+                    return conversionMap.get(key);
+                }
+                toClazz1 = toClazz1.getSuperclass();
+            }
+            fromClazz = fromClazz.getSuperclass();
+
         }
-        throw new Exception("ERROR : can't find converter for: " + clazz);
+        return null;
     }
 
     /**
@@ -182,7 +179,7 @@ public class Converters {
      *             raise an exception if the conversion fails, conversion class cannot be found.
      */
 
-    public static <T> T convert(Class<T> target, Object value) throws Exception {
+    public static final <T, S> T convert(Class<T> target, S value) throws Exception {
         ConverterInterface converter = null;
         try {
             if (value == null) {
@@ -197,45 +194,55 @@ public class Converters {
                 return target.cast(value);
             }
 
-            if (target.isEnum()) {
-                return (T) new EnumConverter(target).convertToType(target, value);
+            converter = lookup(target, value);
+            if (converter == null) {
+                throw new Exception("Conversion not found: from " + value.getClass() + " to " + target.getName());
             }
-
-            if (value.getClass().isEnum()) {
-                return (T) new EnumConverter(value.getClass()).convertToType(target, value);
-            }
-
-            if (target.isArray()) {
-                Class clazz = target.getComponentType();
-                converter = lookup(clazz);
-                return (T) converter.convertToArray(clazz, value);
-            }
-
-            converter = lookup(target);
-            return (T) converter.convertToType(target, value);
+            return converter.convert(target, value);
 
         } catch (Throwable ex) {
-            String name = ((target == null) ? "target is null" : target.getName());
-            log.throwing("ERROR: convert: " + name + "," + converter, "", ex);
+            System.err.println(ex.getMessage());
+            log.throwing(ex.getMessage(), "", ex);
             throw ex;
         }
     }
 
-    /**
-     * This method to be incorprated into the convert method. Not yet deprecated, as not replaced
-     * yet.
-     */
-
-    public static <T> List<T> convertToList(Class<T> target, Object value) throws Exception {
+    public static final <T, S> List<T> convertToList(Class<T> target, S value) throws Exception {
         try {
             if (value == null || target == null) {
                 return null;
             }
 
-            return new ListConverter().convertToList(target, value);
+            if (value instanceof String) {
+                StringReader reader = new StringReader((String) value);
+                return (List<T>) Arrays.asList(mapper.readArray(reader, target));
+            }
+
+            throw new Exception("ERROR : can't implement connversion to " + target + " from " + value.getClass() + ":" + value);
 
         } catch (Exception ex) {
             System.err.println("ERROR: convertToList: " + ((target == null) ? "target is null" : target.getName()) + "," + ex);
+            throw ex;
+        }
+    }
+
+    /**
+     * Given a bean, convert the bean to a JSON string
+     * 
+     * @param beans
+     *            the Java bean of the data model.
+     * @return the JSON string representing the bean
+     * @note returns null if conversion failed.
+     */
+    public static final <T, S> String convertFromList(Collection<T> beans) {
+        try {
+            if (beans == null) {
+                return null;
+            }
+            return mapper.writeArrayAsString(beans);
+
+        } catch (Exception ex) {
+            System.err.println("ERROR: convertFromList: " + ex);
             throw ex;
         }
     }

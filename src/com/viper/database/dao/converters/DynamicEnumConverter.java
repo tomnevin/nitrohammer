@@ -30,100 +30,38 @@
 
 package com.viper.database.dao.converters;
 
-import com.viper.database.annotations.Column;
 import com.viper.database.dao.DatabaseUtil;
 import com.viper.database.dao.DynamicEnum;
 
-public final class DynamicEnumConverter implements ConverterInterface {
+public final class DynamicEnumConverter {
 
-    private Class<?> defaultType = null;
+    public static final void initialize() {
+        Converters.register(String.class, DynamicEnum.class, DynamicEnumConverter::convertStringToDynamicEnum);
+        Converters.register(DynamicEnum.class, String.class, DynamicEnumConverter::convertDynamicEnumToString);
 
-    public DynamicEnumConverter(Class<?> defaultType) {
-        this.defaultType = defaultType;
+        Converters.register(String.class, DynamicEnum[].class, DynamicEnumConverter::convertStringToDynamicEnumArray);
+        Converters.register(DynamicEnum[].class, String.class, DynamicEnumConverter::convertDynamicEnumArrayToString);
     }
 
-    @Override
-    public Class<?> getDefaultType() {
-        return defaultType;
+    public static final <T, S> T convertStringToDynamicEnum(Class<T> toType, S fromValue) throws Exception {
+        return toType.cast(DatabaseUtil.newInstance(toType, fromValue));
     }
 
-    @Override
-    public Object convertToType(Class toType, Object fromValue) throws Exception {
-
-        if (fromValue == null) {
-            return null;
-        }
-        if (DynamicEnum.class.isAssignableFrom(toType)) {
-            return convertToDynamicEnum(toType, fromValue);
-        }
-
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+    public static final <T, S> T convertDynamicEnumToString(Class<T> toType, S fromValue) throws Exception {
+        return toType.cast(((DynamicEnum) fromValue).value());
     }
 
-    @Override
-    public Object convertToArray(Class toType, Object fromValue) throws Exception {
-        if (fromValue == null) {
-            return null;
-        }
-
-        if (fromValue instanceof String) {
-            if (DynamicEnum.class.isAssignableFrom(toType)) {
-                return convertToDynamicEnumArray(toType, (String) fromValue);
-            }
-        }
-
-        if (fromValue.getClass().isArray()) {
-            // if (fromValue.getClass().equals(byte[].class)) {
-            // throw new Exception("Unhandled conversion from " + fromValue + " to " +
-            // toType + ".");
-            // }
-            if (DynamicEnum.class.isAssignableFrom(toType)) {
-                return convertToDynamicEnumArray(toType, ConverterUtils.createArrayFromArrayObject(fromValue));
-            }
-        }
-
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
-    }
-
-    @Override
-    public <T> String convertToString(Column column, T fromValue, String[] qualifiers) throws Exception {
-        if (fromValue instanceof DynamicEnum) {
-            return ((DynamicEnum)fromValue).value();
-        }
-
-        throw new Exception("Unhandled conversion from " + fromValue + " to String.");
-    }
-
-    private DynamicEnum convertToDynamicEnum(Class<? extends DynamicEnum> toType, Object fromValue) throws Exception {
-        if (fromValue instanceof String) {
-            return DatabaseUtil.newInstance(toType, fromValue);
-        } else {
-            throw new Exception("Unhandled conversion from " + fromValue + " to Integer.");
-        }
-    }
-
-    private DynamicEnum[] convertToDynamicEnumArray(Class<? extends DynamicEnum> toType, Object[] fromValues)
-            throws Exception {
-        if (fromValues == null) {
-            return null;
-        }
-        DynamicEnum[] toValues = new DynamicEnum[fromValues.length];
-        for (int i = 0; i < fromValues.length; i++) {
-            toValues[i] = convertToDynamicEnum(toType, fromValues[i]);
-        }
-        return toValues;
-    }
-
-    private DynamicEnum[] convertToDynamicEnumArray(Class<? extends DynamicEnum> toType, String fromValues)
-            throws Exception {
-        if (fromValues == null) {
-            return null;
-        }
-        String items[] = ConverterUtils.toArray(fromValues);
+    private static final <T, S> T convertStringToDynamicEnumArray(Class<T> toType, S fromValue) throws Exception {
+        String items[] = ConverterUtils.toArray((String) fromValue);
         DynamicEnum[] toValues = new DynamicEnum[items.length];
         for (int i = 0; i < items.length; i++) {
-            toValues[i] = convertToDynamicEnum(toType, items[i]);
+            toValues[i] = convertStringToDynamicEnum(DynamicEnum.class, items[i]);
         }
-        return toValues;
+        return toType.cast(toValues);
     }
+
+    public static final <T, S> T convertDynamicEnumArrayToString(Class<T> toType, S fromValue) throws Exception {
+        return null;
+    }
+
 }

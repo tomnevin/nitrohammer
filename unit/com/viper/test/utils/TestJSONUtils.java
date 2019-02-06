@@ -42,8 +42,10 @@ import org.junit.Test;
 import org.junit.rules.MethodRule;
 
 import com.viper.database.utils.JSONUtil;
+import com.viper.database.utils.RandomBean;
 import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.junit.BenchmarkRule;
+import com.viper.demo.unit.model.Activity;
 
 public class TestJSONUtils extends AbstractTestCase {
 
@@ -72,11 +74,23 @@ public class TestJSONUtils extends AbstractTestCase {
         String str = "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]";
 
         JSONArray favorites = new JSONArray(str);
-        
+
         assertEquals(getCallerMethodName(), favorites.length(), 10);
-        
+
         for (int i = 0; i < favorites.length(); i++) {
-           assertEquals(getCallerMethodName(), favorites.getInt(i), i);
+            assertEquals(getCallerMethodName(), favorites.getInt(i), i);
         }
+    }
+
+    @Test
+    public void testJSONActivity() throws Exception {
+
+        Activity activity1 = RandomBean.getRandomBean(Activity.class, 123);
+
+        String str = JSONUtil.toJSON(activity1);
+        assertNotNull(getCallerMethodName(), str);
+
+        Activity activity2 = JSONUtil.fromJSON(Activity.class, str);
+        assertBeanEquals(getCallerMethodName(), activity1, activity2);
     }
 }

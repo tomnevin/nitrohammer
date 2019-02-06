@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<database name="NA">
+	<table name="TableDef" table-type="bean">
+		<column name="classname" java-type="String" /> 
+		<column name="databasename" java-type="String" /> 
+		<column name="tablename" java-type="String" /> 
+		<column name="url" java-type="String" /> 
+		<column name="primaryKey" java-type="String" /> 
+		<column name="primaryValue" java-type="Object" /> 
+	</table>
+</database> 

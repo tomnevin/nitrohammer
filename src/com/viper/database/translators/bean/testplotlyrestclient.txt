@@ -1,0 +1,144 @@
+## for (var table : root.tables) {
+## if (table.isRestService) { 
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/rs/client/plotly/test/Test" + classname + "PlotlyRestClient.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.rs.client.plotly.test;
+
+import java.util.List;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import #{database.packageName}.#{classname};
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+import com.viper.database.dao.DatabaseUtil;
+import com.viper.rest.client.RestStringClient;
+import com.viper.database.dao.DynamicEnum;
+import com.viper.database.utils.JSONUtil;
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+public class Test#{classname}PlotlyRestClient extends AbstractTestCase {
+
+    private final static String RestServiceUsername = System.getProperty("rest.service.username", "tom@bliss.com");
+    private final static String RestServicePassword = System.getProperty("rest.service.password", "password");
+    private final static String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost/rest/classes/");
+    private final static String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
+    private static final RestStringClient client = new RestStringClient(AuthorizeServiceUrl, RestServiceUrl);
+
+    @BeforeClass
+    public static final void initializeClass() throws Exception {
+        Logger.getGlobal().setLevel(Level.FINEST);
+        
+        client.setAcceptMediaType("application", "json", "subtype", "plotly");
+    }
+
+    @Test
+    public final void testLogin() throws Exception {
+        
+        boolean response = client.authorize(RestServiceUsername, RestServicePassword);
+
+        assertEquals(getCallerMethodName() + ", status ", true, response);
+    }
+
+    @Test
+    public final void testQueryOne() throws Exception {
+ 
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        String str = client.insert(expected);
+        assertNotNull(getCallerMethodName() + ", result= ", str); 
+         
+         #{classname}  result = JSONUtil.fromJSON (#{classname}.class, str);
+        
+        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result);
+        
+        String actual = client.query(#{classname}.class, name, value);
+
+        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+    }
+    
+    @Test
+    public final void testQueryTwo() throws Exception {
+ 
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5); 
+        
+        String result = client.insert(expected); 
+        assertNotNull(getCallerMethodName() + ", result= ", result);
+        
+        List<#{classname}> items = JSONUtil.fromJSONList(#{classname}.class, result);
+         
+        String actual = client.query(#{classname}.class, (Object[])items.toArray()); 
+        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
+    }
+
+    @Test
+    public final void testQueryList() throws Exception {
+
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 100);
+        client.insertAll(expected);
+        
+        String beans = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", null beans", beans); 
+    }
+    
+    @Test
+    public final void testQueryAll() throws Exception {
+
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 100);
+        client.insertAll(expected);
+        
+        String beans = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", null beans", beans); 
+    } 
+
+    @Test
+    public final void testUpdate() throws Exception {
+        
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
+        String result = client.update(bean);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+
+    @Test
+    public final void testCreate() throws Exception {
+
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 6);
+        String result = client.insert(bean);
+        
+        assertNotNull(getCallerMethodName() + ", failed:", result);
+    }
+    
+    @Test
+    public final void testCreateList() throws Exception {
+
+        int numberOfBeans = 100;
+        List<#{classname}> beans = RandomBean.getRandomBeans(#{classname}.class, 6, numberOfBeans);
+        client.insertAll(beans);
+        
+        String actual = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", actual beans", actual); 
+    }
+ 
+}
+## util.write(filename, writer);
+## } 
+## }

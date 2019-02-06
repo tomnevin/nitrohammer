@@ -136,8 +136,7 @@ public class Schematool {
                 String value = args[++i];
                 parameters.put(key, value);
 
-            } else if ("-meta2database".equals(args[i]) || "-import".equals(args[i])
-                    || "-model2database".equals(args[i])) {
+            } else if ("-meta2database".equals(args[i]) || "-import".equals(args[i]) || "-model2database".equals(args[i])) {
 
                 String sourceUrl = args[++i];
                 String packageName = args[++i];
@@ -198,8 +197,7 @@ public class Schematool {
                 String source = args[++i];
                 String databaseName = args[++i];
                 String outfile = args[++i];
-                System.out
-                        .println("-database2sql: connection=" + source + ", outfile=" + outfile + ", " + databaseName);
+                System.out.println("-database2sql: connection=" + source + ", outfile=" + outfile + ", " + databaseName);
 
                 DatabaseConnection connection = createConnection(source);
                 DatabaseSQLInterface dao = (DatabaseSQLInterface) DatabaseFactory.getInstance(connection);
@@ -243,8 +241,8 @@ public class Schematool {
                 params.put("java", CustomXPathFunctions.class);
                 params.put("packagename", packageName);
 
-                System.out.println("-pojo: modeldir=" + indir + ", outdir=>" + outdir + ", template=" + template
-                        + ",packagename=" + packageName);
+                System.out.println("-pojo: modeldir=" + indir + ", outdir=>" + outdir + ", template=" + template + ",packagename="
+                        + packageName);
 
                 generatePOJO(new File(indir), new File(outdir), template, ".xml", params, cache);
 
@@ -449,7 +447,7 @@ public class Schematool {
 
                 System.out.println("-document-xsd:indir=" + indir + ", outdir=>" + outdir);
 
-                generateXSDDocument(new File(indir), new File(outdir), ".xml");
+                generateXSDDocument(new File(indir), new File(outdir), ".xsd");
 
             } else if ("-password".equalsIgnoreCase(args[i])) {
                 final String password = args[++i];
@@ -572,20 +570,19 @@ public class Schematool {
     }
 
     /**
-     * Given the input directory scan for all XML files, using the templateFilename
-     * convert the XML file to a Java POJO bean.
+     * Given the input directory scan for all XML files, using the templateFilename convert the XML
+     * file to a Java POJO bean.
      * 
      * @param indir
-     *            the directory containing all the model XML files, which contain
-     *            the database/table definitions.
+     *            the directory containing all the model XML files, which contain the database/table
+     *            definitions.
      * @param outdir
      *            the directory to which all java bean files are to be written.
      * @param templateFilename
-     *            the filename of the template to use to generate the java pojo
-     *            beans.
+     *            the filename of the template to use to generate the java pojo beans.
      * @param databaseName
-     *            the name of the database to be processed, (deprecated this should
-     *            be in the model XML file).
+     *            the name of the database to be processed, (deprecated this should be in the model
+     *            XML file).
      * @param filter
      *            the filter on the input files to be applied.
      * @param params
@@ -593,8 +590,8 @@ public class Schematool {
      * 
      * @throws Exception
      */
-    public void generatePOJO(File indir, File outdir, String templateFilename, String filter,
-            Map<String, Object> params, List<Table> cache) throws Exception {
+    public void generatePOJO(File indir, File outdir, String templateFilename, String filter, Map<String, Object> params,
+            List<Table> cache) throws Exception {
 
         String template = readFileWithIncludes(templateFilename);
 
@@ -637,20 +634,19 @@ public class Schematool {
     }
 
     /**
-     * Given the input directory scan for all XML files, using the templateFilename
-     * convert the XML file to a Java POJO bean.
+     * Given the input directory scan for all XML files, using the templateFilename convert the XML
+     * file to a Java POJO bean.
      * 
      * @param indir
-     *            the directory containing all the model XML files, which contain
-     *            the database/table definitions.
+     *            the directory containing all the model XML files, which contain the database/table
+     *            definitions.
      * @param outdir
      *            the directory to which all java bean files are to be written.
      * @param templateFilename
-     *            the filename of the template to use to generate the java pojo
-     *            beans.
+     *            the filename of the template to use to generate the java pojo beans.
      * @param databaseName
-     *            the name of the database to be processed, (deprecated this should
-     *            be in the model XML file).
+     *            the name of the database to be processed, (deprecated this should be in the model
+     *            XML file).
      * @param filter
      *            the filter on the input files to be applied.
      * @param params
@@ -676,20 +672,19 @@ public class Schematool {
     }
 
     /**
-     * Given the input directory scan for all XML files, using the templateFilename
-     * convert the XML file to a Java POJO bean.
+     * Given the input directory scan for all XML files, using the templateFilename convert the XML
+     * file to a Java POJO bean.
      * 
      * @param indir
-     *            the directory containing all the model XML files, which contain
-     *            the database/table definitions.
+     *            the directory containing all the model XML files, which contain the database/table
+     *            definitions.
      * @param outdir
      *            the directory to which all java bean files are to be written.
      * @param templateFilename
-     *            the filename of the template to use to generate the java pojo
-     *            beans.
+     *            the filename of the template to use to generate the java pojo beans.
      * @param databaseName
-     *            the name of the database to be processed, (deprecated this should
-     *            be in the model XML file).
+     *            the name of the database to be processed, (deprecated this should be in the model
+     *            XML file).
      * @param filter
      *            the filter on the input files to be applied.
      * @param params
@@ -809,20 +804,19 @@ public class Schematool {
     }
 
     /**
-     * Given the input directory scan for all XML files, using the templateFilename
-     * convert the XML file to a Java POJO bean.
+     * Given the input directory scan for all XML files, using the templateFilename convert the XML
+     * file to a Java POJO bean.
      * 
      * @param indir
-     *            the directory containing all the model XML files, which contain
-     *            the database/table definitions.
+     *            the directory containing all the model XML files, which contain the database/table
+     *            definitions.
      * @param outdir
      *            the directory to which all java bean files are to be written.
      * @param templateFilename
-     *            the filename of the template to use to generate the java pojo
-     *            beans.
+     *            the filename of the template to use to generate the java pojo beans.
      * @param databaseName
-     *            the name of the database to be processed, (deprecated this should
-     *            be in the model XML file).
+     *            the name of the database to be processed, (deprecated this should be in the model
+     *            XML file).
      * @param filter
      *            the filter on the input files to be applied.
      * @param params
@@ -871,8 +865,7 @@ public class Schematool {
     private void compareMetaDatabaseInfo(String indir1, String indir2) throws Exception {
 
         List<String> attrs = Arrays.asList("required", "enum-value");
-        IgnoreAttributeDifferenceEvaluator ignoreAttributeDifferenceEvaluator = new IgnoreAttributeDifferenceEvaluator(
-                attrs);
+        IgnoreAttributeDifferenceEvaluator ignoreAttributeDifferenceEvaluator = new IgnoreAttributeDifferenceEvaluator(attrs);
 
         Map<String, String> items1 = loadFiles(indir1, ".xml");
         Map<String, String> items2 = loadFiles(indir2, ".xml");
@@ -969,8 +962,8 @@ public class Schematool {
         return tables;
     }
 
-    private void processImportTable(String modelpackage, Database database, List<Table> cache,
-            Map<String, Object> params) throws Exception {
+    private void processImportTable(String modelpackage, Database database, List<Table> cache, Map<String, Object> params)
+            throws Exception {
 
         for (Table table : database.getTables()) {
             for (String tablename : table.getImportTables()) {
@@ -1034,8 +1027,8 @@ public class Schematool {
     }
 
     /**
-     * Convert the given XML Document object to a String object. If an error occurs,
-     * log it and return a null object.
+     * Convert the given XML Document object to a String object. If an error occurs, log it and
+     * return a null object.
      * 
      * @param dao
      *            The database interface (DAO) object, which maybe null.
@@ -1044,13 +1037,11 @@ public class Schematool {
      * @param filter
      *            a filter to be applied to the input files.
      * @param dbc
-     *            the database connection object, contains database url, username,
-     *            password, etc.
+     *            the database connection object, contains database url, username, password, etc.
      * 
      * @throws Exception
      */
-    public void generateSeed(DatabaseInterface dao, File indir, String filter, DatabaseConnection dbc)
-            throws Exception {
+    public void generateSeed(DatabaseInterface dao, File indir, String filter, DatabaseConnection dbc) throws Exception {
 
         if (dao == null) {
             dao = DatabaseFactory.getInstance(dbc);
@@ -1080,12 +1071,11 @@ public class Schematool {
     }
 
     /**
-     * Given a database connection, generate beans for all tables in the database
-     * connection, could be the entire database.
+     * Given a database connection, generate beans for all tables in the database connection, could
+     * be the entire database.
      * 
      * @param connection
-     *            the database connection object, contains database URL, username,
-     *            password, etc.
+     *            the database connection object, contains database URL, username, password, etc.
      * @throws Exception
      */
     public void generateBeans(DatabaseConnection connection) throws Exception {
@@ -1398,8 +1388,7 @@ public class Schematool {
                 for (Column column : table.getColumns()) {
                     String columnname = getFullColumnName(packagename, table, column.getName());
 
-                    putValue(params.getAttrs(), columnname, "name",
-                            getFullColumnName(packagename, table, column.getName()));
+                    putValue(params.getAttrs(), columnname, "name", getFullColumnName(packagename, table, column.getName()));
                     putValue(params.getAttrs(), columnname, "type", column.getComponentType());
                     putValue(params.getAttrs(), columnname, "converter", column.getConverter());
                     putValue(params.getAttrs(), columnname, "description", column.getDescription());
@@ -1530,8 +1519,8 @@ public class Schematool {
             for (Table table : database.getTables()) {
                 System.out.println("Processing: " + table.getName());
 
-                out.println("List<" + table.getName() + "> " + table.getName() + "List = new ArrayList<"
-                        + table.getName() + ">();");
+                out.println(
+                        "List<" + table.getName() + "> " + table.getName() + "List = new ArrayList<" + table.getName() + ">();");
 
                 for (Row row : table.getRows()) {
                     out.println("{");
@@ -1597,8 +1586,7 @@ public class Schematool {
 
     /**
      * @param dao
-     *            the database connection object, contains database url, username,
-     *            password, etc.
+     *            the database connection object, contains database url, username, password, etc.
      * 
      * @param databaseName
      * 
@@ -1698,10 +1686,109 @@ public class Schematool {
 
             // TODO Convert XSD document to XHTML document, make changes
 
-            // Write the XHTML file out
+            StringBuilder buf = new StringBuilder();
 
-            File outfile = new File(outdir, infile.getName().substring(0, infile.getName().lastIndexOf(".")) + ".html");
-            XMLUtil.writeDocumentToFile(document, outfile);
+            Element root = document.getDocumentElement();
+            System.out.println("Root Element : " + root.getTagName());
+
+            // Write the XHTML file out
+            buf.append("<html> \n");
+
+            buf.append("<style>\n");
+            buf.append("table, th, td {\n");
+            buf.append("border: 1px solid black;\n");
+            buf.append("  border-collapse: collapse;\n");
+            buf.append(" background-color: #f1f1c1;\n");
+            buf.append("}\n");
+            buf.append("th, td {\n");
+            buf.append("padding: 15px;\n");
+            buf.append(" text-align: left;\n");
+            buf.append("}\n");
+            buf.append(".schema-header {\n");
+            buf.append("padding: 15px;\n");
+            buf.append(" text-align: left;\n");
+            buf.append("}\n");
+            buf.append(".element {\n");
+            buf.append("padding: 15px;\n");
+            buf.append(" text-align: left;\n");
+            buf.append("}\n");
+            buf.append(".attribute {\n");
+            buf.append("padding: 15px;\n");
+            buf.append(" text-align: left;\n");
+            buf.append("}\n");
+            buf.append(".node-type {\n");
+            buf.append("padding: 15px;\n");
+            buf.append(" text-align: left;\n");
+            buf.append("}\n");
+            buf.append("  </style>\n");
+            buf.append(" <body>\n");
+
+            processNode(buf, root, false);
+
+            buf.append("</body</html>\n");
+
+            String filename = outdir.getAbsolutePath() + "/" + infile.getName().substring(0, infile.getName().lastIndexOf("."))
+                    + ".html";
+            FileUtil.writeFile(filename, buf.toString());
+        }
+    }
+
+    private void processNode(StringBuilder buf, Element node, boolean inTable) {
+        if (node.getTagName().contains("complexType")) {
+            buf.append("<span class='schema-header'>" + node.getAttributeNode("name").getNodeValue() + "</span>\n");
+            buf.append("<ul class='w3-leftbar w3-theme-border' style='list-style: none'>\n");
+
+            List<Node> items = getNodeArray(node.getChildNodes());
+            Collections.sort(items, new NodeComparator());
+
+            for (Node child : items) {
+                if (child instanceof Element) {
+                    processNode(buf, (Element) child, true);
+                }
+            }
+            buf.append("</ul>\n");
+
+        } else if (node.getTagName().contains("element")) {
+            if (inTable) {
+                buf.append("<li><span class='element'>" + node.getAttributeNode("name").getNodeValue() + "</span> ");
+                buf.append("<span class='node-type'>(element) </span>");
+                if (node.hasAttribute("type")) {
+                    buf.append(node.getAttributeNode("type").getNodeValue());
+                }
+                buf.append("</li>\n");
+                for (int i = 0; i < node.getChildNodes().getLength(); i++) {
+                    Node child = node.getChildNodes().item(i);
+                    if (child instanceof Element) {
+                        processNode(buf, (Element) child, inTable);
+                    }
+                }
+            }
+            
+        } else if (node.getTagName().contains("attribute")) {
+            if (inTable) {
+                if (node.hasAttribute("name")) {
+                    buf.append("<li><span class='attribute'>" + node.getAttributeNode("name").getNodeValue() + "</span> ");
+                    buf.append("<span class='node-type'>(attribute) </span>");
+                    buf.append(node.getAttributeNode("type").getNodeValue());
+                    buf.append("</li>\n");
+                    for (int i = 0; i < node.getChildNodes().getLength(); i++) {
+                        Node child = node.getChildNodes().item(i);
+                        if (child instanceof Element) {
+                            processNode(buf, (Element) child, inTable);
+                        }
+                    }
+                }
+            }
+            
+        } else {
+            List<Node> items = getNodeArray(node.getChildNodes());
+            Collections.sort(items, new NodeComparator());
+
+            for (Node child : items) {
+                if (child instanceof Element) {
+                    processNode(buf, (Element) child, inTable);
+                }
+            }
         }
     }
 
@@ -2187,6 +2274,26 @@ public class Schematool {
         }
     }
 
+    private class NodeComparator implements Comparator<Node> {
+        @Override
+        public int compare(Node a, Node b) {
+            if (a.getNodeType() != b.getNodeType()) {
+                return b.getNodeType() - a.getNodeType();
+            }
+            return a.getNodeName().compareToIgnoreCase(b.getNodeName());
+        }
+    }
+
+    private List<Node> getNodeArray(NodeList nodes) {
+
+        List<Node> list = new ArrayList<Node>();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node node = nodes.item(i);
+            list.add(node);
+        }
+        return list;
+    }
+
     public void read(Reader reader, DatabaseConnection dbc) throws Exception {
 
         DatabaseSQLInterface dao = (DatabaseSQLInterface) DatabaseFactory.getInstance(dbc);
@@ -2514,16 +2621,14 @@ public class Schematool {
     }
 
     /**
-     * Given the table class, and the database field name, return the column
-     * annotation object.
+     * Given the table class, and the database field name, return the column annotation object.
      * 
      * @param clazz
      *            java table model, with annotations.
      * @param <T>
-     *            the class of the pojo database bean, annotated with classes from
-     *            package com.viper.database.annotations
-     * @return the list of column annotations if defined with the class, zero size
-     *         list otherwise.
+     *            the class of the pojo database bean, annotated with classes from package
+     *            com.viper.database.annotations
+     * @return the list of column annotations if defined with the class, zero size list otherwise.
      */
     private void sortColumnsByName(List<Column> columns) {
         Collections.sort(columns, new ColumnNameComparator());

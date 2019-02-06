@@ -12,12 +12,16 @@
 	<property name="test.name" value="Test*" />
 	<property name="source" value="1.8" />
 	<property name="target" value="1.8" />
+	<property name="service.name" value="TomEE" />
 	<property name="database.name" value="test" />
-	<property name="test.url" value="https://localhost:8443/rest" />
-	<property name="authorize.service.url" value="${test.url}/authorize/" />
+	<property name="test.url" value="https://localhost/rest" />
+	<property name="authorize.service.url" value="${test.url}/authorize/login" />
 	<property name="rest.service.url" value="${test.url}/classes/" />
 	<property name="web.service.url" value="${test.url}/web/classes/" />
+	<property name="war.service.name" value="rest" />
 	<property name="war.name" value="rest.war" />
+	<property name="os.family" value="windows" />
+	<property name="keystore.password" value="DummyP@ssw0rd4Now!" />
 	<property name="DatabaseUrl" value="jdbc:mysql://localhost:3306?user=root&amp;password=root&amp;useInformationSchema=true&amp;CatalogMeansCurrent=false" />
 	<!-- Dictionary location -->
 	<!-- http://download.wikimedia.org/enwiktionary/latest/enwiktionary-latest-pages-articles.xml.bz2  -->
@@ -180,7 +184,10 @@
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testbean.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testdaobean.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testrestclient.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testplotlyrestclient.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testaggridrestclient.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testrestserver.txt com.viper.demo.unit.model" />
+ 
 			<arg line="-resources etc/model/test ${basedir}/etc/lang-gen/resources.man.properties ${build.dir}/resource.properties" />
 			<arg line="-print etc/model/test ${build.dir}/out com.viper.demo.unit.model" />
 			<!-- NEW <arg line="-test src/com/viper/database/tools srcgen/com/viper/database/tools res:/com/viper/database/translators/tests/junit-test.txt 
@@ -226,6 +233,9 @@
 			<fileset dir="${basedir}/unit" excludes="**/*.java" />
 		</jar>
 	</target>
+	<!-- =================================================================== -->
+	<!-- Creates the war archive -->
+	<!-- =================================================================== -->
 	<target name="war" depends="jar">
 		<war destfile="${build.dir}/${war.name}" needxmlfile="false" webxml="${basedir}/etc/web/web.xml">
 			<classes dir="${basedir}/etc" includes="databases.xml" />
@@ -239,25 +249,28 @@
 			</mappedresources>
 		</war>
 	</target>
+	<!-- =================================================================== -->
+	<!-- Creates the distribution file -->
+	<!-- =================================================================== -->
 	<target name="dist" depends="war">
 		<copy todir="${basedir}/dist">
 			<fileset dir="${build.dir}" includes="database.jar" />
 		</copy>
-        <jar jarfile="${basedir}/dist/${name}-src.jar">
-            <fileset dir="${basedir}/.." includes="${name}/etc/**" />
-            <fileset dir="${basedir}/.." includes="${name}/lib/**" />
-            <fileset dir="${basedir}/.." includes="${name}/src/**" />
-            <fileset dir="${basedir}/.." includes="${name}/srcgen/**" />
-            <fileset dir="${basedir}/.." includes="${name}/unit/**" />
-            <fileset dir="${basedir}/.." includes="${name}/*" />
-            <fileset dir="${basedir}/.." includes="${name}/*.*" />
-        </jar>
+		<jar jarfile="${basedir}/dist/${name}-src.jar">
+			<fileset dir="${basedir}/.." includes="${name}/etc/**" />
+			<fileset dir="${basedir}/.." includes="${name}/lib/**" />
+			<fileset dir="${basedir}/.." includes="${name}/src/**" />
+			<fileset dir="${basedir}/.." includes="${name}/srcgen/**" />
+			<fileset dir="${basedir}/.." includes="${name}/unit/**" />
+			<fileset dir="${basedir}/.." includes="${name}/*" />
+			<fileset dir="${basedir}/.." includes="${name}/*.*" />
+		</jar>
 	</target>
 	<!-- =================================================================== -->
 	<!-- Check the style of sources (Java). -->
 	<!-- =================================================================== -->
 	<target name="checkstyle">
-		<checkstyle config="${basedir}/etc/checkstyle/xlims_checks.xml" failureProperty="checkstyle.failure" failOnViolation="false">
+		<checkstyle config="${basedir}/etc/checkstyle/viper_checks.xml" failureProperty="checkstyle.failure" failOnViolation="false">
 			<formatter type="xml" tofile="${build.dir}/checkstyle_report.xml" />
 			<fileset dir="${basedir}/src" includes="**/*.java" />
 			<fileset dir="${basedir}/srcgen" includes="**/*.java" />
@@ -291,6 +304,23 @@
 	<target name="jdeps">
 		<exec executable="jdeps">
 			<arg line="-v -recursive -classpath='${basedir}/lib' ${build.dir}/${name}.jar" />
+		</exec>
+	</target>
+	<!-- =================================================================== -->
+	<!-- GenKey -->
+	<!-- =================================================================== -->
+	<target name="keytool">
+		<delete quiet="true" file="${basedir}/etc/tomcat/conf/viper.keystore" />
+		<exec executable="keytool">
+			<arg line="-v" />
+			<arg line="-genkey" />
+			<arg line="-alias viper" />
+			<arg line="-keyalg RSA" />
+			<arg line="-storetype pkcs12" />
+			<arg line='-dname "CN=localhost, OU=VIPER Division, O=viper.com, L=Fremont, ST=California,C=US"  ' />
+			<arg line="-keypass ${keystore.password}" />
+			<arg line="-keystore ${basedir}/etc/tomcat/conf/viper.keystore" />
+			<arg line="-storepass ${keystore.password}" />
 		</exec>
 	</target>
 	<!-- =================================================================== -->
@@ -344,10 +374,19 @@
 			<classpath refid="classpath.main" />
 		</java>
 	</target>
-	<target name="doc.schemas"> 
+	<target name="doc.schemas">
 		<xslt in="${basedir}/etc/schemas/database.xsd" out="${build.dir}/database.xsd.html" style="${basedir}/etc/schemas/database.xsl">
 		</xslt>
 	</target>
+
+	<target name="xsd.doc">
+		<mkdir dir="${build.dir}/schemas" />
+		<java fork="true" classname="com.viper.database.tools.Schematool" dir="${basedir}">
+			<arg line="-document-xsd ${basedir}/etc/schemas ${build.dir}/schemas" />
+			<jvmarg line="${jvm.args}" />
+			<classpath refid="classpath.main" />
+		</java>
+	</target> 
 
 	<!-- =================================================================== -->
 	<!-- Runs the test -->
@@ -391,12 +430,15 @@
 	<!-- Runs the test -->
 	<!-- =================================================================== -->
 	<target name="deploy">
-		<delete quiet="true" dir="${tomcat.home}/webapps/${war.name}" />
+		<delete quiet="true" dir="${tomcat.home}/webapps/${war.service.name}" />
+		<delete quiet="true" file="${tomcat.home}/webapps/${war.name}" />
+		<delete quiet="true">
+			<fileset dir="${tomcat.home}/logs" includes="*.*" />
+		</delete>
 		<!-- Copy rest services war to tomcat directory -->
 		<copy todir="${tomcat.home}/webapps">
 			<fileset dir="${build.dir}" includes="${war.name}" />
 		</copy>
-		<chmod file="${tomcat.home}/webapps/${war.name}" perm="775" />
 		<!-- Copy lib extensions to tomcat directory -->
 		<copy todir="${tomcat.home}/lib">
 			<fileset dir="${basedir}/lib/libgen" includes="mysql-connector*.jar" />
@@ -406,24 +448,47 @@
 			<fileset dir="${basedir}/etc/tomcat" includes="**" />
 		</copy>
 		<!-- set permissions -->
-		<chmod perm="755">
-			<fileset dir="${tomcat.home}">
-				<include name="**/*" />
-				<include name="**/*.*" />
-			</fileset>
+		<!-- 
+		<chmod perm="755" osfamily="${os.family}" type="both" verbose="true">
+			<fileset dir="${tomcat.home}" includes="**" />
 		</chmod>
-		<chown owner="Tom">
-			<fileset dir="${tomcat.home}">
-				<include name="**/*" />
-				<include name="**/*.*" />
-			</fileset>
+		<attrib readonly="false" osfamily="${os.family}" type="both" verbose="true">
+			<fileset dir="${tomcat.home}" includes="**" />
+		</attrib>
+		<setpermissions mode="755" nonPosixMode="tryDosOrPass" >
+			<fileset dir="${tomcat.home}" includes="**" />
+		</setpermissions>
+		<chown owner="Administrators" osfamily="${os.family}" type="both">
+			<fileset dir="${tomcat.home}" includes="**" />
 		</chown>
-		<chmod perm="755" type="file">
-			<fileset dir="${tomcat.home}/bin">
-				<include name="*.sh" />
-				<include name="*.bat" />
-			</fileset>
-		</chmod>
+		<chgrp group="SYSTEM" osfamily="${os.family}" type="both">
+			<fileset dir="${tomcat.home}" includes="**" />
+		</chgrp>
+	-->
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- restart tomcat windows service  -->
+	<!-- =================================================================== -->
+	<macrodef name="service">
+		<attribute name="service" />
+		<attribute name="action" />
+		<sequential>
+			<exec executable="cmd.exe">
+				<arg line="/c net @{action} '@{service}'" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="start">
+		<service action="start" service="${service.name}" />
+	</target>
+	<target name="stop">
+		<service action="stop" service="${service.name}" />
+	</target>
+	<target name="restart">
+		<service action="stop" service="${service.name}" />
+		<service action="start" service="${service.name}" />
 	</target>
 	<!-- =================================================================== -->
 	<!-- Runs the test -->
@@ -470,6 +535,8 @@
 				<jvmarg value="-Dweb.service.url=${web.service.url}" />
 				<jvmarg value="-Dauthorize.service.url=${authorize.service.url}" />
 				<jvmarg value="-DDATABASE_LOCATOR=${database.name}" />
+				<jvmarg value="-Djavax.net.ssl.trustStore=${basedir}/etc/tomcat/conf/viper.keystore" />
+				<jvmarg value="-Djavax.net.ssl.trustStorePassword=${keystore.password}" />
 				<jvmarg line="${jvm.args}" />
 				<jvmarg value="-XX:-UseSplitVerifier" />
 			</junit>
@@ -508,8 +575,8 @@
 		</javadoc>
 	</target>
 	<!-- =================================================================== -->
-	<target name="test-all" depends="taskdefs,deploy,start.tomcat,taskdefs,junit,stop.tomcat,junit-report,jacoco-report" />
-	<target name="test" depends="taskdefs,deploy,taskdefs,junit,junit-report,jacoco-report" />
+	<target name="test-all" depends="taskdefs,stop,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
+	<target name="test" depends="taskdefs,stop,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
 	<target name="cruise-control" depends="clean,war,deploy,junit,junit-report,jacoco-report,javadoc" />
 	<target name="all" depends="clean,dist" />
 </project>

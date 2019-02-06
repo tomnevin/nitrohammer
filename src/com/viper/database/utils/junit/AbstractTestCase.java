@@ -243,10 +243,10 @@ public class AbstractTestCase extends Assert {
                 continue;
             }
 
-            assertTrue(msg + " (" + propertyDescriptor.getName() + ") [" + e + "] vs [ " + a + "] " + precision, equals(e, a, precision));
+            assertTrue(msg + " (" + propertyDescriptor.getName() + ") [" + e + "] vs [ " + a + "] " + precision,
+                    equals(e, a, precision));
         }
     }
-    
 
     public static <T> void assertBeansEquals(String msg, List<T> expected, List<T> actual) throws Exception {
         assertNotNull(msg + ", expected is null", expected);
@@ -278,7 +278,10 @@ public class AbstractTestCase extends Assert {
             return equals((Date) bean1, (Date) bean2);
         }
 
-        String[] excludedFields = new String[]{DatabaseUtil.getPrimaryKeyName(bean1.getClass())};
+        String[] excludedFields = new String[0];
+        if (DatabaseUtil.isTableClass(bean1.getClass())) {
+            excludedFields = new String[] { DatabaseUtil.getPrimaryKeyName(bean1.getClass()) };
+        }
         return EqualsBuilder.reflectionEquals(bean1, bean2, false, bean1.getClass(), excludedFields);
     }
 

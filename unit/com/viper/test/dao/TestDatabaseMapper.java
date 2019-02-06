@@ -168,8 +168,7 @@ public class TestDatabaseMapper extends AbstractTestCase {
     public void testFindConnection1() throws Exception {
 
         String name = "mysql";
-        DatabaseConnections connections = DatabaseMapper.readConnections("res:/databases.xml");
-        System.err.println("Databases.xml: connections size: " + connections.getConnections().size() + ":" + name);
+        DatabaseConnections connections = DatabaseMapper.readConnections("res:/databases.xml"); 
 
         DatabaseConnection connection = DatabaseUtil.findOneItem(connections.getConnections(), "name", name);
 
@@ -183,17 +182,12 @@ public class TestDatabaseMapper extends AbstractTestCase {
     public void testFindConnection2() throws Exception {
 
         String name = "test";
-        DatabaseConnections connections = DatabaseMapper.readConnections("res:/databases.xml");
-        System.err.println("Databases.xml: connections size: " + connections.getConnections().size() + ":" + name);
+        DatabaseConnections connections = DatabaseMapper.readConnections("res:/databases.xml"); 
 
         assertNotNull(getCallerMethodName() + " : connections were not found ", connections.getConnections());
         assertTrue(getCallerMethodName() + " : not enought connections were not found ",
                 connections.getConnections().size() > 0);
-
-        for (DatabaseConnection c : connections.getConnections()) {
-            System.err.println("testFindConnection2: " + c.getName());
-        }
-
+ 
         DatabaseConnection connection = DatabaseUtil.findOneItem(connections.getConnections(), "name", name);
 
         assertNotNull(getCallerMethodName() + " : connection was not found ", connection);

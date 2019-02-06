@@ -194,7 +194,7 @@ public class TestJDBCColumn extends AbstractTestCase {
 		assertEquals("name", ColumnName, column.getName());
 		assertEquals("size", 32L, column.getSize());
 		assertEquals("decimal_digits", 0, column.getDecimalSize());
-		assertEquals("is-required", true, column.isRequired());
+		assertEquals("is-required", false, column.isRequired());
 		assertEquals("remarks", "this is the teachers column", column.getDescription());
 	}
 }

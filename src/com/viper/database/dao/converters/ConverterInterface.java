@@ -30,28 +30,12 @@
 
 package com.viper.database.dao.converters;
 
-import com.viper.database.annotations.Column;
-
 /**
  * This interface defines the API for converter methods used/registered by the Converter class.
- *
  * 
- * @author Tom
- *
  */
 public interface ConverterInterface {
 
-    /**
-     * Return the default type this <code>Converter</code> handles.
-     *
-     * @return The default type this <code>Converter</code> handles.
-     */
-    public Class<?> getDefaultType();
-
-    public Object convertToType(Class toType, Object fromValue) throws Exception;
-
-    public Object convertToArray(Class toType, Object fromValue) throws Exception;
-
-    public <T> String convertToString(Column column, T fromValue, String[] qualifiers) throws Exception;
+    public <T, S> T convert(Class<T> toType, S fromValue) throws Exception;
 
 }

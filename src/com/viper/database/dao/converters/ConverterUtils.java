@@ -167,6 +167,18 @@ public class ConverterUtils {
         return "X'" + buf.toString() + "'";
     }
 
+    public final static String toHex(Byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            // TODO CHeck this, it's mysql put in the drivers.
+            return "NULL";
+        }
+        StringBuilder buf = new StringBuilder();
+        for (Byte b : bytes) {
+            buf.append(String.format("%02X", b));
+        }
+        return "X'" + buf.toString() + "'";
+    }
+
     public final static byte[] fromHex(String value) {
         if (value == null || value.length() == 0) {
             return null;

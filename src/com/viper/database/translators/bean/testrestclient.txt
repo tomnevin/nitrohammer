@@ -36,8 +36,8 @@ public class Test#{classname}RestClient extends AbstractTestCase {
 
     private final static String RestServiceUsername = System.getProperty("rest.service.username", "tom@bliss.com");
     private final static String RestServicePassword = System.getProperty("rest.service.password", "password");
-    private final static String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost:80/rest/classes/");
-    private final static String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost:80/rest/authorize/");
+    private final static String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost/rest/classes/");
+    private final static String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
     private static final RestClient client = new RestClient(AuthorizeServiceUrl, RestServiceUrl);
 
     @BeforeClass
@@ -101,6 +101,18 @@ public class Test#{classname}RestClient extends AbstractTestCase {
         assertNotNull(getCallerMethodName() + ", null beans", beans);
         assertTrue(getCallerMethodName() + " beans.size() is zero", beans.size() > 0);
     }
+    
+    @Test
+    public final void testQueryAll() throws Exception {
+
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 100);
+        client.insertAll(expected);
+        
+        List<#{classname}> beans = client.queryAll(#{classname}.class);
+
+        assertNotNull(getCallerMethodName() + ", null beans", beans);
+        assertTrue(getCallerMethodName() + " beans.size() is zero", beans.size() > 0);
+    } 
 
     @Test
     public final void testUpdate() throws Exception {

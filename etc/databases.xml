@@ -3,7 +3,7 @@
 	xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/databases.xsd">
 	<connection name="test">
 		<username>root</username>
-		<password>root</password> <!-- ENC:lvZkFEUgMadIgqV4Kj77Uw== -->
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password> 
 		<create-database>true</create-database>
 		<model>etc/Education.xml</model>
 		<database-url>jdbc:mysql://localhost:3306</database-url>
@@ -12,7 +12,7 @@
 	</connection>
 	<connection name="test-mapper">
 		<username>root</username>
-		<password>root</password> <!-- ENC:lvZkFEUgMadIgqV4Kj77Uw== -->
+		<password>ENC:lvZkFEUgMadIgqV4Kj77Uw==</password>
 		<create-database>true</create-database>
 		<model>etc/Education.xml</model>
 		<database-url>jdbc:mysql://localhost:3306</database-url>

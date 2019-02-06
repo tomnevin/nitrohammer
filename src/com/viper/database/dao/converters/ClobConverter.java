@@ -31,85 +31,64 @@
 package com.viper.database.dao.converters;
 
 import java.io.Reader;
-import java.sql.Blob;
 import java.sql.Clob;
-import java.text.DecimalFormat;
 
 import javax.sql.rowset.serial.SerialClob;
 
-import com.viper.database.annotations.Column;
+public class ClobConverter {
 
-public class ClobConverter implements ConverterInterface {
+    public static final void initialize() {
 
-    private Class<?> defaultType = null;
+        Converters.register(SerialClob.class, char[].class, ClobConverter::convertClobToChars);
+        Converters.register(SerialClob.class, Character[].class, ClobConverter::convertClobToChars);
+        Converters.register(SerialClob.class, char.class, ClobConverter::convertClobToChars);
+        Converters.register(SerialClob.class, Character.class, ClobConverter::convertClobToChars);
 
-    public ClobConverter(Class<?> defaultType) {
-        this.defaultType = defaultType;
+        Converters.register(char[].class, SerialClob.class, ClobConverter::convertCharsToClob);
+        Converters.register(Character[].class, SerialClob.class, ClobConverter::convertCharsToClob);
+        Converters.register(char.class, SerialClob.class, ClobConverter::convertCharsToClob);
+        Converters.register(Character.class, SerialClob.class, ClobConverter::convertCharsToClob);
     }
 
-    @Override
-    public Class<?> getDefaultType() {
-        return defaultType;
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertClobToChars(Class<T> toType, S fromValue) throws Exception {
+        return (T) convertClobToChars(fromValue);
     }
 
-    @Override
-    public <T> String convertToString(Column column, T fromValue, String[] qualifiers) throws Exception {
-        if (fromValue instanceof Blob) {
-            new DecimalFormat(qualifiers[0]).format((Blob) fromValue);
-        }
-
-        throw new Exception("Unhandled conversion from " + fromValue + " to String.");
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertCharsToClob(Class<T> toType, S fromValue) throws Exception {
+        return (T) convertCharsToClob(fromValue);
     }
 
-    @Override
-    public Object convertToType(Class toType, Object fromValue) throws Exception {
-        if (fromValue == null) {
-            return null;
+    private static final  char[] convertClobToChars(Object source) throws Exception {
+        Clob blob = (Clob) source;
+        char[] bytes = null;
+        Reader r = null;
+        try {
+            bytes = new char[(int) blob.length()];
+            r = blob.getCharacterStream();
+            r.read(bytes);
+        } finally {
+            r.close();
         }
-        if (toType.equals(char.class) && Clob.class.isAssignableFrom(fromValue.getClass())) {
-            return convertClobToChars(fromValue);
-        }
-        if (toType.equals(Character.class) && Clob.class.isAssignableFrom(fromValue.getClass())) {
-            return convertClobToChars(fromValue);
-        }
-        if (Clob.class.isAssignableFrom(Clob.class) && fromValue instanceof char[]) {
-            return convertCharsToClob(fromValue);
-        }
-        if (Clob.class.isAssignableFrom(Clob.class) && fromValue instanceof Character[]) {
-            return convertCharsToClob(fromValue);
-        }
-        if (Clob.class.isAssignableFrom(Clob.class) && fromValue instanceof Character) {
-            return convertCharToClob(fromValue);
-        }
-        if (toType.isInstance(String.class) && fromValue instanceof char[]) {
-            return new CharacterConverter(char.class).convertToType(toType, fromValue);
-        }
-        if (toType.isInstance(String.class) && fromValue instanceof Character[]) {
-            return new CharacterConverter(Character.class).convertToType(toType, fromValue);
-        }
-        if (toType.isInstance(String.class) && fromValue instanceof Character) {
-            return new CharacterConverter(Character.class).convertToType(toType, fromValue);
-        }
-
-        if (toType.isInstance(Character.class) && fromValue instanceof String) {
-            return new CharacterConverter(Character.class).convertToType(toType, fromValue);
-        }
-        return fromValue;
+        return bytes;
     }
 
-    @Override
-    public Object convertToArray(Class toType, Object fromValue) throws Exception {
-        if (fromValue == null) {
-            return null;
-        }
-        throw new Exception("Unhandled conversion from " + fromValue + " to " + toType + ".");
+    private static final  Clob convertCharsToClob(Object source) throws Exception {
+        char[] blob = (char[]) source;
+        return new javax.sql.rowset.serial.SerialClob(blob);
     }
 
-    public String convertToString(Object value) throws Exception {
+    private static final  Clob convertCharToClob(Object source) throws Exception {
+        Character blob = (Character) source;
+        return new javax.sql.rowset.serial.SerialClob(new char[] { blob });
+    }
+
+    private static final  String convertToString(Object value) throws Exception {
         return convertImpl(value);
     }
 
-    public String convertImpl(Object source) throws Exception {
+    private static final  String convertImpl(Object source) throws Exception {
         Clob clob = (Clob) source;
         Reader r = null;
         try {
@@ -128,31 +107,8 @@ public class ClobConverter implements ConverterInterface {
         }
     }
 
-    public Clob convertFromString(String source) throws Exception {
+    private static final  Clob convertFromString(String source) throws Exception {
         return new SerialClob(source.toCharArray());
     }
-
-    public char[] convertClobToChars(Object source) throws Exception {
-        Clob blob = (Clob) source;
-        char[] bytes = null;
-        Reader r = null;
-        try {
-            bytes = new char[(int) blob.length()];
-            r = blob.getCharacterStream();
-            r.read(bytes);
-        } finally {
-            r.close();
-        }
-        return bytes;
-    }
-
-    public Clob convertCharsToClob(Object source) throws Exception {
-        char[] blob = (char[]) source;
-        return new javax.sql.rowset.serial.SerialClob(blob);
-    }
-
-    public Clob convertCharToClob(Object source) throws Exception {
-        Character blob = (Character) source;
-        return new javax.sql.rowset.serial.SerialClob(new char[] { blob });
-    }
+ 
 }

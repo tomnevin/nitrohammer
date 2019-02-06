@@ -31,6 +31,7 @@
 package com.viper.rest.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ import org.apache.johnzon.jaxrs.JohnzonProvider;
 import org.glassfish.jersey.SslConfigurator;
 
 import com.viper.database.dao.DatabaseUtil;
-import com.viper.database.dao.converters.ConverterUtils;
+import com.viper.database.dao.converters.Converters;
 import com.viper.database.filters.Predicate;
 import com.viper.database.model.ColumnParam;
 import com.viper.database.model.LimitParam;
@@ -54,11 +55,11 @@ import com.viper.database.security.Encryptor;
 
 public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
-    private static final String defaultMediaType = MediaType.APPLICATION_JSON;
-    public static boolean debugOn = true;
+    private MediaType acceptMediaType = MediaType.APPLICATION_JSON_TYPE;
+    public static boolean debugOn = false;
 
-    private String baseURL = "https://localhost:80/rest/classes/";
-    private String authorizeURL = "https://localhost:80/rest/authorize/";
+    private String baseURL = "https://localhost/rest/classes/";
+    private String authorizeURL = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
     private String sessionToken = null;
     private Client client = null;
 
@@ -81,19 +82,24 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         if (!this.authorizeURL.endsWith("/")) {
             this.authorizeURL = this.authorizeURL + "/";
         }
-
-        System.out.println("RestClient: AuthorizeURL=" + this.authorizeURL);
-        System.out.println("RestClient: baseURL=" + this.baseURL);
-
     }
 
-    public void setSSLContext(String trustStoreFile, String trustStorePassword, String keyStoreFile,
-            String keyPassword) {
+    public void setSSLContext(String trustStoreFile, String trustStorePassword, String keyStoreFile, String keyPassword) {
         this.trustStoreFile = trustStoreFile;
         this.trustStorePassword = trustStorePassword;
         this.keyStoreFile = keyStoreFile;
         this.keyPassword = keyPassword;
         this.useSSL = true;
+    }
+
+    public void setAcceptMediaType(String type, String subtype, String key, String value) {
+        
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put(key, value);
+        
+        MediaType mediaType = new MediaType(type, subtype, parameters);
+
+        acceptMediaType = mediaType;
     }
 
     public Client getClient() throws Exception {
@@ -124,8 +130,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
         String url = authorizeURL;
         try {
-            WebTarget webTarget = getClient().target(url).queryParam("username", username).queryParam("password",
-                    password);
+            WebTarget webTarget = getClient().target(url).queryParam("username", username).queryParam("password", password);
 
             Response response = webTarget.request(MediaType.TEXT_PLAIN).get();
             handleErrorResponse(webTarget, response);
@@ -149,7 +154,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         WebTarget webTarget = getClient().target(authorizeURL).path("login").queryParam("username", username)
                 .queryParam("password", password);
 
-        Response response = webTarget.request(defaultMediaType).get();
+        Response response = webTarget.request(acceptMediaType).get();
         handleErrorResponse(webTarget, response);
 
         String str = response.readEntity(String.class);
@@ -166,7 +171,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
         WebTarget webTarget = getClient().target(authorizeURL).path("logout");
 
-        Response response = webTarget.request(defaultMediaType).post(null);
+        Response response = webTarget.request(acceptMediaType).post(null);
         handleErrorResponse(webTarget, response);
 
         String str = response.readEntity(String.class);
@@ -284,7 +289,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
             return null;
         }
 
-        Response response = webTarget.request(defaultMediaType).get();
+        Response response = webTarget.request(acceptMediaType).get();
         handleErrorResponse(webTarget, response);
 
         T item = response.readEntity(tableClass);
@@ -305,14 +310,14 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String path = clazz.getSimpleName().toLowerCase() + "/all";
         WebTarget webTarget = getClient().target(baseURL).path(path);
 
-        Response response = webTarget.request(defaultMediaType).get();
+        Response response = webTarget.request(acceptMediaType).get();
         handleErrorResponse(webTarget, response);
 
         String json = response.readEntity(String.class);
 
         println(webTarget, response, json);
 
-        return ConverterUtils.readJsonToList(json, clazz);
+        return Converters.convertToList(clazz, json);
     }
 
     /**
@@ -334,14 +339,14 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String path = clazz.getSimpleName().toLowerCase() + "/list/" + keyValue[0] + "/" + keyValue[1];
         WebTarget webTarget = getClient().target(baseURL).path(path);
 
-        Response response = webTarget.request(defaultMediaType).get();
+        Response response = webTarget.request(acceptMediaType).get();
         handleErrorResponse(webTarget, response);
 
         String json = response.readEntity(String.class);
 
         println(webTarget, response, json);
 
-        return ConverterUtils.readJsonToList(json, clazz);
+        return Converters.convertToList(clazz, json);
     }
 
     /**
@@ -350,10 +355,11 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
      * Note: currently this method is not implemented.
      */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams,
-            LimitParam limitParam, Map<String, String> parameters) throws Exception {
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam,
+            Map<String, String> parameters) throws Exception {
 
         List<T> beans = queryAll(clazz);
+
         return DatabaseUtil.applyFilter(beans, filter);
     }
 
@@ -366,8 +372,9 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
         String path = item.getClass().getSimpleName().toLowerCase();
         WebTarget webTarget = getClient().target(baseURL).path(path);
+        String requestStr = Converters.convert(String.class, item);
 
-        Response response = webTarget.request(defaultMediaType).put(Entity.json(item));
+        Response response = webTarget.request(acceptMediaType).put(Entity.entity(requestStr, MediaType.TEXT_PLAIN_TYPE));
         handleErrorResponse(webTarget, response);
 
         T bean = response.readEntity((Class<T>) item.getClass());
@@ -388,8 +395,9 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
         String path = item.getClass().getSimpleName().toLowerCase();
         WebTarget webTarget = getClient().target(baseURL).path(path);
+        String requestStr = Converters.convert(String.class, item);
 
-        Response response = webTarget.request(defaultMediaType).post(Entity.json(item));
+        Response response = webTarget.request(acceptMediaType).post(Entity.entity(requestStr, MediaType.TEXT_PLAIN_TYPE));
         handleErrorResponse(webTarget, response);
 
         String msg = "";
@@ -417,26 +425,25 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
             return;
         }
 
-        Class clazz = beans.get(0).getClass();
+        Class<T> clazz = (Class<T>) beans.get(0).getClass();
         String path = clazz.getSimpleName().toLowerCase() + "/list";
-        String requestStr = ConverterUtils.writeJsonFromList(beans);
+        String requestStr = Converters.convertFromList(beans);
 
         WebTarget webTarget = getClient().target(baseURL).path(path);
-        Response response = webTarget.request(defaultMediaType).post(Entity.json(requestStr));
+        Response response = webTarget.request(acceptMediaType).post(Entity.entity(requestStr, MediaType.TEXT_PLAIN_TYPE));
         handleErrorResponse(webTarget, response);
 
         if (response.getStatus() == 200) {
             String json = response.readEntity(String.class);
             println(webTarget, response, json);
 
-            List<T> results = ConverterUtils.readJsonToList(json, clazz);
+            List<T> results = Converters.convertToList(clazz, json);
             // TODO transfer primary key to insert values.
 
         } else {
 
             String msg = response.readEntity(String.class);
             println(webTarget, response, msg);
-            System.out.println("RETURN STATUS: " + msg);
         }
 
         response.close();
@@ -457,7 +464,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String path = tableClass.getSimpleName().toLowerCase() + "/" + key + "/" + val;
         WebTarget webTarget = getClient().target(baseURL).path(path);
 
-        Response response = webTarget.request(MediaType.TEXT_PLAIN).delete();
+        Response response = webTarget.request().delete();
         handleErrorResponse(webTarget, response);
 
         String msg = response.readEntity(String.class);
@@ -474,11 +481,11 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     @Override
     public <T> void delete(T bean) throws Exception {
 
-        String path = bean.getClass().getSimpleName().toLowerCase() + "/"
-                + DatabaseUtil.getPrimaryKeyName(bean.getClass()) + "/" + DatabaseUtil.getPrimaryKeyValue(bean);
+        String path = bean.getClass().getSimpleName().toLowerCase() + "/" + DatabaseUtil.getPrimaryKeyName(bean.getClass()) + "/"
+                + DatabaseUtil.getPrimaryKeyValue(bean);
         WebTarget webTarget = getClient().target(baseURL).path(path);
 
-        Response response = webTarget.request(MediaType.TEXT_PLAIN).delete();
+        Response response = webTarget.request().delete();
         handleErrorResponse(webTarget, response);
 
         String msg = response.readEntity(String.class);
@@ -498,7 +505,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String path = tableClass.getSimpleName().toLowerCase() + "/all";
         WebTarget webTarget = getClient().target(baseURL).path(path);
 
-        Response response = webTarget.request(defaultMediaType).delete();
+        Response response = webTarget.request(acceptMediaType).delete();
         handleErrorResponse(webTarget, response);
 
         String msg = response.readEntity(String.class);
@@ -537,7 +544,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         WebTarget webTarget = getClient().target(baseURL).path(url);
 
         String msg = null;
-        Response response = webTarget.request(defaultMediaType).get();
+        Response response = webTarget.request(acceptMediaType).get();
         if (response.getStatus() != 200) {
             msg = response.readEntity(String.class);
         }

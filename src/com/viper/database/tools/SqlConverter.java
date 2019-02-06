@@ -171,8 +171,7 @@ public class SqlConverter {
 			}
 		}
 
-		for (String item : items) {
-			System.err.println("SqlConverter: " + item);
+		for (String item : items) { 
 			try {
 				writer.write(item + ";\n");
 				writer.flush();
