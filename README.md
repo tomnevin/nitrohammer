@@ -19,7 +19,7 @@ The NitroHanmmer command line tool has the following features:
 * All java, portable to any Java supported OS.
 * Supports JDBC, therefore MySql, H2, Oracle, PostgreSQL, also limited support for Mongo, HBase, and JPA.
 
-## Additional Documentation
+## Documentation
 
 In progress:
 * [NitroHammer User Manual - Local](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/nitrohammer.html)
@@ -54,42 +54,29 @@ https://github.com/vipersoftwareservices/nitrohammer
 
 ```
 ant clean all
-```
+``` 
 
-
-## Running the tests
-
-Run the tests, by running ant command.
+3. Run the tests, by running ant command.
 
 ```
 ant test
 ```
 
-View the JUnit test results, by bringing the following file up in browser.
+4. View the JUnit test results, by bringing the following file up in browser.
 For windows, double click the file in the disk explorer, the location of the file is:
 
 ```
 <install-directory>/build/reports/index.html
 ```
 
-View the code coverage file in the browser..
+5. View the code coverage file in the browser..
 For windows, double click the file in the disk explorer, the location of the file is:
 
 ```
 <install-directory>/build/jacoco/index.html
 ```
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Check on coding style by running:
+  
+6. Check on coding style by running:
 
 ```
 ant checkstyle
@@ -98,14 +85,7 @@ ant checkstyle
 ## Deployment
 
 In progress
-
-## Built With
-
-In progress
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
+ 
 ## Contributing
 
 Please read [CONTRIBUTING.md](https://gist.github.com/vipersoftwareservices/nitrohammer) for details on our code of conduct, and the process for submitting pull requests to us.
@@ -123,8 +103,4 @@ See also the list of [contributors](https://github.com/vipersoftwareservices/nit
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details
-
-## Acknowledgments
-
-In progress
-
+ 

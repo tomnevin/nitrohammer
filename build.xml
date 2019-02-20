@@ -6,10 +6,17 @@
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="data.source" value="mysql" />
 	<property name="version" value="1.0" />
+	<property name="jvm.deprecation" value="-Xlint:deprecation" /> 
+	<property name="jvm.args" value="-Xmx1024m -Xms256m " />
+	<property name="jvm.debug.args" value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000" />
 	<property name="tomcat.dir" value="tomcat" />
 	<property name="tomcat.root" value="/opt" />
 	<property name="tomcat.home" value="/opt/${tomcat.dir}" />
 	<property name="test.name" value="Test*" />
+	<property name="debug" value="on" />
+	<property name="deprecation" value="off" />
+	<property name="optimize" value="off" />
+	<property name="nowarn" value="on" />
 	<property name="source" value="1.8" />
 	<property name="target" value="1.8" />
 	<property name="service.name" value="TomEE" />
@@ -58,6 +65,7 @@
 		<delete quiet="true" dir="${basedir}/lib/libgen" />
 		<delete quiet="true" dir="${basedir}/lib/libdev" />
 		<delete quiet="true" dir="${basedir}/lib/drivers" />
+		<delete quiet="true" dir="${basedir}/doc/api" />
 		<delete quiet="true" dir="/tmp/JNDI" />
 	</target>
 	<target name="very.clean" depends="clean">
@@ -74,7 +82,7 @@
 		<mkdir dir="${build.dir}/classes" />
 		<mkdir dir="${build.dir}/out" />
 		<mkdir dir="${build.dir}/reports/raw" />
-		<mkdir dir="${build.dir}/doc/api" />
+		<mkdir dir="${basedir}/doc/api" />
 		<mkdir dir="${basedir}/srcgen" />
 		<mkdir dir="${basedir}/lib/libgen" />
 		<mkdir dir="${basedir}/lib/libdev" />
@@ -187,7 +195,7 @@
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testplotlyrestclient.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testaggridrestclient.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testrestserver.txt com.viper.demo.unit.model" />
- 
+
 			<arg line="-resources etc/model/test ${basedir}/etc/lang-gen/resources.man.properties ${build.dir}/resource.properties" />
 			<arg line="-print etc/model/test ${build.dir}/out com.viper.demo.unit.model" />
 			<!-- NEW <arg line="-test src/com/viper/database/tools srcgen/com/viper/database/tools res:/com/viper/database/translators/tests/junit-test.txt 
@@ -221,7 +229,7 @@
 		<jar jarfile="${build.dir}/${name}.jar" manifest="${build.dir}/info.txt">
 			<fileset dir="${basedir}/etc" includes="META-INF/**" />
 			<fileset dir="${basedir}" includes="etc/data/lists/*.*" />
-			<fileset dir="${build.dir}/classes" includes="com/viper/database/**/*.*" />
+			<fileset dir="${build.dir}/classes" includes="com/viper/**/*.*" />
 			<fileset dir="${basedir}/src" excludes="**/*.java" />
 		</jar>
 		<jar jarfile="${build.dir}/${name}-all.jar" manifest="${build.dir}/info.txt">
@@ -386,7 +394,7 @@
 			<jvmarg line="${jvm.args}" />
 			<classpath refid="classpath.main" />
 		</java>
-	</target> 
+	</target>
 
 	<!-- =================================================================== -->
 	<!-- Runs the test -->
@@ -441,7 +449,10 @@
 		</copy>
 		<!-- Copy lib extensions to tomcat directory -->
 		<copy todir="${tomcat.home}/lib">
-			<fileset dir="${basedir}/lib/libgen" includes="mysql-connector*.jar" />
+			<fileset dir="${basedir}/lib/drivers" includes="mysql-connector*.jar" />
+		</copy>
+		<copy todir="${tomcat.home}/lib">
+			<fileset dir="${basedir}/lib/drivers" includes="h2*.jar" />
 		</copy>
 		<!-- Copy tomcat/conf extensions to tomcat directory -->
 		<copy todir="${tomcat.home}">
@@ -570,7 +581,7 @@
 	<!-- Creates the API documentation -->
 	<!-- =================================================================== -->
 	<target name="javadoc">
-		<javadoc packagenames="*" sourcepath="${basedir}/src" destdir="${basedir}/build/doc/api" author="true" version="true" windowtitle="${Name} ${version} API" doctitle="${Name}" footer="Copyright &amp;copy; 1997-2015 Viper Software. See &lt;a target=&quot;_top&quot; href=&quot;../license.html&quot;&gt;license agreement&lt;/A&gt; for rights granted.">
+		<javadoc packagenames="*" sourcepath="${basedir}/src" destdir="${basedir}/doc/api" author="true" version="true" windowtitle="${name} ${version} API" doctitle="${Name}" footer="Copyright &amp;copy; 1997-2019 Viper Software. See &lt;a target=&quot;_top&quot; href=&quot;../license.html&quot;&gt;license agreement&lt;/A&gt; for rights granted.">
 			<classpath refid="classpath.main" />
 		</javadoc>
 	</target>
@@ -578,5 +589,6 @@
 	<target name="test-all" depends="taskdefs,stop,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
 	<target name="test" depends="taskdefs,stop,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
 	<target name="cruise-control" depends="clean,war,deploy,junit,junit-report,jacoco-report,javadoc" />
-	<target name="all" depends="clean,dist" />
+	<target name="release" depends="clean,dist,javadoc" />
+	<target name="all" depends="clean,war" />
 </project>

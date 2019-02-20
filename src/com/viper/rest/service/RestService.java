@@ -39,10 +39,7 @@ import javax.ws.rs.core.Response;
 
 import com.viper.database.dao.DatabaseFactory;
 import com.viper.database.dao.DatabaseInterface;
-import com.viper.database.dao.DatabaseSQLInterface;
 import com.viper.database.dao.converters.Converters;
-import com.viper.database.rest.model.Form;
-import com.viper.database.rest.model.HeaderDef;
 import com.viper.database.utils.JSONUtil; 
 
 public class RestService implements RestServiceInterface {

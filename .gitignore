@@ -1,6 +1,7 @@
 #
-build
+.settings
 benchmarks
+build 
 srcgen
 lib/libgen
 lib/drivers

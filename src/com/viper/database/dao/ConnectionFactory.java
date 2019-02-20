@@ -47,75 +47,79 @@ import com.viper.database.model.DatabaseConnection;
 import com.viper.database.security.Encryptor;
 
 public class ConnectionFactory {
-	
-	private final static Logger log = Logger.getLogger(ConnectionFactory.class.getName());
 
-	private final static Map<String, PoolingDataSource> dataSources = new HashMap<String, PoolingDataSource>();
+    private final static Logger log = Logger.getLogger(ConnectionFactory.class.getName());
 
-	public final static synchronized DataSource getDataSource(DatabaseConnection dbc) throws Exception {
+    private final static Map<String, PoolingDataSource> dataSources = new HashMap<String, PoolingDataSource>();
 
-		if (dataSources.containsKey(dbc.getName())) {
-			return dataSources.get(dbc.getName());
-		}
+    public final static synchronized DataSource getDataSource(DatabaseConnection dbc) throws Exception {
 
-		Class.forName(dbc.getDriver());
+        if (dataSources.containsKey(dbc.getName())) {
+            return dataSources.get(dbc.getName());
+        } 
 
-		DriverManagerConnectionFactory cf = null;
+        Class.forName(dbc.getDriver() );
 
-		log.fine("ConnectionFactory: database url: " + dbc.getDatabaseUrl());
-		if (dbc.getUsername() != null && dbc.getPassword() != null) {
-			Encryptor encryptor = new Encryptor();
-			String password = encryptor.decryptPassword(dbc.getPassword());
+        DriverManagerConnectionFactory cf = null;
 
-			cf = new DriverManagerConnectionFactory(dbc.getDatabaseUrl(), dbc.getUsername(), password);
-		} else {
-			cf = new DriverManagerConnectionFactory(dbc.getDatabaseUrl());
-		}
+        log.fine("ConnectionFactory: database url: " + dbc.getDatabaseUrl());
+        if (dbc.getUsername() != null && dbc.getPassword() != null) {
+            Encryptor encryptor = new Encryptor();
+            String password = encryptor.decryptPassword(dbc.getPassword());
 
-		PoolableConnectionFactory pcf = new PoolableConnectionFactory(cf, null);
-		pcf.setValidationQuery(getValue(dbc.getPoolValidationQuery(), "select 1"));
+            cf = new DriverManagerConnectionFactory(dbc.getDatabaseUrl(), dbc.getUsername(), password);
 
-		// create a generic pool
-		GenericObjectPool<PoolableConnection> pool = new GenericObjectPool<PoolableConnection>(pcf);
-		pool.setMaxTotal(getValue(dbc.getPoolMaxTotal(), 50));
-		pool.setMaxIdle(getValue(dbc.getPoolMaxIdle(), 10));
-		pool.setMinIdle(getValue(dbc.getPoolMinIdle(), 0));
-		pool.setMaxWaitMillis(getValue(dbc.getPoolMaxWaitMillis(), -1));
-		pool.setTimeBetweenEvictionRunsMillis(getValue(dbc.getPoolTimeBetweenEvictionRunsMillis(), 30000));
-		pool.setMinEvictableIdleTimeMillis(getValue(dbc.getPoolMinEvictableIdleTimeMillis(), 60000));
-		pool.setTestWhileIdle(dbc.isPoolTestWhileIdle());
-		pool.setTestOnBorrow(dbc.isPoolTestOnBorrow());
+        } else if (dbc.getUsername() != null) {
+            cf = new DriverManagerConnectionFactory(dbc.getDatabaseUrl(), dbc.getUsername(), "");
 
-		AbandonedConfig abandonedConfig = new AbandonedConfig();
-		abandonedConfig.setRemoveAbandonedOnMaintenance(dbc.isPoolRemoveAbandoned());
-		abandonedConfig.setRemoveAbandonedTimeout(getValue(dbc.getPoolRemoveAbandonedTimeoutSeconds(), 300));
-		abandonedConfig.setLogAbandoned(dbc.isPoolLogAbandoned());
+        } else {
+            cf = new DriverManagerConnectionFactory(dbc.getDatabaseUrl());
+        }
 
-		pool.setAbandonedConfig(abandonedConfig);
+        PoolableConnectionFactory pcf = new PoolableConnectionFactory(cf, null);
+        pcf.setValidationQuery(getValue(dbc.getPoolValidationQuery(), "select 1"));
 
-		pcf.setPool(pool);
+        // create a generic pool
+        GenericObjectPool<PoolableConnection> pool = new GenericObjectPool<PoolableConnection>(pcf);
+        pool.setMaxTotal(getValue(dbc.getPoolMaxTotal(), 50));
+        pool.setMaxIdle(getValue(dbc.getPoolMaxIdle(), 10));
+        pool.setMinIdle(getValue(dbc.getPoolMinIdle(), 0));
+        pool.setMaxWaitMillis(getValue(dbc.getPoolMaxWaitMillis(), -1));
+        pool.setTimeBetweenEvictionRunsMillis(getValue(dbc.getPoolTimeBetweenEvictionRunsMillis(), 30000));
+        pool.setMinEvictableIdleTimeMillis(getValue(dbc.getPoolMinEvictableIdleTimeMillis(), 60000));
+        pool.setTestWhileIdle(dbc.isPoolTestWhileIdle());
+        pool.setTestOnBorrow(dbc.isPoolTestOnBorrow());
 
-		PoolingDataSource ds = new PoolingDataSource(pool);
+        AbandonedConfig abandonedConfig = new AbandonedConfig();
+        abandonedConfig.setRemoveAbandonedOnMaintenance(dbc.isPoolRemoveAbandoned());
+        abandonedConfig.setRemoveAbandonedTimeout(getValue(dbc.getPoolRemoveAbandonedTimeoutSeconds(), 300));
+        abandonedConfig.setLogAbandoned(dbc.isPoolLogAbandoned());
 
-		dataSources.put(dbc.getName(), ds);
+        pool.setAbandonedConfig(abandonedConfig);
 
-		return ds;
-	}
+        pcf.setPool(pool);
 
-	public final static synchronized void releaseAll() throws Exception {
-		for (String key : dataSources.keySet()) {
-			PoolingDataSource ds = dataSources.get(key);
-			ds.close();
-		}
+        PoolingDataSource ds = new PoolingDataSource(pool);
 
-		dataSources.clear();
-	}
+        dataSources.put(dbc.getName(), ds);
 
-	private final static int getValue(int value, int defaultValue) {
-		return (value == 0) ? defaultValue : value;
-	}
+        return ds;
+    }
 
-	private final static String getValue(String value, String defaultValue) {
-		return (value == null) ? defaultValue : value;
-	}
+    public final static synchronized void releaseAll() throws Exception {
+        for (String key : dataSources.keySet()) {
+            PoolingDataSource ds = dataSources.get(key);
+            ds.close();
+        }
+
+        dataSources.clear();
+    }
+
+    private final static int getValue(int value, int defaultValue) {
+        return (value == 0) ? defaultValue : value;
+    }
+
+    private final static String getValue(String value, String defaultValue) {
+        return (value == null) ? defaultValue : value;
+    }
 }

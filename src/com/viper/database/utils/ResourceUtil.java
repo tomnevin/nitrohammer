@@ -30,6 +30,7 @@
 
 package com.viper.database.utils;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 
 public class ResourceUtil {
@@ -39,6 +40,13 @@ public class ResourceUtil {
         try {
             InitialContext initialContext = new javax.naming.InitialContext();
             String value = (String) initialContext.lookup("java:comp/env/" + name);
+            if (value != null && !value.isEmpty()) {
+                return value;
+            }
+
+            Context env = (Context) new InitialContext().lookup("java:comp/env");
+
+            value = (String) env.lookup(name);
             if (value != null && !value.isEmpty()) {
                 return value;
             }

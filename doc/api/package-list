@@ -1,0 +1,16 @@
+com.viper.database
+com.viper.database.annotations
+com.viper.database.dao
+com.viper.database.dao.converters
+com.viper.database.dao.drivers
+com.viper.database.dao.validators
+com.viper.database.filters
+com.viper.database.interfaces
+com.viper.database.managers
+com.viper.database.security
+com.viper.database.tools
+com.viper.database.utils
+com.viper.database.utils.junit
+com.viper.rest
+com.viper.rest.client
+com.viper.rest.service

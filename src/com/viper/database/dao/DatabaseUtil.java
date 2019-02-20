@@ -474,16 +474,14 @@ public class DatabaseUtil {
 
         File[] files = directory.listFiles();
         for (File file : files) {
-            if (file.isDirectory()) {
-                log.info("findClassesInFile: directory=" + file.getAbsolutePath());
+            if (file.isDirectory()) { 
                 try {
                     classes.addAll(findClassesInFile(classLoader, file, packageName + "." + file.getName()));
                 } catch (Throwable ex) {
                     log.severe("findClassesInFile: directory=" + file.getAbsolutePath() + ", " + ex);
 
                 }
-            } else if (file.getName().endsWith(".class")) {
-                log.info("findClassesInFile: class=" + file.getAbsolutePath());
+            } else if (file.getName().endsWith(".class")) { 
                 try {
                     classes.add(Class
                             .forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
