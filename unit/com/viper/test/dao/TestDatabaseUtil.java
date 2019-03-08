@@ -84,8 +84,8 @@ public class TestDatabaseUtil extends AbstractTestCase {
 
     @Test
     public void testToPathname() throws Exception {
-        String urlstr = "http://localhost:8080/viper/rest";
-        String expected = "/viper/rest";
+        String urlstr = "http://localhost:8080/viper/nitrohammer";
+        String expected = "/viper/nitrohammer";
 
         String actual = DatabaseUtil.toPathname(urlstr);
 
@@ -95,8 +95,8 @@ public class TestDatabaseUtil extends AbstractTestCase {
 
     @Test
     public void testEscape() throws Exception {
-        String str = "http://localhost:8080/viper/rest";
-        String expected = "http:////localhost:8080///viper///rest";
+        String str = "http://localhost:8080/viper/nitrohammer";
+        String expected = "http:////localhost:8080///viper///nitrohammer";
 
         String actual = DatabaseUtil.escape(str, "/");
 

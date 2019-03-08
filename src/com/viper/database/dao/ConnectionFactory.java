@@ -56,9 +56,9 @@ public class ConnectionFactory {
 
         if (dataSources.containsKey(dbc.getName())) {
             return dataSources.get(dbc.getName());
-        } 
+        }
 
-        Class.forName(dbc.getDriver() );
+        Class.forName(dbc.getDriver());
 
         DriverManagerConnectionFactory cf = null;
 

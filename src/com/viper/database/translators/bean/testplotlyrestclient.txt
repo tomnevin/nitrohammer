@@ -36,8 +36,8 @@ public class Test#{classname}PlotlyRestClient extends AbstractTestCase {
 
     private final static String RestServiceUsername = System.getProperty("rest.service.username", "tom@bliss.com");
     private final static String RestServicePassword = System.getProperty("rest.service.password", "password");
-    private final static String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost/rest/classes/");
-    private final static String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
+    private final static String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost/nitrohammer/classes/");
+    private final static String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost/nitrohammer/authorize/login");
     private static final RestStringClient client = new RestStringClient(AuthorizeServiceUrl, RestServiceUrl);
 
     @BeforeClass

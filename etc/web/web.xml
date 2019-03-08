@@ -3,13 +3,7 @@
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="web" version="2.5">
 	<display-name>Archetype Created Web Application</display-name>
-
-	<env-entry>
-		<env-entry-name>Bla/SomeFilePath</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>/opt/bla</env-entry-value>
-	</env-entry>
-
+ 
 	<welcome-file-list>
 		<welcome-file>viewer.html</welcome-file>
 	</welcome-file-list>

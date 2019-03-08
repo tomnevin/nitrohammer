@@ -36,8 +36,8 @@ public class Test#{classname}AgGridRestClient extends AbstractTestCase {
 
     private static final String RestServiceUsername = System.getProperty("rest.service.username", "tom@bliss.com");
     private static final String RestServicePassword = System.getProperty("rest.service.password", "password");
-    private static final String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost/rest/classes/");
-    private static final String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
+    private static final String RestServiceUrl = System.getProperty("rest.service.url", "http://localhost/nitrohammer/classes/");
+    private static final String AuthorizeServiceUrl = System.getProperty("authorize.service.url", "http://localhost/nitrohammer/authorize/login");
     private static final RestStringClient client = new RestStringClient(AuthorizeServiceUrl, RestServiceUrl);
 
     @BeforeClass

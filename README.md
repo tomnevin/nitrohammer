@@ -22,8 +22,9 @@ The NitroHanmmer command line tool has the following features:
 ## Documentation
 
 In progress:
-* [NitroHammer User Manual - Local](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/nitrohammer.html)
-* [NitroHammer Data Model Schema](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/database.xsd.html)
+* [API Docs](http://www.tnevin.com/world/doc/api/index.html) JavaDoc API documentation
+* [User Manual](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/nitrohammer.html)
+* [Data Model](https://cdn.rawgit.com/vipersoftwareservices/nitrohammer/master/doc/database.xsd.html)
 * [Authors Home Page](http://www.tnevin.com)
 
 ## Getting Started
@@ -42,21 +43,21 @@ What things you need to install the software and how to install them
 
 Note: ant commands have been run and tested using cygwin bash shell, dos shell, and other linux shells will probably work.
 
-### Installing
-
-1. Download the nitro-hammer zip file, and unzip it.
+### Install/Build and Test
+ 
 
 ```
-https://github.com/vipersoftwareservices/nitrohammer
+# 1. Download the nitro-hammer zip file, and unzip it. Download from the following url: 
+https://github.com/vipersoftwareservices/nitrohammer 
 ```
 
-2. Run the build script if building sources is desired, runtime jars are available.
+2. Run the build script, if building sources is desired, runtime jars are available.
 
 ```
 ant clean all
 ``` 
 
-3. Run the tests, by running ant command.
+3. Run the tests, by running the following ant command.
 
 ```
 ant test

@@ -58,8 +58,8 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     private MediaType acceptMediaType = MediaType.APPLICATION_JSON_TYPE;
     public static boolean debugOn = false;
 
-    private String baseURL = "https://localhost/rest/classes/";
-    private String authorizeURL = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
+    private String baseURL = System.getProperty("rest.service.url");
+    private String authorizeURL = System.getProperty("authorize.service.url");
     private String sessionToken = null;
     private Client client = null;
 
@@ -93,10 +93,10 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     }
 
     public void setAcceptMediaType(String type, String subtype, String key, String value) {
-        
+
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put(key, value);
-        
+
         MediaType mediaType = new MediaType(type, subtype, parameters);
 
         acceptMediaType = mediaType;
@@ -129,6 +129,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     public boolean authorize(String username, String password) throws Exception {
 
         String url = authorizeURL;
+        
         try {
             WebTarget webTarget = getClient().target(url).queryParam("username", username).queryParam("password", password);
 

@@ -13,7 +13,7 @@
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.35" conf="drivers->master" />
 
 		<!-- H2 Database (MYSQL driver required) -->
-		<dependency org="com.h2database" name="h2" rev="1.4.192" conf="drivers->master" />
+		<dependency org="com.h2database" name="h2" rev="1.4.196" conf="drivers->master" />
 
 		<!-- Hadoop database cliet (Optional) -->
 		<dependency org="org.apache.hadoop" name="hadoop-mapreduce-client-common" rev="2.7.2" conf="drivers->master" />
@@ -43,22 +43,7 @@
 		<!--  LIBGEN  S/B COMMON -->
 		<!-- log4j -->
 		<dependency org="org.apache.logging.log4j" name="log4j" rev="2.9.1" conf="libgen->master" />
-
-		<!-- JERSEY -->
-		<!-- <dependency org="javax.ws.rs" name="javax.ws.rs-api" rev="2.1" conf="libgen->master" /> -->
-		<!-- JERSEY Extensions (ext) -->
-		<!-- <dependency org="org.glassfish.hk2.external" name="javax.inject" rev="2.5.0-b61" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.hk2" name="osgi-resource-locator" rev="2.5.0-b42" conf="libgen->master" /> -->
-		<!-- <dependency org="javax.annotation" name="javax.annotation-api" rev="1.3.2" conf="libgen->master" /> -->
-		<!-- <dependency org="javax.validation" name="validation-api" rev="2.0.1.Final" conf="libgen->master" /> -->	
-		<!-- <dependency org="org.osgi" name="org.osgi.core" rev="4.2.0" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.hk2.external" name="javax.inject" rev="2.5.0-b42" conf="libgen->master" /> -->
-		<!-- JERSEY implementation (lib) -->
-		<!-- <dependency org="org.glassfish.jersey.core" name="jersey-client" rev="2.27" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jersey.core" name="jersey-common" rev="2.27" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jersey.core" name="jersey-server" rev="2.27" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jersey.media" name="jersey-media-jaxb" rev="2.27" conf="libgen->master" /> -->
-
+ 
 		<!-- Apache Johnzon -->
 		<!-- https://mvnrepository.com/artifact/org.apache.johnzon/apache-johnzon -->
 		<dependency org="javax.json" name="javax.json-api" rev="1.1.2" conf="libgen->master" />
@@ -67,18 +52,7 @@
 		<dependency org="org.apache.johnzon" name="johnzon-jsonb" rev="1.1.8" conf="libgen->master" />
 		<dependency org="org.apache.johnzon" name="johnzon-mapper" rev="1.1.8" conf="libgen->master" />
 		<dependency org="javax.annotation" name="javax.annotation-api" rev="1.3.2" conf="libgen->master" />
-
-		<!-- JAXB -->
-		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
-		<!-- <dependency org="javax.activation" name="activation" rev="1.1.1" conf="libgen->master" /> -->
-		<!-- <dependency org="javax.xml.bind" name="jaxb-api" rev="2.3.0" conf="libgen->master" /> -->
-		<!-- <dependency org="javax.xml.bind" name="jsr173_api" rev="1.0" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-runtime" rev="2.3.0.1" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-core" rev="2.3.0.1" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-xjc" rev="2.3.0.1" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jaxb" name="jaxb-jxc" rev="2.3.0.1" conf="libgen->master" /> -->
-		<!-- <dependency org="org.glassfish.jaxb" name="txw2" rev="2.3.0.1" conf="libgen->master" /> -->
-
+ 
 		<!-- JACKSON -->
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.9.6" conf="libgen->master" />

@@ -204,7 +204,7 @@ public class InterceptorAdapter implements DatabaseSQLInterface {
      */
     @Override
     public <T> void insertAll(List<T> beans) throws Exception {
-        if (beans == null || beans.size() == 0) {
+        if (beans == null || beans.size() == 0 || beans.get(0) == null) {
             return;
         }
         Class<T> clazz = (Class<T>) beans.get(0).getClass();

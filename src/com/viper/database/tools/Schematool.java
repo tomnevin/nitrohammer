@@ -109,8 +109,9 @@ import com.viper.database.utils.XMLUtil;
 
 public class Schematool {
 
-    private final static Logger log = Logger.getLogger(Schematool.class.getName());
+    private static final Logger log = Logger.getLogger(Schematool.class.getName());
     private static final JEXLUtil jexl = JEXLUtil.getInstance();
+    private static boolean verbose = false;
 
     public void process(String args[]) throws Exception {
 
@@ -121,11 +122,15 @@ public class Schematool {
 
         ConsoleHandler ch = new ConsoleHandler();
         ch.setLevel(Level.FINEST);
+        
         log.addHandler(ch);
         log.setLevel(Level.FINEST);
 
         for (int i = 0; i < args.length; i++) {
-            if ("-username".equals(args[i])) {
+            if ("-verbose".equals(args[i]) || "-v".equals(args[i])) {
+                verbose = true;
+                
+            } else if ("-username".equals(args[i])) {
                 user = args[++i];
 
             } else if ("-password".equals(args[i])) {
@@ -1082,12 +1087,16 @@ public class Schematool {
         int iteration = 1;
 
         DatabaseInterface database = DatabaseFactory.getInstance(connection);
+        
         List<Class<?>> clazzes = DatabaseUtil.getClasses(connection.getPackageNames());
         Class[] classes = new Class[clazzes.size()];
         int counter = 0;
         for (Class clazz : clazzes) {
             classes[counter++] = clazz;
         }
+        
+        log("Package Names size: " + connection.getPackageNames().size());
+        log("Class Names size: " + clazzes.size());
 
         Arrays.sort(classes, new BeanComparator());
 
@@ -1104,6 +1113,8 @@ public class Schematool {
                 continue;
             }
 
+            log("Generate data for " + clazz.getName() + " nrows " + table.iterations());
+
             List beans = database.queryAll(clazz);
             RandomBean.setTableData(table.databaseName(), table.name(), beans);
         }
@@ -1111,7 +1122,7 @@ public class Schematool {
         for (Class clazz : classes) {
             com.viper.database.annotations.Table table = (com.viper.database.annotations.Table) clazz
                     .getAnnotation(com.viper.database.annotations.Table.class);
-            if (table.iterations() == -1) {
+            if (table == null || table.iterations() == -1) {
                 continue;
             }
             if (!"table".equalsIgnoreCase(table.tableType())) {
@@ -1122,7 +1133,7 @@ public class Schematool {
                 nitems = 100;
             }
 
-            System.out.println("Generating table : " + clazz.getName() + ", nitems: " + nitems);
+            log("Generating table : " + clazz.getName() + ", nitems: " + nitems);
             List beans = RandomBean.getRandomBeans(clazz, iteration, nitems);
             database.insertAll(beans);
 
@@ -2680,6 +2691,12 @@ public class Schematool {
             name = table.getTableName();
         }
         return name;
+    }
+    
+    private final void log(String msg) {
+        if (verbose) {
+            System.out.println(msg);
+        }
     }
 
     public static void main(String args[]) {

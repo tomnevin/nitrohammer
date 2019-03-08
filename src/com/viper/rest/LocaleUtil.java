@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
+ 
 
 public class LocaleUtil {
 
@@ -68,5 +69,5 @@ public class LocaleUtil {
 			locale = request.getLocale();
 		}
 		return locale;
-	}
+	} 
 }

@@ -1309,6 +1309,9 @@ public class SQLDriver {
         } else if (value instanceof Boolean) {
             writeBoolean(value.toString());
 
+        } else if ("boolean".equalsIgnoreCase(column.getJavaType())) {
+            writeBoolean(value.toString());
+
         } else if (value instanceof Time) {
             str = str.trim();
             if (str.length() > 0 && Character.isDigit(str.charAt(0))) {

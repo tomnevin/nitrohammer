@@ -33,6 +33,7 @@ package com.viper.database.utils;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.File;
 import java.io.StringReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -1440,6 +1441,10 @@ public class RandomBean {
     private final static String toDataFilename(String filename) {
         if (filename.contains("/")) {
             return filename;
+        }
+        String filename1 = "etc/data/lists/" + filename;
+        if (new File(filename1).exists()) {
+            return filename1;
         }
         return "res:/etc/data/lists/" + filename;
     }

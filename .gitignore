@@ -6,3 +6,4 @@ srcgen
 lib/libgen
 lib/drivers
 lib/libdev
+lib/jsf

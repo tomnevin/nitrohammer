@@ -58,8 +58,8 @@ public class RestStringClient {
     private MediaType acceptMediaType = MediaType.APPLICATION_JSON_TYPE;
     public static boolean debugOn = false;
 
-    private String baseURL = "https://localhost/rest/classes/";
-    private String authorizeURL = System.getProperty("authorize.service.url", "http://localhost/rest/authorize/login");
+    private String baseURL = System.getProperty("rest.service.url");
+    private String authorizeURL = System.getProperty("authorize.service.url");
     private String sessionToken = null;
     private Client client = null;
 

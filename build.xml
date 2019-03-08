@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="database" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:jacoco="antlib:org.jacoco.ant">
+<project name="nitrohammer" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:jacoco="antlib:org.jacoco.ant">
+	
 	<property environment="env" />
-	<property file="${basedir}/build.properties" />
-	<property name="name" value="database" />
+	 
+	<property name="name" value="nitrohammer" /> 
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="data.source" value="mysql" />
 	<property name="version" value="1.0" />
 	<property name="jvm.deprecation" value="-Xlint:deprecation" /> 
 	<property name="jvm.args" value="-Xmx1024m -Xms256m " />
 	<property name="jvm.debug.args" value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000" />
-	<property name="tomcat.dir" value="tomcat" />
-	<property name="tomcat.root" value="/opt" />
-	<property name="tomcat.home" value="/opt/${tomcat.dir}" />
 	<property name="test.name" value="Test*" />
 	<property name="debug" value="on" />
 	<property name="deprecation" value="off" />
@@ -21,12 +19,15 @@
 	<property name="target" value="1.8" />
 	<property name="service.name" value="TomEE" />
 	<property name="database.name" value="test" />
-	<property name="test.url" value="https://localhost/rest" />
+	<property name="tomcat.dir" value="tomcat" />
+	<property name="tomcat.root" value="/opt" />
+	<property name="tomcat.home" value="/opt/${tomcat.dir}" />
+	<property name="test.url" value="http://localhost/${name}" />
 	<property name="authorize.service.url" value="${test.url}/authorize/login" />
 	<property name="rest.service.url" value="${test.url}/classes/" />
 	<property name="web.service.url" value="${test.url}/web/classes/" />
-	<property name="war.service.name" value="rest" />
-	<property name="war.name" value="rest.war" />
+	<property name="war.service.name" value="${name}" />
+	<property name="war.name" value="${name}.war" />
 	<property name="os.family" value="windows" />
 	<property name="keystore.password" value="DummyP@ssw0rd4Now!" />
 	<property name="DatabaseUrl" value="jdbc:mysql://localhost:3306?user=root&amp;password=root&amp;useInformationSchema=true&amp;CatalogMeansCurrent=false" />
@@ -65,7 +66,6 @@
 		<delete quiet="true" dir="${basedir}/lib/libgen" />
 		<delete quiet="true" dir="${basedir}/lib/libdev" />
 		<delete quiet="true" dir="${basedir}/lib/drivers" />
-		<delete quiet="true" dir="${basedir}/doc/api" />
 		<delete quiet="true" dir="/tmp/JNDI" />
 	</target>
 	<target name="very.clean" depends="clean">
@@ -82,7 +82,6 @@
 		<mkdir dir="${build.dir}/classes" />
 		<mkdir dir="${build.dir}/out" />
 		<mkdir dir="${build.dir}/reports/raw" />
-		<mkdir dir="${basedir}/doc/api" />
 		<mkdir dir="${basedir}/srcgen" />
 		<mkdir dir="${basedir}/lib/libgen" />
 		<mkdir dir="${basedir}/lib/libdev" />
@@ -135,11 +134,11 @@
 	<!-- =================================================================== -->
 	<!-- Compiles the source code -->
 	<!-- =================================================================== -->
-	<target name="schematool" depends="srcgen">
+	<target name="schematool" depends="srcgen"> 
 		<javac destdir="${build.dir}/classes" srcdir="srcgen" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
 			<include name="**/*.java" />
 			<classpath refid="classpath.test" />
-		</javac>
+		</javac> 
 		<javac destdir="${build.dir}/classes" srcdir="src" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
 			<include name="**/*.java" />
 			<exclude name="com/viper/rest/**/*.java" />
@@ -244,12 +243,13 @@
 	<!-- =================================================================== -->
 	<!-- Creates the war archive -->
 	<!-- =================================================================== -->
-	<target name="war" depends="jar">
+	<target name="war">
 		<war destfile="${build.dir}/${war.name}" needxmlfile="false" webxml="${basedir}/etc/web/web.xml">
+			<fileset dir="${basedir}" includes="doc/api/**/*.*" />
 			<classes dir="${basedir}/etc" includes="databases.xml" />
 			<lib dir="${build.dir}" includes="${name}-all.jar" />
 			<mappedresources>
-				<fileset dir="${basedir}/lib" includes="**/*.jar" excludes="jersey-2.0.1/**/*.jar,dev/**/*.jar" />
+				<fileset dir="${basedir}/lib" includes="**/*.jar" excludes="jersey-2.0.1/**/*.jar,libdev/*.jar,jsf/*.jar" />
 				<chainedmapper>
 					<flattenmapper />
 					<globmapper from="*.jar" to="WEB-INF/lib/*.jar" />
@@ -262,16 +262,16 @@
 	<!-- =================================================================== -->
 	<target name="dist" depends="war">
 		<copy todir="${basedir}/dist">
-			<fileset dir="${build.dir}" includes="database.jar" />
+			<fileset dir="${build.dir}" includes="${name}.jar" />
 		</copy>
 		<jar jarfile="${basedir}/dist/${name}-src.jar">
-			<fileset dir="${basedir}/.." includes="${name}/etc/**" />
-			<fileset dir="${basedir}/.." includes="${name}/lib/**" />
-			<fileset dir="${basedir}/.." includes="${name}/src/**" />
-			<fileset dir="${basedir}/.." includes="${name}/srcgen/**" />
-			<fileset dir="${basedir}/.." includes="${name}/unit/**" />
-			<fileset dir="${basedir}/.." includes="${name}/*" />
-			<fileset dir="${basedir}/.." includes="${name}/*.*" />
+			<fileset dir="${basedir}/.." includes="database/etc/**" />
+			<fileset dir="${basedir}/.." includes="database/lib/**" />
+			<fileset dir="${basedir}/.." includes="database/src/**" />
+			<fileset dir="${basedir}/.." includes="database/srcgen/**" />
+			<fileset dir="${basedir}/.." includes="database/unit/**" />
+			<fileset dir="${basedir}/.." includes="database/*" />
+			<fileset dir="${basedir}/.." includes="database/*.*" />
 		</jar>
 	</target>
 	<!-- =================================================================== -->
@@ -581,14 +581,16 @@
 	<!-- Creates the API documentation -->
 	<!-- =================================================================== -->
 	<target name="javadoc">
+		<delete quiet="true" dir="${basedir}/doc/api" />
+		<mkdir dir="${basedir}/doc/api" />
 		<javadoc packagenames="*" sourcepath="${basedir}/src" destdir="${basedir}/doc/api" author="true" version="true" windowtitle="${name} ${version} API" doctitle="${Name}" footer="Copyright &amp;copy; 1997-2019 Viper Software. See &lt;a target=&quot;_top&quot; href=&quot;../license.html&quot;&gt;license agreement&lt;/A&gt; for rights granted.">
 			<classpath refid="classpath.main" />
 		</javadoc>
 	</target>
 	<!-- =================================================================== -->
-	<target name="test-all" depends="taskdefs,stop,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
-	<target name="test" depends="taskdefs,stop,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
-	<target name="cruise-control" depends="clean,war,deploy,junit,junit-report,jacoco-report,javadoc" />
-	<target name="release" depends="clean,dist,javadoc" />
-	<target name="all" depends="clean,war" />
+	<target name="test-all" depends="taskdefs,stop,jar,war,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
+	<target name="test" depends="taskdefs,stop,jar,war,deploy,start,taskdefs,junit,junit-report,jacoco-report" />
+	<target name="cruise-control" depends="clean,jar,war,deploy,junit,junit-report,jacoco-report,javadoc" />
+	<target name="release" depends="clean,jar,javadoc,dist" />
+	<target name="all" depends="clean,jar,war,deploy" />
 </project>
