@@ -93,8 +93,7 @@ public class DatabaseMongoDB implements DatabaseInterface {
             URI uri = new URI(databaseUrl);
             String databaseName = uri.getPath().substring(1);
 
-            log.fine("Mongo Database opened.entering: " + databaseUrl + "," + username + "," + password + ","
-                    + databaseName);
+            log.fine("Mongo Database opened.entering: " + databaseUrl + "," + username + "," + password + "," + databaseName);
 
             if (username != null && password != null) {
                 MongoCredential credential = MongoCredential.createMongoCRCredential(username, databaseName,
@@ -148,8 +147,7 @@ public class DatabaseMongoDB implements DatabaseInterface {
                                  // database.authenticate(uri.getUsername(),
                                  // uri.getPassword());
             if (!auth) {
-                throw new Exception(
-                        "Mongo authenticate failed for user: " + databaseUrl + ":" + username + "," + password);
+                throw new Exception("Mongo authenticate failed for user: " + databaseUrl + ":" + username + "," + password);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -299,14 +297,14 @@ public class DatabaseMongoDB implements DatabaseInterface {
     public <T> List<T> queryList(Class<T> tableClass, Map<String, String> parameters) throws Exception {
         return null; // TODO
     }
-    
+
     /**
      * {@inheritDoc}
      * 
      */
     @Override
-    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams,
-            LimitParam limitParam, Map<String, String> parameters) throws Exception {
+    public <T> List<T> queryList(Class<T> clazz, Predicate<T> filter, List<ColumnParam> columnParams, LimitParam limitParam,
+            Map<String, String> parameters) throws Exception {
 
         List<T> beans = queryAll(clazz);
         return DatabaseUtil.applyFilter(beans, filter);
@@ -528,18 +526,20 @@ public class DatabaseMongoDB implements DatabaseInterface {
         BasicDBObject query = new BasicDBObject();
         if (keyValue != null && keyValue.length > 0) {
             for (int i = 0; i < keyValue.length;) {
-                String key = (String) keyValue[i++];
-                Object value = keyValue[i++];
 
-                query.put(key, value);
+                Object key = keyValue[i++];
+                Object value = keyValue[i++];
+                if (key != null) { 
+                    query.put(key.toString(), value);
+                }
             }
         }
         return query;
     }
 
     /**
-     * Creates a select statement for SQL that can do multiple where and selections
-     * based on the keyValue pairs.
+     * Creates a select statement for SQL that can do multiple where and selections based on the
+     * keyValue pairs.
      * 
      * @param <T>
      * 
@@ -548,8 +548,7 @@ public class DatabaseMongoDB implements DatabaseInterface {
      * @return
      * @throws Exception
      */
-    private <T> BasicDBObject buildWhereClauseByMap(String primaryKeyName, Map<String, List<String>> params)
-            throws Exception {
+    private <T> BasicDBObject buildWhereClauseByMap(String primaryKeyName, Map<String, List<String>> params) throws Exception {
 
         BasicDBObject query = new BasicDBObject();
         if (params != null) {
@@ -569,8 +568,8 @@ public class DatabaseMongoDB implements DatabaseInterface {
     }
 
     /**
-     * TODO This is a bad idea for mongo, just use a natural primary key, like user
-     * login name, timestamp, etc.
+     * TODO This is a bad idea for mongo, just use a natural primary key, like user login name,
+     * timestamp, etc.
      *
      * @param bean
      * @param primaryKeyName

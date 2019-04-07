@@ -148,8 +148,13 @@ public class PlotlyRestService implements RestServiceInterface {
 
         String filename = makeDashboardFilename(chartname);
         JSONObject dashboard = loadDashboard(filename);
-        JSONArray charts = dashboard.getJSONArray("charts");
-
+        
+        JSONArray charts = null;
+        if (!dashboard.has("charts")) {
+            dashboard.put("charts", new JSONArray());
+        }
+        charts = dashboard.getJSONArray("charts");
+        
         for (int i = 0; i < charts.length(); i++) {
             JSONObject chart = charts.getJSONObject(i);
 

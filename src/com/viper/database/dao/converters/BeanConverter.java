@@ -30,25 +30,17 @@
 
 package com.viper.database.dao.converters;
 
-import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.johnzon.mapper.Mapper;
-import org.apache.johnzon.mapper.MapperBuilder;
-import org.apache.johnzon.mapper.reflection.JohnzonParameterizedType;
-
-import com.viper.database.dao.converters.ConverterUtils;
+import com.viper.database.utils.JSONUtil;
 
 public final class BeanConverter {
-
-    private static final Mapper mapper = new MapperBuilder().build();
 
     public static final void initialize() {
 
@@ -84,107 +76,100 @@ public final class BeanConverter {
     }
 
     public static final <T, S> T convertBeanToString(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(mapper.writeObjectAsString(fromValue));
+        return toType.cast(JSONUtil.toJSON(fromValue));
     }
 
     public static final <T, S> T convertStringToBean(Class<T> toType, S fromValue) throws Exception {
-        return mapper.readObject((String) fromValue, toType);
+        return JSONUtil.fromJSON(toType, (String) fromValue);
     }
 
     public static final <T, S> T convertCharsToBean(Class<T> toType, S fromValue) throws Exception {
-        return mapper.readObject(new StringReader(new String((char[]) fromValue)), toType);
+        return JSONUtil.fromJSON(toType, new String((char[]) fromValue));
     }
 
     public static final <T, S> T convertCharacterArrayToBean(Class<T> toType, S fromValue) throws Exception {
-        return mapper.readObject(new StringReader(ConverterUtils.convertToString((Character[]) fromValue)), toType);
+        return JSONUtil.fromJSON(toType, ConverterUtils.convertToString((Character[]) fromValue));
     }
 
     public static final <T, S> T convertBytesToBean(Class<T> toType, S fromValue) throws Exception {
-        return mapper.readObject(new StringReader(new String((byte[]) fromValue)), toType);
+        return JSONUtil.fromJSON(toType, new String((byte[]) fromValue));
     }
 
     public static final <T, S> T convertBytesArrayToBean(Class<T> toType, S fromValue) throws Exception {
-        return mapper.readObject(new StringReader(ConverterUtils.convertToString((Byte[]) fromValue)), toType);
+        return JSONUtil.fromJSON(toType, ConverterUtils.convertToString((Byte[]) fromValue));
     }
 
     public static final <T, S> T convertClobToBean(Class<T> toType, S fromValue) throws Exception {
-        return mapper.readObject(new StringReader(new String(ConverterUtils.convertClobToChars(fromValue))), toType);
+        return JSONUtil.fromJSON(toType, new String(ConverterUtils.convertClobToChars(fromValue)));
     }
 
     public static final <T, S> T convertBlobToBean(Class<T> toType, S fromValue) throws Exception {
-        return mapper.readObject(new StringReader(new String(ConverterUtils.convertBlobToBytes(fromValue))), toType);
+        return JSONUtil.fromJSON(toType, new String(ConverterUtils.convertBlobToBytes(fromValue)));
     }
 
     // Arrays
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToBeanArray(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readArray(new StringReader((String) fromValue), toType.getComponentType());
+        return JSONUtil.fromJSONArray(toType, (String) fromValue);
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertCharsToBeanArray(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readArray(new StringReader(new String((char[]) fromValue)), toType.getComponentType());
+        return JSONUtil.fromJSONArray(toType, new String((char[]) fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertCharactersToBeanArray(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readArray(new StringReader(ConverterUtils.convertToString((Character[]) fromValue)),
-                toType.getComponentType());
+        return JSONUtil.fromJSONArray(toType, ConverterUtils.convertToString((Character[]) fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertBytesToBeanArray(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readArray(new StringReader(new String((byte[]) fromValue)), toType.getComponentType());
+        return JSONUtil.fromJSONArray(toType, new String((byte[]) fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertByteArrayToBeanArray(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readArray(new StringReader(ConverterUtils.convertToString((Byte[]) fromValue)),
-                toType.getComponentType());
+        return JSONUtil.fromJSONArray(toType, ConverterUtils.convertToString((Byte[]) fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertClobToBeanArray(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readArray(new StringReader(new String(ConverterUtils.convertClobToChars(fromValue))),
-                toType.getComponentType());
+        return JSONUtil.fromJSONArray(toType, new String(ConverterUtils.convertClobToChars(fromValue)));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertBlobToBeanArray(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readArray(new StringReader(new String(ConverterUtils.convertBlobToBytes(fromValue))),
-                toType.getComponentType());
+        return JSONUtil.fromJSONArray(toType, new String(ConverterUtils.convertBlobToBytes(fromValue)));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertListToString(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.writeArrayAsString((List) fromValue);
+        return toType.cast(JSONUtil.toJSON((List) fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertArrayToString(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.writeObjectAsString(fromValue);
+        return toType.cast(JSONUtil.toJSON(fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToList(Class<T> toType, S fromValue) throws Exception {
-        StringReader reader = new StringReader((String) fromValue);
-        JohnzonParameterizedType parameterizedType = new JohnzonParameterizedType(List.class, toType);
-        return (T) Arrays.asList(mapper.readCollection(reader, parameterizedType));
+        return toType.cast(JSONUtil.fromJSONList(toType, (String) fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToArray(Class<T> toType, S fromValue) throws Exception {
-        StringReader reader = new StringReader((String) fromValue);
-        return (T) mapper.readArray(reader, toType);
+        return toType.cast(JSONUtil.fromJSONArray(toType, (String) fromValue));
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertMapToString(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.writeObjectAsString((Map) fromValue);
+        return (T) JSONUtil.toJSON(fromValue);
     }
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToMap(Class<T> toType, S fromValue) throws Exception {
-        return (T) mapper.readObject((String) fromValue, Map.class);
+        return (T) JSONUtil.fromJSON(Map.class, (String)fromValue); 
     }
 }

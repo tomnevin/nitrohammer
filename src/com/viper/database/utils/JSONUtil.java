@@ -30,54 +30,90 @@
 
 package com.viper.database.utils;
 
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.johnzon.jaxrs.JohnzonProvider;
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
+import org.apache.johnzon.mapper.reflection.JohnzonParameterizedType;
 
 public class JSONUtil {
 
-	private final static Mapper mapper = new MapperBuilder().build();
+    private final static Mapper mapper = new MapperBuilder().build();
 
-	public final static <T> T fromJSON(Class<T> clazz, String str) throws Exception {
-		return mapper.readObject(str, clazz);
-	}
+    public final static Class registerProvider() {
+        return JohnzonProvider.class;
+    }
 
-	public final static <T> List<T> fromJSONList(Class<T> clazz, String str) throws Exception {
-		return new ArrayList<T>(Arrays.asList(mapper.readArray(new StringReader(str), clazz)));
-	}
+    public final static <T> T fromJSON(Class<T> clazz, String str) throws Exception {
+        try {
+            return mapper.readObject(str, clazz);
+        } catch (Exception ex) {
+            System.out.println("ERROR: fromJSON: " + str);
+            throw ex;
+        }
+    }
 
-	public final static <T> String toJSON(T bean) throws Exception {
-		return mapper.writeObjectAsString(bean);
-	}
+    public final static <T> T fromJSON(Class<T> clazz, Reader reader) throws Exception {
+        try {
+            return mapper.readObject(reader, clazz);
+        } catch (Exception ex) {
+            System.out.println("ERROR: fromJSON: " + clazz);
+            throw ex;
+        }
+    }
 
-	public final static <T> String toJSON(Collection<T> beans) throws Exception {
-		return mapper.writeArrayAsString(beans);
-	}
+    public final static <T> T fromJSON(Class<T> clazz, InputStream reader) throws Exception {
+        try {
+            return mapper.readObject(reader, clazz);
+        } catch (Exception ex) {
+            System.out.println("ERROR: fromJSON: " + clazz);
+            throw ex;
+        }
+    }
 
-	private final static boolean classExists(String classname) {
-		try {
-			return (Class.forName(classname) != null);
-		} catch (Exception ex) {
-			return false;
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public final static <T> T fromJSONArray(Class<T> clazz, String str) throws Exception {
+        try {
+            return (T) mapper.readArray(new StringReader((String) str), clazz.getComponentType());
+        } catch (Exception ex) {
+            System.out.println("ERROR: fromJSONArray: " + str);
+            throw ex;
+        }
+    }
 
-	private final static boolean isArray(final Type runtimeType) {
-		return Class.class.isInstance(runtimeType) && Class.class.cast(runtimeType).isArray();
-	}
+    public final static <T> List<T> fromJSONList(Class<T> clazz, String str) throws Exception {
+        try {
 
-	private final static boolean isCollection(final Type runtimeType) {
-		if (!ParameterizedType.class.isInstance(runtimeType)) {
-			return false;
-		}
-		final Type rawType = ParameterizedType.class.cast(runtimeType).getRawType();
-		return Class.class.isInstance(rawType) && Collection.class.isAssignableFrom(Class.class.cast(rawType));
-	}
+            StringReader reader = new StringReader((String) str);
+            JohnzonParameterizedType parameterizedType = new JohnzonParameterizedType(List.class, clazz);
+            return new ArrayList<T>(mapper.readCollection(reader, parameterizedType));
+        } catch (Exception ex) {
+            System.out.println("ERROR: fromJSONList: " + str);
+            throw ex;
+        }
+    }
+
+    public final static <T> String toJSON(T bean) throws Exception {
+        try {
+            return mapper.writeObjectAsString(bean);
+        } catch (Exception ex) {
+            System.out.println("ERROR: toJSON: " + bean.getClass().getName());
+            throw ex;
+        }
+    }
+
+    public final static <T> String toJSON(Collection<T> beans) throws Exception {
+        try {
+            return mapper.writeArrayAsString(beans);
+        } catch (Exception ex) {
+            System.out.println("ERROR: toJSON: " + beans);
+            throw ex;
+        }
+    }
 }

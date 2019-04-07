@@ -1,0 +1,85 @@
+## for (var table : root.tables) { 
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/dao/helper/test/Test" + classname + "Helper.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.dao.helper.test;
+
+import org.junit.Test;
+
+import java.util.List; 
+import java.util.Map;  
+import java.util.HashMap; 
+import  #{database.packageName}.dao.helper.#{classname}Helper;
+
+import com.viper.database.utils.junit.AbstractTestCase;
+import com.viper.database.utils.RandomBean;
+import com.viper.database.dao.DynamicEnum;
+import com.viper.database.dao.converters.Converters;
+
+import #{database.packageName}.*;
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+public class Test#{classname}Helper extends AbstractTestCase { 
+
+    @Test
+    public void test#{classname}Helper() throws Exception {
+    
+    	#{classname}Helper helper = new #{classname}Helper(); 
+    	
+    	#{classname} bean0 =  RandomBean.getRandomBean(#{classname}.class, 1);
+    	
+        Map<String, Object> actual = (Map<String, Object>)helper.toMapOfStrings(bean0);
+        assertNotNull(getCallerMethodName() , actual);
+  		
+        #{classname} bean = helper.toBean(actual);
+        assertNotNull(getCallerMethodName() , bean);
+        
+        Map<String, Object> expected = helper.toMapOfStrings(bean);
+        assertNotNull(getCallerMethodName() , expected);
+                
+   		## for (column : table.getColumns()) {  
+        assertEquals(getCallerMethodName() + ",#{java.toJavaVariableName(column)}", expected.get("#{java.toJavaVariableName(column)}"), actual.get("#{java.toJavaVariableName(column)}"));
+     	## }
+     	          
+   		## for (column : table.getColumns()) {  
+        System.out.println(getCallerMethodName() + ",#{java.toJavaVariableName(column)}: " + expected.get("#{java.toJavaVariableName(column)}") + ":" + actual.get("#{java.toJavaVariableName(column)}"));
+     	## }
+    }
+    
+    @Test
+    public void test#{classname}DBHelper() throws Exception {  
+    
+    	#{classname}Helper helper = new #{classname}Helper(); 
+    	#{classname} bean0 =  RandomBean.getRandomBean(#{classname}.class, 1);
+    	
+        Map<String, Object> actual = (Map<String, Object>)helper.toMapOfBFields(bean0);
+        assertNotNull(getCallerMethodName() , actual);
+  		
+        #{classname} bean = helper.toBeanFromDBFields(actual);
+        assertNotNull(getCallerMethodName() , bean);
+        
+        Map<String, Object> expected = helper.toMapOfBFields(bean);
+        assertNotNull(getCallerMethodName() , expected);
+                
+   		## for (column : table.getColumns()) {  
+        assertEquals(getCallerMethodName() + ",#{java.toJavaVariableName(column)}", expected.get("#{java.toJavaVariableName(column)}"), actual.get("#{java.toJavaVariableName(column)}"));
+     	## }
+     	          
+   		## for (column : table.getColumns()) {  
+        System.out.println(getCallerMethodName() + ",#{java.toJavaVariableName(column)}: " + expected.get("#{java.toJavaVariableName(column)}") + ":" + actual.get("#{java.toJavaVariableName(column)}"));
+     	## }
+    }
+    
+
+}
+## util.write(filename, writer); 
+## }

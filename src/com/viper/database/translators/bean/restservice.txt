@@ -125,14 +125,7 @@ public class #{classname}Service {
   
 		return RestServiceFactory.find(httpServletRequest).deleteItem(#{classname}.class, key, value);
     }
-    
-    @DELETE
-    @Consumes({ MediaType.TEXT_PLAIN }) 
-    public Response deleteItem(String request) throws Exception {
- 
-		return RestServiceFactory.find(httpServletRequest).deleteItem(#{classname}.class, request);
-    }  
-    
+     
     public final void setHttpServletRequest(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;
     }

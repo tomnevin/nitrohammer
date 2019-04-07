@@ -35,12 +35,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 
-import org.apache.johnzon.mapper.Mapper;
-import org.apache.johnzon.mapper.MapperBuilder;
-
 public final class StringConverter {
 
-    private final static Mapper mapper = new MapperBuilder().build();
     private static final String DELIMITER = ",";
 
     public static final void initialize() {
@@ -100,7 +96,7 @@ public final class StringConverter {
         Converters.register(short[].class, String.class, StringConverter::convertshortArrayToString);
         Converters.register(Short[].class, String.class, StringConverter::convertShortArrayToString);
 
-        Converters.register(String.class, boolean[].class, StringConverter::convertStringToBooleanArray);
+        Converters.register(String.class, boolean[].class, StringConverter::convertStringTobooleanArray);
         Converters.register(String.class, Boolean[].class, StringConverter::convertStringToBooleanArray);
         Converters.register(String.class, byte[].class, StringConverter::convertStringTobyteArray);
         Converters.register(String.class, Byte[].class, StringConverter::convertStringToByteArray);
@@ -173,6 +169,9 @@ public final class StringConverter {
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToCharacter(Class<T> toType, S fromValue) throws Exception {
+        if (fromValue == null || ((String) fromValue).length() == 0) {
+            return null;
+        }
         return (T) new Character(("" + fromValue).charAt(0));
     }
 
@@ -190,7 +189,7 @@ public final class StringConverter {
     // String / Double
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToDouble(Class<T> toType, S fromValue) throws Exception {
-        return (T) Double.valueOf(Double.parseDouble((String) fromValue));
+        return (T) toDouble(fromValue);
     }
 
     @SuppressWarnings("unchecked")
@@ -201,7 +200,7 @@ public final class StringConverter {
     // String / Float
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToFloat(Class<T> toType, S fromValue) throws Exception {
-        return (T) Float.valueOf(Float.parseFloat((String) fromValue));
+        return (T) toFloat(fromValue);
     }
 
     @SuppressWarnings("unchecked")
@@ -212,7 +211,7 @@ public final class StringConverter {
     // String / Integer
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToInteger(Class<T> toType, S fromValue) throws Exception {
-        return (T) Integer.valueOf(Integer.parseInt((String) fromValue));
+        return (T) toInt(fromValue);
     }
 
     @SuppressWarnings("unchecked")
@@ -223,7 +222,7 @@ public final class StringConverter {
     // String / Long
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToLong(Class<T> toType, S fromValue) throws Exception {
-        return (T) Long.valueOf(Long.parseLong((String) fromValue));
+        return (T) toLong(fromValue);
     }
 
     @SuppressWarnings("unchecked")
@@ -234,7 +233,7 @@ public final class StringConverter {
     // String / Short
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringToShort(Class<T> toType, S fromValue) throws Exception {
-        return (T) Short.valueOf(Short.parseShort((String) fromValue));
+        return (T) toShort(fromValue);
     }
 
     @SuppressWarnings("unchecked")
@@ -275,7 +274,7 @@ public final class StringConverter {
     }
 
     @SuppressWarnings("unchecked")
-    public static final <T, S> T convertStringToBoolArray(Class<T> toType, S fromValue) throws Exception {
+    public static final <T, S> T convertStringTobooleanArray(Class<T> toType, S fromValue) throws Exception {
         String[] items = ((String) fromValue).split("\\s*(" + DELIMITER + ")\\s*");
         boolean[] toValues = new boolean[items.length];
         for (int i = 0; i < items.length; i++) {
@@ -349,10 +348,10 @@ public final class StringConverter {
 
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertStringTodoubleArray(Class<T> toType, S fromValue) throws Exception {
-        String[] items = ((String) fromValue).split("\\s*(" + DELIMITER + ")\\s*");
+        String[] items = ((String) fromValue).split("\\s*\\(|[" + DELIMITER + "]|\\)\\s*");
         double[] toValues = new double[items.length];
         for (int i = 0; i < items.length; i++) {
-            toValues[i] = Converters.convert(double.class, items[i]);
+            toValues[i] = toDouble(items[i]);
         }
         return (T) toValues;
     }
@@ -378,7 +377,7 @@ public final class StringConverter {
         String[] items = ((String) fromValue).split("\\s*(" + DELIMITER + ")\\s*");
         float[] toValues = new float[items.length];
         for (int i = 0; i < items.length; i++) {
-            toValues[i] = Converters.convert(float.class, items[i]);
+            toValues[i] = toFloat(items[i]);
         }
         return (T) toValues;
     }
@@ -404,7 +403,7 @@ public final class StringConverter {
         String[] items = ((String) fromValue).split("\\s*(" + DELIMITER + ")\\s*");
         int[] toValues = new int[items.length];
         for (int i = 0; i < items.length; i++) {
-            toValues[i] = Converters.convert(int.class, items[i]);
+            toValues[i] = toInt(items[i]);
         }
         return (T) toValues;
     }
@@ -430,7 +429,7 @@ public final class StringConverter {
         String[] items = ((String) fromValue).split("\\s*(" + DELIMITER + ")\\s*");
         long[] toValues = new long[items.length];
         for (int i = 0; i < items.length; i++) {
-            toValues[i] = Converters.convert(long.class, items[i]);
+            toValues[i] = toLong(items[i]);
         }
         return (T) toValues;
     }
@@ -456,24 +455,9 @@ public final class StringConverter {
         String[] items = ((String) fromValue).split("\\s*(" + DELIMITER + ")\\s*");
         short[] toValues = new short[items.length];
         for (int i = 0; i < items.length; i++) {
-            toValues[i] = Converters.convert(short.class, items[i]);
+            toValues[i] = toShort(items[i]);
         }
         return (T) toValues;
-    }
-
-    // Deprecated
-    private static final Object convertToType1(Class toType, Object fromValue) throws Exception {
-
-        if (fromValue.getClass().isAssignableFrom(String[].class)) {
-            return convertArrayToString((String[]) fromValue, DELIMITER);
-        }
-        if (Object[].class.isAssignableFrom(fromValue.getClass())) {
-            return convertArrayToString((Object[]) fromValue, DELIMITER);
-        }
-        if (fromValue.getClass().isArray()) {
-            return mapper.writeArrayAsString((Object[]) fromValue);
-        }
-        return null;
     }
 
     private static final String convertArrayToString(Object[] fromValues, String delimiter) throws Exception {
@@ -570,11 +554,11 @@ public final class StringConverter {
     }
 
     @SuppressWarnings("unchecked")
-    private static final <T> T[] convertStringToArray(Class<T> toType, String fromValues) throws Exception {
+    private static final <T> T[] convertStringToArray(Class<T> toClass, String fromValues) throws Exception {
         String[] items = fromValues.split("\\s*(" + DELIMITER + ")\\s*");
-        T[] toValues = (T[]) Array.newInstance(toType, items.length);
+        T[] toValues = (T[]) Array.newInstance(toClass, items.length);
         for (int i = 0; i < items.length; i++) {
-            toValues[i] = Converters.convert(toType, items[i]);
+            toValues[i] = Converters.convert(toClass, items[i]);
         }
         return toValues;
     }
@@ -598,6 +582,61 @@ public final class StringConverter {
             bytes[i++] = b;
         }
         return bytes;
+    }
 
+    private static final String toHex(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return "NULL";
+        }
+        StringBuilder buf = new StringBuilder();
+        // buf.append("0x");
+        for (byte b : bytes) {
+            buf.append(String.format("%02X", b));
+        }
+        return "X'" + buf.toString() + "'";
+    }
+
+    private static final <S> Integer toInt(S value) {
+        if (isEmpty(value)) {
+            return 0;
+        }
+        String str = ((String) value).replace('[', ' ').replace(']', ' ');
+        return Integer.valueOf(Integer.parseInt(str.trim()));
+    }
+
+    private static final <S> Short toShort(S value) {
+        if (isEmpty(value)) {
+            return 0;
+        }
+        String str = ((String) value).replace('[', ' ').replace(']', ' ');
+        return Short.valueOf(Short.parseShort(str.trim()));
+    }
+
+    private static final <S> Long toLong(S value) {
+        if (isEmpty(value)) {
+            return 0L;
+        }
+        String str = ((String) value).replace('[', ' ').replace(']', ' ');
+        return Long.valueOf(Long.parseLong(str.trim()));
+    }
+
+    private static final <S> Float toFloat(S value) {
+        if (isEmpty(value)) {
+            return 0.0F;
+        }
+        String str = ((String) value).replace('[', ' ').replace(']', ' ');
+        return Float.valueOf(Float.parseFloat(str.trim()));
+    }
+
+    private static final <S> Double toDouble(S value) {
+        if (isEmpty(value)) {
+            return 0.0;
+        }
+        String str = ((String) value).replace('[', ' ').replace(']', ' ');
+        return Double.valueOf(Double.parseDouble(str.trim()));
+    }
+
+    private static final <S> boolean isEmpty(S value) {
+        return ((String) value == null || ((String) value).trim().isEmpty());
     }
 }

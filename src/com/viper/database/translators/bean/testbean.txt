@@ -15,11 +15,12 @@ import org.junit.Test;
 
 import com.viper.database.annotations.Column;
 import com.viper.database.annotations.Table;
-import com.viper.database.dao.DatabaseUtil;
 import #{database.packageName}.*;
 import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.RandomBean;
+import com.viper.database.dao.converters.Converters;
 import com.viper.database.dao.DynamicEnum;
+import com.viper.database.dao.DatabaseUtil;
 
 ## if (java.hasEnums(table)) {
 import #{database.packageName}.enums.*;
@@ -52,6 +53,20 @@ public class Test#{classname} extends AbstractTestCase {
         ## }
     }
     ## }
+    
+    
+    @Test
+    public final void testConverters() throws Exception {
+
+        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
+        
+        String str = Converters.convert(String.class, expected); 
+        System.out.println(getCallerMethodName() + ":" + str);
+        assertNotNull(getCallerMethodName() + ", str= ", str);
+
+        #{classname} result = Converters.convert(#{classname}.class, str); 
+        assertNotNull(getCallerMethodName() + ", result= ", result);
+    }
 
 }
 ## util.write(filename, writer); 

@@ -23,10 +23,10 @@ import org.junit.Test;
 import #{database.packageName}.#{classname};
 import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.RandomBean;
-import com.viper.database.dao.DatabaseUtil;
 import com.viper.rest.client.RestStringClient;
-import com.viper.database.dao.DynamicEnum;
-import com.viper.database.utils.JSONUtil;
+import com.viper.database.dao.DynamicEnum; 
+import com.viper.database.dao.DatabaseUtil;
+import com.viper.database.dao.converters.Converters;
 
 ## if (java.hasEnums(table)) {
 import #{database.packageName}.enums.*;
@@ -70,7 +70,7 @@ public class Test#{classname}AgGridRestClient extends AbstractTestCase {
         String str = client.insert(expected);
         assertNotNull(getCallerMethodName() + ", str= ", str);
         
-        #{classname}  result = JSONUtil.fromJSON (#{classname}.class, str);
+        #{classname}  result = Converters.convert( #{classname}.class, str);
         
         String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
         Object value = DatabaseUtil.getPrimaryKeyValue(result);
@@ -80,23 +80,6 @@ public class Test#{classname}AgGridRestClient extends AbstractTestCase {
         assertNotNull(getCallerMethodName() + ", null actual bean", actual);
     }
     
-    @Test
-    public final void testQueryTwo() throws Exception {
- 
-        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
-        String str = client.insert(expected);
-        assertNotNull(getCallerMethodName() + ", str= ", str);
-     
-        #{classname}  result = JSONUtil.fromJSON (#{classname}.class, str);
-           
-        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
-        Object value = DatabaseUtil.getPrimaryKeyValue(result);
-         
-        String actual = client.query(#{classname}.class,  name, value);
-
-        assertNotNull(getCallerMethodName() + ", null actual bean", actual);
-    }
-
     @Test
     public final void testQueryList() throws Exception {
 
@@ -155,7 +138,7 @@ public class Test#{classname}AgGridRestClient extends AbstractTestCase {
         #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 7);
         String str = client.insert(bean);
         
-        #{classname}  result = JSONUtil.fromJSON (#{classname}.class, str);
+        #{classname}  result = Converters.convert(#{classname}.class, str);
         
         assertNotNull(getCallerMethodName() + ", failed:", result);
         

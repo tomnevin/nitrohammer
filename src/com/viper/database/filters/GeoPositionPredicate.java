@@ -30,31 +30,40 @@
 
 package com.viper.database.filters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.viper.database.dao.DatabaseUtil;
 
-public class OrPredicate<T> implements Predicate<T> {
+public class GeoPositionPredicate<T> implements Predicate<T> {
 
-    private List<Predicate> predicates = new ArrayList<Predicate>();
+    private String fieldname = null;
+    private GeoPositionOperator operator = null;
+    private Number lat = null;
+    private Number lon = null;
+    private Number distance = null;
 
-    public OrPredicate() {
-    }
-
-    public OrPredicate(Predicate predicates) {
-        this.predicates.addAll(Arrays.asList(predicates));
-    }
-
-    public void addPredicate(Predicate predicate) {
-        predicates.add(predicate);
+    public GeoPositionPredicate(String fieldname, GeoPositionOperator operator, Number lat, Number lon, Number distance) {
+        this.fieldname = fieldname;
+        this.operator = operator;
+        this.lat = lat;
+        this.lon = lon;
+        this.distance = distance;
     }
 
     @Override
-    public boolean apply(T item) {
-        for (Predicate predicate : predicates) {
-            if (predicate != null && predicate.apply(item)) {
-                return true;
-            }
+    public boolean apply(T bean) {
+
+        String name = fieldname.substring(fieldname.lastIndexOf('.') + 1);
+        Object v = DatabaseUtil.getValue(bean, name);
+        if (!(v instanceof Number)) {
+            return false;
+        }
+        Number value = (Number) v;
+
+        // TODO
+        switch (operator) {
+        case INSIDE_RANGE:
+            return value.doubleValue() >= lat.doubleValue() && value.doubleValue() <= lat.doubleValue();
+        case OUTSIDE_RANGE:
+            return value.doubleValue() > lat.doubleValue() && value.doubleValue() > lat.doubleValue();
         }
         return false;
     }
@@ -62,13 +71,15 @@ public class OrPredicate<T> implements Predicate<T> {
     @Override
     public String toSQL() {
         StringBuilder buf = new StringBuilder();
-        for (Predicate predicate : predicates) {
-            if (predicate != null) {
-                if (buf.length() > 0) {
-                    buf.append(" OR ");
-                }
-                buf.append(predicate.toSQL());
-            }
+
+        // TODO
+        switch (operator) {
+        case INSIDE_RANGE:
+            // TODO
+            return fieldname + " between " + lat + " " + lat;
+        case OUTSIDE_RANGE:
+            return fieldname + " between " + lon + " " + lon;
+
         }
         return buf.toString();
     }

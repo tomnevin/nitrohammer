@@ -43,11 +43,13 @@ import java.util.List;
 import org.junit.Test;
 
 import com.viper.database.dao.converters.Converters;
+import com.viper.database.dao.converters.NumberConverter;
 import com.viper.database.utils.RandomBean;
 import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.demo.beans.model.enums.MyColor;
 import com.viper.demo.beans.model.enums.NamingField;
 import com.viper.demo.unit.model.Activity;
+import com.viper.demo.unit.model.Employee;
 
 public class TestConverters extends AbstractTestCase {
 
@@ -123,22 +125,36 @@ public class TestConverters extends AbstractTestCase {
     @Test
     public void testBooleanConverter() throws Exception {
 
-        assertEquals(getCallerMethodName(), "true", Converters.convert(String.class, true)); 
+        assertEquals(getCallerMethodName(), "true", Converters.convert(String.class, true));
+        assertEquals(getCallerMethodName(), "false", Converters.convert(String.class, false));
         assertEquals(getCallerMethodName(), 1, (int) Converters.convert(int.class, true));
+        assertEquals(getCallerMethodName(), 0, (int) Converters.convert(int.class, false));
         assertEquals(getCallerMethodName(), 1L, (long) Converters.convert(long.class, true));
-        assertEquals(getCallerMethodName(), (short)1, (short) Converters.convert(short.class, true));
+        assertEquals(getCallerMethodName(), 0L, (long) Converters.convert(long.class, false));
+        assertEquals(getCallerMethodName(), (short) 1, (short) Converters.convert(short.class, true));
+        assertEquals(getCallerMethodName(), (short) 0, (short) Converters.convert(short.class, false));
         assertEquals(getCallerMethodName(), 1.0, (double) Converters.convert(double.class, true), 0.0);
+        assertEquals(getCallerMethodName(), 0.0, (double) Converters.convert(double.class, false), 0.0);
         assertEquals(getCallerMethodName(), 1.0F, (float) Converters.convert(float.class, true), 0.0);
-        assertEquals(getCallerMethodName(), (byte)1, (byte) Converters.convert(byte.class, true), 0.0);
+        assertEquals(getCallerMethodName(), 0.0F, (float) Converters.convert(float.class, false), 0.0);
+        assertEquals(getCallerMethodName(), (byte) 1, (byte) Converters.convert(byte.class, true), 0.0);
+        assertEquals(getCallerMethodName(), (byte) 0, (byte) Converters.convert(byte.class, false), 0.0);
 
         assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, "false"));
+        assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, "true"));
         assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, 0));
         assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, 1));
+        assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, 0));
         assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, 1L));
-        assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, (short)1));
+        assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, 0L));
+        assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, (short) 1));
+        assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, (short) 0));
         assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, 1.0));
+        assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, 0.0));
         assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, 1.0F));
-        assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, (byte)1));
+        assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, 0.0F));
+        assertEquals(getCallerMethodName(), true, Converters.convert(boolean.class, (byte) 1));
+        assertEquals(getCallerMethodName(), false, Converters.convert(boolean.class, (byte) 0));
     }
 
     @Test
@@ -183,9 +199,17 @@ public class TestConverters extends AbstractTestCase {
     @Test
     public void testXToIntegerConverter() throws Exception {
 
+        Integer empty = null;
         assertEquals(getCallerMethodName(), 10, (int) Converters.convert(int.class, "10"));
         assertEquals(getCallerMethodName(), 10, (int) Converters.convert(int.class, 10.0));
         assertEquals(getCallerMethodName(), 10, (int) Converters.convert(int.class, 10L));
+        assertEquals(getCallerMethodName(), 0, (int) Converters.convert(int.class, empty));
+    }
+
+    @Test
+    public void testNumberToIntegerConverter() throws Exception {
+        assertEquals(getCallerMethodName(), new Integer(10),
+                (Integer) NumberConverter.convertNumberToInteger(int.class, new Integer(10)));
     }
 
     @Test
@@ -333,16 +357,58 @@ public class TestConverters extends AbstractTestCase {
     @Test
     public void testListConverter() throws Throwable {
 
-        String json = "[\"tom@viper.com\",\"john@viper.com\",\"bill@viper.com\"]";
-        List<String> items = new ArrayList<String>();
+        String expectedStr = "[\"tom@viper.com\",\"john@viper.com\",\"bill@viper.com\"]";
+        List<String> expected = new ArrayList<String>();
         {
-            items.add("tom@viper.com");
-            items.add("john@viper.com");
-            items.add("bill@viper.com");
+            expected.add("tom@viper.com");
+            expected.add("john@viper.com");
+            expected.add("bill@viper.com");
         }
 
-        assertEquals(getCallerMethodName(), items, Converters.convertToList(String.class, json));
-        assertEquals(getCallerMethodName(), json, Converters.convert(String.class, items));
+        List<String> actual = Converters.convertToList(String.class, expectedStr);
+
+        String actualStr = Converters.convertFromList(expected);
+
+        assertEquals(getCallerMethodName(), actual.size(), expected.size());
+        for (int i = 0; i < 3; i++) {
+            assertEquals(getCallerMethodName() + ":" + i, expected.get(i), actual.get(i));
+        }
+
+        assertEquals(getCallerMethodName(), expected, actual);
+        assertEquals(getCallerMethodName(), expectedStr, actualStr);
+
+        // assertEquals(getCallerMethodName(), expectedStr,
+        // actualStrConverters.convert(String.class, expected));
+    }
+
+    @Test
+    public void testEmptyListConverter() throws Throwable {
+
+        String expectedStr = "[]";
+        List<String> expected = new ArrayList<String>();
+
+        List<String> actual = Converters.convertToList(String.class, expectedStr);
+
+        String actualStr = Converters.convertFromList(expected);
+
+        assertEquals(getCallerMethodName(), actual.size(), expected.size());
+        assertEquals(getCallerMethodName(), expected, actual);
+        assertEquals(getCallerMethodName(), expectedStr, actualStr);
+
+    }
+
+    @Test
+    public void testListBeanConverter() throws Throwable {
+
+        List<Employee> beans = RandomBean.getRandomBeans(Employee.class, 1, 1);
+
+        String actual = Converters.convertFromList(beans);
+
+        List<Employee> beans1 = Converters.convertToList(Employee.class, actual);
+
+        String expected = Converters.convertFromList(beans1);
+
+        assertEquals(getCallerMethodName(), expected, actual);
     }
 
     // Arrays

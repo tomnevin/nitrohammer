@@ -33,14 +33,13 @@ package com.viper.rest.service;
 import java.util.List;
 import java.util.Locale;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.viper.database.dao.DatabaseFactory;
 import com.viper.database.dao.DatabaseInterface;
 import com.viper.database.dao.converters.Converters;
-import com.viper.database.utils.JSONUtil; 
+import com.viper.database.utils.JSONUtil;
 
 public class RestService implements RestServiceInterface {
 
@@ -56,7 +55,7 @@ public class RestService implements RestServiceInterface {
 
         T bean = database.query(clazz, (Object[]) whereClause.toArray());
 
-        return Response.ok(JSONUtil.toJSON(bean), MediaType.APPLICATION_JSON).build();
+        return Response.ok().entity(JSONUtil.toJSON(bean)).build();
     }
 
     @Override
@@ -67,7 +66,7 @@ public class RestService implements RestServiceInterface {
 
         T bean = database.query(clazz, key, value);
 
-        return Response.ok(JSONUtil.toJSON(bean), MediaType.APPLICATION_JSON).build();
+        return Response.ok().entity(JSONUtil.toJSON(bean)).build();
     }
 
     @Override
@@ -78,7 +77,7 @@ public class RestService implements RestServiceInterface {
 
         List<T> beans = database.queryList(clazz, key, value);
 
-        return Response.ok(JSONUtil.toJSON(beans), MediaType.APPLICATION_JSON).build();
+        return Response.ok().entity(JSONUtil.toJSON(beans)).build();
     }
 
     @Override
@@ -94,7 +93,7 @@ public class RestService implements RestServiceInterface {
 
         List<T> beans = database.queryAll(clazz);
 
-        return Response.ok(JSONUtil.toJSON(beans), MediaType.APPLICATION_JSON).build();
+        return Response.ok().entity(JSONUtil.toJSON(beans)).build();
     }
 
     @Override
@@ -107,7 +106,7 @@ public class RestService implements RestServiceInterface {
 
         database.insert(bean);
 
-        return Response.ok(JSONUtil.toJSON(bean), MediaType.APPLICATION_JSON).build();
+        return Response.ok().entity(JSONUtil.toJSON(bean)).build();
     }
 
     @Override
@@ -125,7 +124,7 @@ public class RestService implements RestServiceInterface {
 
         database.insert(bean);
 
-        return Response.ok(JSONUtil.toJSON(bean), MediaType.APPLICATION_JSON).build();
+        return Response.ok().entity(JSONUtil.toJSON(bean)).build();
     }
 
     @Override
@@ -138,7 +137,7 @@ public class RestService implements RestServiceInterface {
 
         database.insertAll(beans);
 
-        return Response.ok(JSONUtil.toJSON(beans), MediaType.APPLICATION_JSON).build();
+        return Response.ok().entity(JSONUtil.toJSON(beans)).build();
     }
 
     @Override
@@ -165,91 +164,99 @@ public class RestService implements RestServiceInterface {
         return Response.ok().build();
     }
 
-//    public final <T> Response dataGetResponse(Class<T> clazz, Locale locale, MultivaluedMap<String, String> queryParams)
-//            throws Exception {
-//
-//        String DatabaseInstanceName = getDatabaseName();
-//
-//        DatabaseSQLInterface dao = (DatabaseSQLInterface) DatabaseFactory.getInstance(DatabaseInstanceName);
-//
-//        List<T> beans;
-//        if (queryParams == null) {
-//            beans = dao.queryAll(clazz);
-//        } else {
-//            beans = dao.querySQL(clazz, AgTablesUtil.toWhereClause(queryParams, clazz));
-//        }
-//
-//        HeaderDef headerDef = AgTablesUtil.data(locale, clazz, beans);
-//
-//        return Response.ok(JSONUtil.toJSON(headerDef), MediaType.APPLICATION_JSON).build();
-//    }
-//
-//    public final <T> Response dataPostResponse(Class<T> clazz, Locale locale, MultivaluedMap<String, String> queryParams)
-//            throws Exception {
-//
-//        String DatabaseInstanceName = getDatabaseName();
-//
-//        DatabaseSQLInterface dao = (DatabaseSQLInterface) DatabaseFactory.getInstance(DatabaseInstanceName);
-//
-//        List<T> beans;
-//        if (queryParams == null) {
-//            beans = dao.queryAll(clazz);
-//        } else {
-//            beans = dao.querySQL(clazz, AgTablesUtil.toWhereClause(queryParams, clazz));
-//        }
-//
-//        HeaderDef headerDef = AgTablesUtil.data(locale, clazz, beans);
-//
-//        return Response.ok(JSONUtil.toJSON(headerDef), MediaType.APPLICATION_JSON).build();
-//    }
-//
-//    public final <T> Response dataTableResponse(Class<T> clazz, Locale locale) throws Exception {
-//
-//        HeaderDef headerDef = AgTablesUtil.header(locale, clazz);
-//
-//        return Response.ok(JSONUtil.toJSON(headerDef), MediaType.APPLICATION_JSON).build();
-//    }
-//
-//    public final <T> Response tableResponse(Class<T> clazz, Locale locale, MultivaluedMap<String, String> queryParams)
-//            throws Exception {
-//
-//        String DatabaseInstanceName = getDatabaseName();
-//
-//        DatabaseSQLInterface dao = (DatabaseSQLInterface) DatabaseFactory.getInstance(DatabaseInstanceName);
-//
-//        List<T> beans;
-//        if (queryParams == null) {
-//            beans = dao.queryAll(clazz);
-//        } else {
-//            beans = dao.querySQL(clazz, AgTablesUtil.toWhereClause(queryParams, clazz));
-//        }
-//
-//        HeaderDef headerDef = AgTablesUtil.table(locale, clazz, beans);
-//
-//        return Response.ok(JSONUtil.toJSON(headerDef), MediaType.APPLICATION_JSON).build();
-//    }
-//
-//    public final <T> Response dataResponses(Class<T> clazz, Locale locale, String key, String value) throws Exception {
-//
-//        String DatabaseInstanceName = getDatabaseName();
-//        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
-//
-//        List<T> beans = AgTablesUtil.getBeansByForeignKeys(database, clazz.getName(), clazz, key, value);
-//
-//        Form form = AgTablesUtil.form(locale, clazz.getName(), beans);
-//
-//        return Response.ok(JSONUtil.toJSON(form), MediaType.APPLICATION_JSON).build();
-//    }
-//
-//    public final <T> Response dataResponses(Class<T> clazz, Locale locale) throws Exception {
-//
-//        String DatabaseInstanceName = getDatabaseName();
-//        DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
-//
-//        List<T> beans = database.queryAll(clazz);
-//
-//        Form form = AgTablesUtil.form(locale, clazz.getName(), beans);
-//
-//        return Response.ok(JSONUtil.toJSON(form), MediaType.APPLICATION_JSON).build();
-//    }
+    // public final <T> Response dataGetResponse(Class<T> clazz, Locale locale,
+    // MultivaluedMap<String, String> queryParams)
+    // throws Exception {
+    //
+    // String DatabaseInstanceName = getDatabaseName();
+    //
+    // DatabaseSQLInterface dao = (DatabaseSQLInterface)
+    // DatabaseFactory.getInstance(DatabaseInstanceName);
+    //
+    // List<T> beans;
+    // if (queryParams == null) {
+    // beans = dao.queryAll(clazz);
+    // } else {
+    // beans = dao.querySQL(clazz, AgTablesUtil.toWhereClause(queryParams, clazz));
+    // }
+    //
+    // HeaderDef headerDef = AgTablesUtil.data(locale, clazz, beans);
+    //
+    // return Response.ok(JSONUtil.toJSON(headerDef)).build();
+    // }
+    //
+    // public final <T> Response dataPostResponse(Class<T> clazz, Locale locale,
+    // MultivaluedMap<String, String> queryParams)
+    // throws Exception {
+    //
+    // String DatabaseInstanceName = getDatabaseName();
+    //
+    // DatabaseSQLInterface dao = (DatabaseSQLInterface)
+    // DatabaseFactory.getInstance(DatabaseInstanceName);
+    //
+    // List<T> beans;
+    // if (queryParams == null) {
+    // beans = dao.queryAll(clazz);
+    // } else {
+    // beans = dao.querySQL(clazz, AgTablesUtil.toWhereClause(queryParams, clazz));
+    // }
+    //
+    // HeaderDef headerDef = AgTablesUtil.data(locale, clazz, beans);
+    //
+    // return Response.ok(JSONUtil.toJSON(headerDef)).build();
+    // }
+    //
+    // public final <T> Response dataTableResponse(Class<T> clazz, Locale locale) throws Exception {
+    //
+    // HeaderDef headerDef = AgTablesUtil.header(locale, clazz);
+    //
+    // return Response.ok(JSONUtil.toJSON(headerDef)).build();
+    // }
+    //
+    // public final <T> Response tableResponse(Class<T> clazz, Locale locale, MultivaluedMap<String,
+    // String> queryParams)
+    // throws Exception {
+    //
+    // String DatabaseInstanceName = getDatabaseName();
+    //
+    // DatabaseSQLInterface dao = (DatabaseSQLInterface)
+    // DatabaseFactory.getInstance(DatabaseInstanceName);
+    //
+    // List<T> beans;
+    // if (queryParams == null) {
+    // beans = dao.queryAll(clazz);
+    // } else {
+    // beans = dao.querySQL(clazz, AgTablesUtil.toWhereClause(queryParams, clazz));
+    // }
+    //
+    // HeaderDef headerDef = AgTablesUtil.table(locale, clazz, beans);
+    //
+    // return Response.ok(JSONUtil.toJSON(headerDef)).build();
+    // }
+    //
+    // public final <T> Response dataResponses(Class<T> clazz, Locale locale, String key, String
+    // value) throws Exception {
+    //
+    // String DatabaseInstanceName = getDatabaseName();
+    // DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+    //
+    // List<T> beans = AgTablesUtil.getBeansByForeignKeys(database, clazz.getName(), clazz, key,
+    // value);
+    //
+    // Form form = AgTablesUtil.form(locale, clazz.getName(), beans);
+    //
+    // return Response.ok(JSONUtil.toJSON(form)).build();
+    // }
+    //
+    // public final <T> Response dataResponses(Class<T> clazz, Locale locale) throws Exception {
+    //
+    // String DatabaseInstanceName = getDatabaseName();
+    // DatabaseInterface database = DatabaseFactory.getInstance(DatabaseInstanceName);
+    //
+    // List<T> beans = database.queryAll(clazz);
+    //
+    // Form form = AgTablesUtil.form(locale, clazz.getName(), beans);
+    //
+    // return Response.ok(JSONUtil.toJSON(form)).build();
+    // }
 }

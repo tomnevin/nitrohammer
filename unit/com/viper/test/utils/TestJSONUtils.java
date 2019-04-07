@@ -41,7 +41,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
 
-import com.viper.database.utils.JSONUtil;
+import com.viper.database.dao.converters.Converters;
 import com.viper.database.utils.RandomBean;
 import com.viper.database.utils.junit.AbstractTestCase;
 import com.viper.database.utils.junit.BenchmarkRule;
@@ -65,7 +65,7 @@ public class TestJSONUtils extends AbstractTestCase {
         map.put("foo", 25);
         map.put("bar", "Alpha");
 
-        assertEquals("{\"bar\":\"Alpha\",\"foo\":25}", JSONUtil.toJSON(map));
+        assertEquals("{\"bar\":\"Alpha\",\"foo\":25}", Converters.convert(String.class, map));
     }
 
     @Test
@@ -87,10 +87,10 @@ public class TestJSONUtils extends AbstractTestCase {
 
         Activity activity1 = RandomBean.getRandomBean(Activity.class, 123);
 
-        String str = JSONUtil.toJSON(activity1);
+        String str = Converters.convert(String.class, activity1);
         assertNotNull(getCallerMethodName(), str);
 
-        Activity activity2 = JSONUtil.fromJSON(Activity.class, str);
+        Activity activity2 = Converters.convert(Activity.class, str);
         assertBeanEquals(getCallerMethodName(), activity1, activity2);
     }
 }

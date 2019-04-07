@@ -44,6 +44,7 @@ public class Test#{classname}RestClient extends AbstractTestCase {
     @BeforeClass
     public static final void initializeClass() throws Exception {
         Logger.getGlobal().setLevel(Level.FINEST);
+        client.debugOn = false;
     }
     
     @Test
@@ -52,10 +53,25 @@ public class Test#{classname}RestClient extends AbstractTestCase {
         #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 5);
         
         String str = Converters.convert(String.class, expected); 
+        System.out.println(getCallerMethodName() + ":" + str);
         assertNotNull(getCallerMethodName() + ", str= ", str);
 
         #{classname} result = Converters.convert(#{classname}.class, str); 
         assertNotNull(getCallerMethodName() + ", result= ", result);
+    }
+       
+    @Test
+    public final void testConverterList() throws Exception {
+
+        List<#{classname}> expected = RandomBean.getRandomBeans(#{classname}.class, 5, 10);
+        
+        String str = Converters.convertFromList( expected); 
+        System.out.println(getCallerMethodName() + ":" + str);
+        assertNotNull(getCallerMethodName() + ", str= ", str);
+
+        List<#{classname}> result = Converters.convertToList(#{classname}.class, str); 
+        assertNotNull(getCallerMethodName() + ", result= ", result);
+        assertEquals(getCallerMethodName(), expected.size() , result.size());
     }
     
 

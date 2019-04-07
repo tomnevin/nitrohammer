@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test"  package-name="com.viper.unit.model">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="ArrayOfClobBlob" is-rest-service="true">
+		<column name='id' java-type='int' id-method="autoincrement" required='true' primary-key='true' /> 
+		<column name="BLOB_TYPE" java-type='byte[]' data-type='Blob' />
+		<column name="CLOB_TYPE" java-type="char[]" data-type="Clob" /> 
+	</table>
+</database>

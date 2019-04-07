@@ -43,7 +43,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.johnzon.jaxrs.JohnzonProvider;
 import org.glassfish.jersey.SslConfigurator;
 
 import com.viper.database.dao.DatabaseUtil;
@@ -52,6 +51,7 @@ import com.viper.database.filters.Predicate;
 import com.viper.database.model.ColumnParam;
 import com.viper.database.model.LimitParam;
 import com.viper.database.security.Encryptor;
+import com.viper.database.utils.JSONUtil;
 
 public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
@@ -106,8 +106,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         if (client == null) {
 
             ClientBuilder clientBuilder = ClientBuilder.newBuilder();
-            clientBuilder = clientBuilder.register(JohnzonProvider.class);
-            // clientBuilder = clientBuilder.register(JacksonFeature.class);
+            clientBuilder = clientBuilder.register(JSONUtil.registerProvider());
 
             if (useSSL) {
                 Encryptor encryptor = new Encryptor();
@@ -129,7 +128,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     public boolean authorize(String username, String password) throws Exception {
 
         String url = authorizeURL;
-        
+
         try {
             WebTarget webTarget = getClient().target(url).queryParam("username", username).queryParam("password", password);
 
@@ -293,12 +292,12 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         Response response = webTarget.request(acceptMediaType).get();
         handleErrorResponse(webTarget, response);
 
-        T item = response.readEntity(tableClass);
+        String json = response.readEntity(String.class);
 
         println(webTarget, response, "");
         response.close();
 
-        return item;
+        return Converters.convert(tableClass, json);
     }
 
     /**
@@ -318,15 +317,31 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
         println(webTarget, response, json);
 
-        return Converters.convertToList(clazz, json);
+        return (List<T>) Converters.convertToList(clazz, json);
     }
 
     /**
      * {@inheritDoc}
      * 
      */
-    public <T> List<T> queryList(Class<T> tableClass, Map<String, String> parameters) throws Exception {
-        return null; // TODO
+    public <T> List<T> queryList(Class<T> clazz, Map<String, String> parameters) throws Exception {
+
+        StringBuffer path = new StringBuffer();
+        path.append(clazz.getSimpleName().toLowerCase() + "/list");
+        for (String key : parameters.keySet()) {
+            path.append("/" + key + "/" + parameters.get(key));
+        }
+
+        WebTarget webTarget = getClient().target(baseURL).path(path.toString());
+
+        Response response = webTarget.request(acceptMediaType).get();
+        handleErrorResponse(webTarget, response);
+
+        String json = response.readEntity(String.class);
+
+        println(webTarget, response, json);
+
+        return (List<T>) Converters.convertToList(clazz, json);
     }
 
     /**
@@ -336,6 +351,10 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
      */
     @Override
     public <T> List<T> queryList(Class<T> clazz, Object... keyValue) throws Exception {
+
+        if (keyValue.length < 2) {
+            throw new IllegalArgumentException("queryList: argument.length=" + keyValue.length);
+        }
 
         String path = clazz.getSimpleName().toLowerCase() + "/list/" + keyValue[0] + "/" + keyValue[1];
         WebTarget webTarget = getClient().target(baseURL).path(path);
@@ -347,7 +366,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
         println(webTarget, response, json);
 
-        return Converters.convertToList(clazz, json);
+        return (List<T>) Converters.convertToList(clazz, json);
     }
 
     /**
@@ -376,15 +395,15 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String requestStr = Converters.convert(String.class, item);
 
         Response response = webTarget.request(acceptMediaType).put(Entity.entity(requestStr, MediaType.TEXT_PLAIN_TYPE));
-        handleErrorResponse(webTarget, response);
+        handleErrorResponse(webTarget, requestStr, response);
 
-        T bean = response.readEntity((Class<T>) item.getClass());
+        String json = response.readEntity(String.class);
 
-        println(webTarget, response, "");
+        println(webTarget, requestStr, response, "");
 
         response.close();
 
-        return bean;
+        return Converters.convert((Class<T>) item.getClass(), json);
     }
 
     /**
@@ -399,17 +418,15 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String requestStr = Converters.convert(String.class, item);
 
         Response response = webTarget.request(acceptMediaType).post(Entity.entity(requestStr, MediaType.TEXT_PLAIN_TYPE));
-        handleErrorResponse(webTarget, response);
+        handleErrorResponse(webTarget, requestStr, response);
 
-        String msg = "";
+        String json = response.readEntity(String.class);
         T bean = null;
         if (response.getStatus() == 200) {
-            bean = response.readEntity((Class<T>) item.getClass());
-        } else {
-            msg = response.readEntity(String.class);
+            bean = Converters.convert((Class<T>) item.getClass(), json);
         }
 
-        println(webTarget, response, msg);
+        println(webTarget, requestStr, response, json);
 
         response.close();
         return bean;
@@ -432,19 +449,19 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
 
         WebTarget webTarget = getClient().target(baseURL).path(path);
         Response response = webTarget.request(acceptMediaType).post(Entity.entity(requestStr, MediaType.TEXT_PLAIN_TYPE));
-        handleErrorResponse(webTarget, response);
+        handleErrorResponse(webTarget, requestStr, response);
 
         if (response.getStatus() == 200) {
             String json = response.readEntity(String.class);
-            println(webTarget, response, json);
+            println(webTarget, requestStr, response, json);
 
-            List<T> results = Converters.convertToList(clazz, json);
+            List<T> results = (List<T>) Converters.convertToList(clazz, json);
             // TODO transfer primary key to insert values.
 
         } else {
 
             String msg = response.readEntity(String.class);
-            println(webTarget, response, msg);
+            println(webTarget, requestStr, response, msg);
         }
 
         response.close();
@@ -462,15 +479,23 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String key = (keyValue.length < 1 || keyValue[0] == null) ? "" : keyValue[0].toString();
         String val = (keyValue.length < 2 || keyValue[1] == null) ? "" : keyValue[1].toString();
 
-        String path = tableClass.getSimpleName().toLowerCase() + "/" + key + "/" + val;
-        WebTarget webTarget = getClient().target(baseURL).path(path);
+        StringBuilder path = new StringBuilder();
+        path.append(tableClass.getSimpleName().toLowerCase());
+        path.append("/");
+        path.append(key);
+        path.append("/");
+        path.append(val);
+
+        WebTarget webTarget = getClient().target(baseURL).path(path.toString());
 
         Response response = webTarget.request().delete();
         handleErrorResponse(webTarget, response);
 
-        String msg = response.readEntity(String.class);
+        if (response.getStatus() != 200) {
+            String msg = response.readEntity(String.class);
 
-        println(webTarget, response, msg);
+            println(webTarget, response, msg);
+        }
 
         response.close();
     }
@@ -482,16 +507,23 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     @Override
     public <T> void delete(T bean) throws Exception {
 
-        String path = bean.getClass().getSimpleName().toLowerCase() + "/" + DatabaseUtil.getPrimaryKeyName(bean.getClass()) + "/"
-                + DatabaseUtil.getPrimaryKeyValue(bean);
-        WebTarget webTarget = getClient().target(baseURL).path(path);
+        StringBuilder path = new StringBuilder();
+        path.append(bean.getClass().getSimpleName().toLowerCase());
+        path.append("/");
+        path.append(DatabaseUtil.getPrimaryKeyName(bean.getClass()));
+        path.append("/");
+        path.append(DatabaseUtil.getPrimaryKeyValue(bean));
+
+        WebTarget webTarget = getClient().target(baseURL).path(path.toString());
 
         Response response = webTarget.request().delete();
         handleErrorResponse(webTarget, response);
 
-        String msg = response.readEntity(String.class);
+        if (response.getStatus() != 200) {
+            String msg = response.readEntity(String.class);
 
-        println(webTarget, response, msg);
+            println(webTarget, response, msg);
+        }
 
         response.close();
     }
@@ -509,9 +541,11 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         Response response = webTarget.request(acceptMediaType).delete();
         handleErrorResponse(webTarget, response);
 
-        String msg = response.readEntity(String.class);
+        if (response.getStatus() != 200) {
+            String msg = response.readEntity(String.class);
 
-        println(webTarget, response, msg);
+            println(webTarget, response, msg);
+        }
 
         response.close();
     }
@@ -528,15 +562,29 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     private List<String> toList(Object[] pairs) {
         List<String> items = new ArrayList<String>();
         for (Object pair : pairs) {
-            items.add(pair.toString());
+            if (pair != null) {
+                items.add(pair.toString());
+            }
         }
         return items;
     }
 
     private void handleErrorResponse(WebTarget webTarget, Response response) throws Exception {
         if (response.getStatus() != 200) {
-            String msg = response.readEntity(String.class);
-            throw new Exception("queryAll: " + webTarget.getUri().toString() + ", " + response.getStatus() + ":" + msg);
+            if (response.getEntity() instanceof String) {
+                String msg = (String) response.getEntity();
+                throw new Exception("RestClient: " + webTarget.getUri().toString() + ": " + response.getStatus() + ":" + msg);
+            } else {
+                throw new Exception("RestClient: " + webTarget.getUri().toString() + ": " + response.getStatus());
+            }
+        }
+    }
+
+    private void handleErrorResponse(WebTarget webTarget, String requestStr, Response response) throws Exception {
+        if (response.getStatus() != 200) {
+            String msg = (String) response.getEntity();
+            throw new Exception(
+                    "RestClient: " + webTarget.getUri().toString() + ": " + requestStr + ": " + response.getStatus() + ":" + msg);
         }
     }
 
@@ -547,7 +595,7 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
         String msg = null;
         Response response = webTarget.request(acceptMediaType).get();
         if (response.getStatus() != 200) {
-            msg = response.readEntity(String.class);
+            msg = (String) response.getEntity();
         }
 
         println(webTarget, response, msg);
@@ -556,6 +604,14 @@ public class RestClient implements com.viper.database.dao.DatabaseInterface {
     }
 
     private void println(WebTarget target, Response response, String json) {
+        if (debugOn) {
+            System.out.println("Path: " + target.getUri());
+            System.out.println("Status: " + response.getStatus());
+            System.out.println("JSON: " + json);
+        }
+    }
+
+    private void println(WebTarget target, String requestStr, Response response, String json) {
         if (debugOn) {
             System.out.println("Path: " + target.getUri());
             System.out.println("Status: " + response.getStatus());

@@ -62,7 +62,6 @@ import com.viper.database.model.Row;
 import com.viper.database.model.Table;
 import com.viper.database.utils.FileUtil;
 import com.viper.database.utils.JAXBUtil;
-import com.viper.database.utils.JSONUtil;
 
 public class DatabaseMapper {
 
@@ -254,7 +253,7 @@ public class DatabaseMapper {
 
         String str = FileUtil.readFile(clazz, filename);
 
-        List<T> beans = JSONUtil.fromJSONList(clazz, str);
+        List<T> beans = Converters.convertToList(clazz, str);
 
         dao.insertAll(beans);
     }
@@ -279,7 +278,7 @@ public class DatabaseMapper {
 
         List<T> beans = dao.queryAll(clazz);
 
-        String str = JSONUtil.toJSON(beans);
+        String str = Converters.convert(String.class, beans);
 
         FileUtil.writeFile(filename, str);
 

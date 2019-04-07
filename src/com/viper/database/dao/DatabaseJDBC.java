@@ -59,6 +59,7 @@ import com.viper.database.dao.converters.Converters;
 import com.viper.database.dao.drivers.SQLConversionTables;
 import com.viper.database.dao.drivers.SQLDriver;
 import com.viper.database.filters.Predicate;
+import com.viper.database.interfaces.HelperInterface;
 import com.viper.database.model.Cell;
 import com.viper.database.model.ColumnParam;
 import com.viper.database.model.DatabaseConnection;
@@ -925,7 +926,58 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         return cell;
     }
 
-    private <T> List<T> read(Class<T> clazz, String sql) throws Exception {
+    private <T> List<T> read (Class<T> clazz, String sql) throws Exception {
+
+        List<T> list = new ArrayList<T>();
+        Statement stmt = null;
+        Connection conn = null;
+        ResultSet rs = null;
+
+        sql = DatabaseUtil.replaceTokens(sql, dbc.getSchemaAlias());
+
+        log.info("READ: sql=" + sql);
+
+        try {
+
+            conn = getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+  
+            HelperInterface helper = HelperFactory.getHelper(clazz);
+  
+            while (rs.next()) { 
+                Map<String, Object> map = new HashMap<String, Object>();
+
+                for (int i = 0; i < columnCount; i++) { 
+                    Object value = rs.getObject(i + 1);
+                    String name = rsmd.getColumnName(i + 1);
+                    map.put(name,  value);    
+                }
+
+                T bean = (T)helper.toBeanFromDBFields(map);
+                list.add(bean);
+            }
+            rs.close();
+
+            // When reading beans update the fields which maybe calculated or for whatever
+            // reason the user deems needs to be altered.
+            DatabaseUtil.callBeanGenerator(list);
+
+        } catch (Exception ex) { 
+            throw new Exception("DatabaseJDBC: Read sql failed: " + dbc.getDatabaseUrl() + "," + sql, ex);
+
+        } finally {
+            close(rs);
+            close(stmt);
+            release(conn);
+        }
+        return list;
+    }
+
+    private <T> List<T> read1(Class<T> clazz, String sql) throws Exception {
 
         List<T> list = new ArrayList<T>();
         Statement stmt = null;
@@ -985,7 +1037,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                     Class<?> fieldClazz = fieldClazzs[i];
                     Column fieldColumn = fieldColumns[i];
                     String propertyName = propertyNames[i];
-                    Object inputValue = rs.getObject(i + 1);
+                    Object inputValue  = rs.getObject(i + 1);
 
                     // duplicate columns skip, we use first column found!
                     if (propertyName == null) {
@@ -1006,7 +1058,7 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
                             DatabaseUtil.set(bean, propertyName, 0);
 
                         } else if (fieldColumn.converter() != null && !fieldColumn.converter().isEmpty()) {
-                            Object value = DatabaseUtil.convert(fieldColumn, fieldClazz, inputValue);
+                            Object value = DatabaseUtil.convert(fieldColumn.converter(), fieldClazz, inputValue);
                             DatabaseUtil.set(bean, propertyName, value);
   
                         } else if (java.util.List.class.isAssignableFrom(fieldClazz)
@@ -1657,6 +1709,16 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         if (value == null) {
             return "NULL";
         }
+
+        if (value instanceof Number) {
+            return value.toString();
+        }
+        if (value instanceof Boolean) {
+            return value.toString();
+        }
+        if (value.getClass().isPrimitive()) {
+            return (value.toString().isEmpty()) ? "0" : toLimitedString(value.toString(), size);
+        }
         if (value instanceof Long && "timestamp".equalsIgnoreCase(datatype)) {
             return escape(toUpdateDateTime((long) value));
         }
@@ -1701,12 +1763,6 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         if (value instanceof short[]) {
             return escape(Arrays.toString((short[]) value));
         }
-        if (value instanceof Number) {
-            return value.toString();
-        }
-        if (value.getClass().isPrimitive()) {
-            return (value.toString().isEmpty()) ? "0" : toLimitedString(value.toString(), size);
-        }
         if (value instanceof DynamicEnum) {
             String v = ((DynamicEnum) value).value();
             return QUOTE_VALUE + v + QUOTE_VALUE;
@@ -1726,9 +1782,6 @@ public final class DatabaseJDBC implements DatabaseInterface, DatabaseSQLInterfa
         }
         if (value instanceof Map) {
             return escape(toLimitedString(convertToString(column, value), size));
-        }
-        if (value instanceof Boolean) {
-            return value.toString();
         }
         if (value instanceof java.util.Date) {
             return QUOTE_VALUE + formatter.format((java.util.Date) value) + QUOTE_VALUE;

@@ -35,8 +35,7 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Calendar; 
 import java.util.List;
 
 import com.viper.database.annotations.Column;
@@ -150,29 +149,33 @@ public final class CalendarConverter {
         Converters.register(BigInteger.class, java.sql.Timestamp.class, CalendarConverter::convertBigIntegerToSQLTimestamp);
         Converters.register(BigInteger.class, java.util.Date.class, CalendarConverter::convertBigIntegerToDate);
 
-        Converters.register(Date.class, java.sql.Date.class, CalendarConverter::convertDateToSQLDate);
-        Converters.register(Date.class, java.sql.Time.class, CalendarConverter::convertDateToSQLTime);
-        Converters.register(Date.class, java.sql.Timestamp.class, CalendarConverter::convertDateToSQLTimestamp);
-        Converters.register(Date.class, java.util.Date.class, CalendarConverter::convertDateToDate);
+        Converters.register(java.util.Date.class, java.sql.Date.class, CalendarConverter::convertDateToSQLDate);
+        Converters.register(java.util.Date.class, java.sql.Time.class, CalendarConverter::convertDateToSQLTime);
+        Converters.register(java.util.Date.class, java.sql.Timestamp.class, CalendarConverter::convertDateToSQLTimestamp);
+        Converters.register(java.util.Date.class, java.util.Date.class, CalendarConverter::convertDateToDate);
 
-        Converters.register(String.class, java.sql.Date.class, CalendarConverter::convertStringToDate);
-        Converters.register(String.class, java.sql.Time.class, CalendarConverter::convertStringToDate);
-        Converters.register(String.class, java.sql.Timestamp.class, CalendarConverter::convertStringToDate);
+        Converters.register(String.class, java.sql.Date.class, CalendarConverter::convertStringToSQLDate);
+        Converters.register(String.class, java.sql.Time.class, CalendarConverter::convertStringToSQLTime);
+        Converters.register(String.class, java.sql.Timestamp.class, CalendarConverter::convertStringToSQLTimestamp);
         Converters.register(String.class, java.util.Date.class, CalendarConverter::convertStringToDate);
 
-        Converters.register(Date.class, BigDecimal.class, CalendarConverter::convertDateToBigDecimal);
-        Converters.register(Date.class, BigInteger.class, CalendarConverter::convertDateToBigInteger);
-        Converters.register(Date.class, Integer.class, CalendarConverter::convertDateToInteger);
-        Converters.register(Date.class, Float.class, CalendarConverter::convertDateToFloat);
-        Converters.register(Date.class, Double.class, CalendarConverter::convertDateToDouble);
-        Converters.register(Date.class, Long.class, CalendarConverter::convertDateToLong);
-        Converters.register(Date.class, Short.class, CalendarConverter::convertDateToShort);
+        Converters.register(java.util.Date.class, BigDecimal.class, CalendarConverter::convertDateToBigDecimal);
+        Converters.register(java.util.Date.class, BigInteger.class, CalendarConverter::convertDateToBigInteger);
+        Converters.register(java.util.Date.class, Integer.class, CalendarConverter::convertDateToInteger);
+        Converters.register(java.util.Date.class, Float.class, CalendarConverter::convertDateToFloat);
+        Converters.register(java.util.Date.class, Double.class, CalendarConverter::convertDateToDouble);
+        Converters.register(java.util.Date.class, Long.class, CalendarConverter::convertDateToLong);
+        Converters.register(java.util.Date.class, Short.class, CalendarConverter::convertDateToShort);
 
-        Converters.register(Date.class, int.class, CalendarConverter::convertDateToInteger);
-        Converters.register(Date.class, float.class, CalendarConverter::convertDateToFloat);
-        Converters.register(Date.class, double.class, CalendarConverter::convertDateToDouble);
-        Converters.register(Date.class, long.class, CalendarConverter::convertDateToLong);
-        Converters.register(Date.class, short.class, CalendarConverter::convertDateToShort);
+        Converters.register(java.util.Date.class, int.class, CalendarConverter::convertDateToInteger);
+        Converters.register(java.util.Date.class, float.class, CalendarConverter::convertDateToFloat);
+        Converters.register(java.util.Date.class, double.class, CalendarConverter::convertDateToDouble);
+        Converters.register(java.util.Date.class, long.class, CalendarConverter::convertDateToLong);
+        Converters.register(java.util.Date.class, short.class, CalendarConverter::convertDateToShort);
+
+        Converters.register(java.sql.Date.class, java.sql.Time.class, CalendarConverter::convertSQLDateToSQLTime);
+        Converters.register(java.sql.Date.class, java.sql.Timestamp.class, CalendarConverter::convertSQLDateToSQLTimestamp);
+        Converters.register(java.sql.Date.class, java.util.Date.class, CalendarConverter::convertSQLDateToDate);
 
         Converters.register(java.sql.Date.class, BigDecimal.class, CalendarConverter::convertDateToBigDecimal);
         Converters.register(java.sql.Date.class, BigInteger.class, CalendarConverter::convertDateToBigInteger);
@@ -219,7 +222,7 @@ public final class CalendarConverter {
         Converters.register(java.sql.Timestamp.class, String.class, CalendarConverter::convertSQLTimestampToString);
         Converters.register(java.sql.Time.class, String.class, CalendarConverter::convertSQLTimeToString);
         Converters.register(java.sql.Date.class, String.class, CalendarConverter::convertSQLDateToString);
-        Converters.register(Date.class, String.class, CalendarConverter::convertDateToString);
+        Converters.register(java.util.Date.class, String.class, CalendarConverter::convertDateToString);
 
     }
 
@@ -436,12 +439,39 @@ public final class CalendarConverter {
         return toType.cast(fromValue);
     }
 
+    public static final <T, S> T convertSQLDateToSQLTime(Class<T> toType, S fromValue) throws Exception {
+        return toType.cast(fromValue);
+    }
+
+    public static final <T, S> T convertSQLDateToSQLTimestamp(Class<T> toType, S fromValue) throws Exception {
+        return toType.cast(fromValue);
+    }
+
+    public static final <T, S> T convertSQLDateToDate(Class<T> toType, S fromValue) throws Exception {
+        return toType.cast(fromValue);
+    }
+
+    public static final <T, S> T convertStringToSQLDate(Class<T> toType, S fromValue) throws Exception {
+        java.util.Date date = convertStringToDate(java.util.Date.class, fromValue);
+        return (T) new java.sql.Date(date.getTime());
+    }
+
+    public static final <T, S> T convertStringToSQLTime(Class<T> toType, S fromValue) throws Exception {
+        java.util.Date date = convertStringToDate(java.util.Date.class, fromValue);
+        return (T) new java.sql.Time(date.getTime());
+    }
+
+    public static final <T, S> T convertStringToSQLTimestamp(Class<T> toType, S fromValue) throws Exception {
+        java.util.Date date = convertStringToDate(java.util.Date.class, fromValue);
+        return (T) new java.sql.Timestamp(date.getTime());
+    }
+
     public static final <T, S> T convertStringToDate(Class<T> toType, S fromValue) throws Exception {
 
         for (String pattern : patterns) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-                Date date = sdf.parse((String) fromValue);
+                java.util.Date date = sdf.parse((String) fromValue);
                 if (date != null) {
                     return toType.cast(date);
                 }
@@ -454,31 +484,31 @@ public final class CalendarConverter {
     }
 
     public static final <T, S> T convertDateToBigDecimal(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(BigDecimal.valueOf(((Date) fromValue).getTime() / 1000.0));
+        return toType.cast(BigDecimal.valueOf(((java.util.Date) fromValue).getTime() / 1000.0));
     }
 
     public static final <T, S> T convertDateToBigInteger(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(BigInteger.valueOf(((Date) fromValue).getTime()));
+        return toType.cast(BigInteger.valueOf(((java.util.Date) fromValue).getTime()));
     }
 
     public static final <T, S> T convertDateToDouble(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(Double.valueOf(((Date) fromValue).getTime() / 1000.0));
+        return toType.cast(Double.valueOf(((java.util.Date) fromValue).getTime() / 1000.0));
     }
 
     public static final <T, S> T convertDateToFloat(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(Float.valueOf(((Date) fromValue).getTime() / 1000.0F));
+        return toType.cast(Float.valueOf(((java.util.Date) fromValue).getTime() / 1000.0F));
     }
 
     public static final <T, S> T convertDateToInteger(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(Integer.valueOf((int) ((Date) fromValue).getTime() / 1000));
+        return toType.cast(Integer.valueOf((int) ((java.util.Date) fromValue).getTime() / 1000));
     }
 
     public static final <T, S> T convertDateToLong(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(Long.valueOf((long) ((Date) fromValue).getTime()));
+        return toType.cast(Long.valueOf((long) ((java.util.Date) fromValue).getTime()));
     }
 
     public static final <T, S> T convertDateToShort(Class<T> toType, S fromValue) throws Exception {
-        return toType.cast(Short.valueOf((short) (((Date) fromValue).getTime() / 1000)));
+        return toType.cast(Short.valueOf((short) (((java.util.Date) fromValue).getTime() / 1000)));
     }
 
     public static final <T, S> T convertSQLTimestampToString(Class<T> toType, S fromValue) throws Exception {

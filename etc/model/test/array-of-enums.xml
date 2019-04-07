@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<database xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.vipersoftwareservices.com/schemas/database.xsd"
+	name="test"  package-name="com.viper.unit.model">
+	<!-- =================================================== -->
+	<!-- J D B C T Y P E T A B L E -->
+	<!-- =================================================== -->
+	<table name="ArrayOfEnums" is-rest-service="true">
+		<column name='id' java-type='int' id-method="autoincrement" required='true' primary-key='true' />
+		<column name="ENUM_TYPE" java-type="EnumColor">
+			<enum-value>RED</enum-value>
+			<enum-value>GREEN</enum-value>
+			<enum-value>BLUE</enum-value>
+		</column>
+        <column name="ENUM_ARRAY_TYPE" java-type="EnumColor[]" data-type="enum" />
+	</table>
+</database>

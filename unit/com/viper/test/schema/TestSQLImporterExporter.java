@@ -47,141 +47,151 @@ import com.viper.database.model.Database;
 import com.viper.database.model.DatabaseConnection;
 import com.viper.database.model.DatabaseConnections;
 import com.viper.database.model.Databases;
+import com.viper.database.model.Table;
 import com.viper.database.tools.SqlConverter;
 import com.viper.database.utils.junit.AbstractTestCase;
 
 public class TestSQLImporterExporter extends AbstractTestCase {
 
-	private final static SqlConverter sqlManager = new SqlConverter();
-	private static final SQLDriver driver = new SQLDriver();
+    private final static SqlConverter sqlManager = new SqlConverter();
+    private static final SQLDriver driver = new SQLDriver();
 
-	private static DatabaseConnection dbc = null;
-	private static DatabaseSQLInterface dao = null;
+    private static DatabaseConnection dbc = null;
+    private static DatabaseSQLInterface dao = null;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
-		DatabaseConnections dbcs = DatabaseMapper.readConnections("res:/databases.xml");
-		assertNotNull("Database connections(databases.xml) empty", dbcs);
+    @BeforeClass
+    public static void setUp() throws Exception {
+        DatabaseConnections dbcs = DatabaseMapper.readConnections("res:/databases.xml");
+        assertNotNull("Database connections(databases.xml) empty", dbcs);
 
-		dbc = DatabaseUtil.findOneItem(dbcs.getConnections(), "name", "test");
-		assertNotNull("Database connection (test) not found", dbc);
+        dbc = DatabaseUtil.findOneItem(dbcs.getConnections(), "name", "test");
+        assertNotNull("Database connection (test) not found", dbc);
 
-		dao = (DatabaseSQLInterface)DatabaseFactory.getInstance(dbc);
-		assertNotNull("JDBCDriver should not be null", dao);
-	}
+        dao = (DatabaseSQLInterface) DatabaseFactory.getInstance(dbc);
+        assertNotNull("JDBCDriver should not be null", dao);
+    }
 
-	@AfterClass
-	public static void tearDown() throws Exception {
-		((DatabaseInterface)dao).release();
-	}
+    @AfterClass
+    public static void tearDown() throws Exception {
+        ((DatabaseInterface) dao).release();
+    }
 
-	@Test
-	public void testLoadMetaData() throws Exception {
+    @Test
+    public void testLoadMetaData() throws Exception {
 
-		Databases databases = driver.load(dao, null, null);
-		assertNotNull(getCallerMethodName(), databases);
-		assertTrue(getCallerMethodName(), databases.getDatabases().size() > 0);
-	}
+        Databases databases = driver.load(dao, null, null);
+        assertNotNull(getCallerMethodName(), databases);
+        assertTrue(getCallerMethodName(), databases.getDatabases().size() > 0);
+    }
 
-	@Test
-	public void testActivity() throws Exception {
-		String filename = "Activity.xml";
-		runFile(filename);
+    @Test
+    public void testActivity() throws Exception {
+        String filename = "Activity.xml";
+        runFile(filename);
 
-		Databases databases = driver.load(dao, null, null);
+        Databases databases = driver.load(dao, null, null);
 
-		Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
-		assertNotNull("Database does not exists: " + database.getName(), database);
+        Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
+        assertNotNull("Database does not exists: " + database.getName(), database);
 
-		boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "Activity") != null;
-		assertTrue("Table doesn't exists: " + filename, tableExists);
-	}
+        boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "Activity") != null;
+        assertTrue("Table doesn't exists: " + filename, tableExists);
+    }
 
-	@Test
-	public void testDatabaseMetaDataTypeInfo() throws Exception {
-		String filename = "DatabaseMetaDataTypeInfo.xml";
+    @Test
+    public void testDatabaseMetaDataTypeInfo() throws Exception {
+        String filename = "DatabaseMetaDataTypeInfo.xml";
 
-		runFile(filename);
+        runFile(filename);
 
-		Databases databases = driver.load(dao, null, null);
+        Databases databases = driver.load(dao, null, null);
 
-		Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
-		assertNotNull("Database does not exists: " + database.getName(), database);
+        Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
+        assertNotNull("Database does not exists: " + database.getName(), database);
 
-		boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "metadatatypeinfo") != null;
-		assertTrue("Table doesn't exists: " + filename, tableExists);
-	}
+        boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "metadatatypeinfo") != null;
+        assertTrue("Table doesn't exists: " + filename, tableExists);
+    }
 
-	@Test
-	public void testEmployee() throws Exception {
-		String filename = "Employee.xml";
+    @Test
+    public void testEmployee() throws Exception {
+        String filename = "Employee.xml";
 
-		runFile(filename);
+        runFile(filename);
 
-		Databases databases = driver.load(dao, null, null);
+        Databases databases = driver.load(dao, null, null);
 
-		Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
-		assertNotNull("Database does not exists: " + database.getName(), database);
+        Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
+        assertNotNull("Database does not exists: " + database.getName(), database);
 
-		boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "employee") != null;
-		assertTrue("Table doesn't exists: " + filename, tableExists);
-	}
+        boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "employee") != null;
+        assertTrue("Table doesn't exists: " + filename, tableExists);
+    }
 
-	@Test
-	public void testProjectSchema() throws Exception {
-		String filename = "project-schema.xml";
+    @Test
+    public void testProjectSchema() throws Exception {
+        String filename = "project-schema.xml";
 
-		runFile(filename);
+        runFile(filename);
 
-		Databases databases = driver.load(dao, null, null);
+        Databases databases = driver.load(dao, null, null);
 
-		Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
-		assertNotNull("Database does not exists: " + database.getName(), database);
+        Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
+        assertNotNull("Database does not exists: " + database.getName(), database);
 
-		boolean tableExists1 = DatabaseUtil.findOneItem(database.getTables(), "name", "civilization") != null;
-		boolean tableExists2 = DatabaseUtil.findOneItem(database.getTables(), "name", "people") != null;
+        boolean tableExists1 = DatabaseUtil.findOneItem(database.getTables(), "name", "civilization") != null;
+        boolean tableExists2 = DatabaseUtil.findOneItem(database.getTables(), "name", "people") != null;
 
-		assertTrue("Table CIVILIZATION doesn't exists: " + filename, tableExists1);
-		assertTrue("Table PEOPLE doesn't exists: " + filename, tableExists2);
-	}
+        assertTrue("Table CIVILIZATION doesn't exists: " + filename, tableExists1);
+        assertTrue("Table PEOPLE doesn't exists: " + filename, tableExists2);
+    }
 
-	@Test
-	public void testStates() throws Exception {
-		String filename = "states.xml";
+    @Test
+    public void testStates() throws Exception {
+        String filename = "states.xml";
 
-		runFile(filename);
+        runFile(filename);
 
-		Databases databases = driver.load(dao, null, null);
+        Databases databases = driver.load(dao, null, null);
 
-		Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
-		assertNotNull("Database does not exists: " + database.getName(), database);
+        Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
+        assertNotNull("Database does not exists: " + database.getName(), database);
 
-		boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "states") != null;
-		assertTrue("Table doesn't exists: " + filename, tableExists);
-	}
+        boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "states") != null;
+        assertTrue("Table doesn't exists: " + filename, tableExists);
+    }
 
-	@Test
-	public void testTypes() throws Exception {
-		String filename = "testtypes-schema.xml";
+    @Test
+    public void testTypes() throws Exception {
+        String filename = "testtypes-schema.xml";
 
-		runFile(filename);
+        runFile(filename);
 
-		Databases databases = driver.load(dao, null, null);
+        Databases databases = driver.load(dao, null, null);
+        assertTrue("Database length is zero: ", databases.getDatabases().size() > 0); 
+        for (Database database : databases.getDatabases()) {
+            System.out.println("Database: " + database.getName() + "," + database.getTables().size());
+        }
 
-		Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test");
-		assertNotNull("Database does not exists: " + database.getName(), database);
+        Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", "test"); 
+        assertNotNull("Database does not exists: " + database.getName(), database);
+        assertEquals("Database does not exists: " + database.getName(), "test", database.getName());
+        assertTrue("Tables lengthis zero: ", database.getTables().size() > 0);
 
-		boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "TYPES") != null;
-		assertTrue("Table doesn't exists: " + filename, tableExists);
-	}
+        boolean tableExists = DatabaseUtil.findOneItem(database.getTables(), "name", "TYPES") != null;
+        for (Table table : database.getTables()) {
+            System.out.println("Table: " + table.getName());
+        }
+        assertTrue("Table doesn't exists: " + filename, tableExists);
+    }
 
-	private void runFile(String filename) throws Exception {
-		String inFilename = "etc/model/test/" + filename;
-		String outFilename = "build/" + filename.replace(".xml", ".sql");
+    private void runFile(String filename) throws Exception {
+        String inFilename = "etc/model/test/" + filename;
+        String outFilename = "build/" + filename.replace(".xml", ".sql");
 
-		Databases databases = DatabaseMapper.read(Databases.class, inFilename);
+        Databases databases = DatabaseMapper.read(Databases.class, inFilename);
 
-		sqlManager.write(new FileWriter(outFilename), dbc.getVendor(), databases);
-		sqlManager.write(new DatabaseWriter(dao), dbc.getVendor(), databases);
-	}
+        sqlManager.write(new FileWriter(outFilename), dbc.getVendor(), databases);
+        sqlManager.write(new DatabaseWriter(dao), dbc.getVendor(), databases);
+    }
 }

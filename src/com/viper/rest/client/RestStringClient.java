@@ -42,8 +42,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.johnzon.jaxrs.JohnzonProvider;
+ 
 import org.glassfish.jersey.SslConfigurator;
 
 import com.viper.database.dao.DatabaseUtil;
@@ -52,6 +51,7 @@ import com.viper.database.filters.Predicate;
 import com.viper.database.model.ColumnParam;
 import com.viper.database.model.LimitParam;
 import com.viper.database.security.Encryptor;
+import com.viper.database.utils.JSONUtil;
 
 public class RestStringClient {
 
@@ -106,7 +106,7 @@ public class RestStringClient {
         if (client == null) {
 
             ClientBuilder clientBuilder = ClientBuilder.newBuilder();
-            clientBuilder = clientBuilder.register(JohnzonProvider.class);
+            clientBuilder = clientBuilder.register(JSONUtil.registerProvider());
             // clientBuilder = clientBuilder.register(JacksonFeature.class);
 
             if (useSSL) {

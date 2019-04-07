@@ -1,0 +1,107 @@
+## for (var table : root.tables) { 
+##   var classname = java.toJavaName(table);
+##   var filename = outdir + "/dao/helper/" + classname + "Helper.java";
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+## import(etc/banners/banner.txt);
+// =============================================================================
+// WARNING: THIS FILE IS AUTO_GENERATED - DO NOT EDIT.
+// =============================================================================
+
+package #{database.packageName}.dao.helper;
+
+import java.util.List; 
+import java.util.Map;  
+import java.util.HashMap; 
+import com.viper.database.dao.converters.Converters;
+import com.viper.database.interfaces.HelperInterface;
+ 
+import #{database.packageName}.#{classname};
+
+## if (java.hasEnums(table)) {
+import #{database.packageName}.enums.*;
+## }
+
+public class #{classname}Helper implements HelperInterface<#{classname}> { 
+     
+    public Map<String, Object> toMapOfStrings(#{classname} bean) throws Exception { 
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	if (bean == null) {
+    		return map;
+    	}
+    	
+        ## for (var column : table.getColumns()) {
+        ## if ( column.isPersistent()) { 
+        String #{java.toJavaVariableName(column)} = Converters.convert(String.class, bean.get#{java.toJavaName(column)}());
+        map.put("#{java.toJavaVariableName(column)}",  #{java.toJavaVariableName(column)});
+        
+  		## }  
+  		## }
+  		
+  		return map;
+    }
+    
+    public #{classname} toBean ( Map<String, Object> map) throws Exception { 
+        #{classname} bean = new #{classname}();  
+    	if (map == null) {
+    		return bean;
+    	}
+        
+        ## for (var column : table.getColumns()) { 
+        ## if ( column.isPersistent()) { 
+        #{column.getJavaType()} #{java.toJavaVariableName(column)} = 
+            Converters.convert(#{column.getJavaType()}.class, map.get("#{java.toJavaVariableName(column)}"));
+        bean.set#{java.toJavaName(column)}(#{java.toJavaVariableName(column)});
+        
+        ## }
+        ## }
+        
+ 		return bean;
+    }                 
+   
+    public #{classname} toBeanFromDBFields( Map<String, Object> map) throws Exception { 
+        #{classname} bean = new #{classname}(); 
+    	if (map == null) {
+    		return bean;
+    	}
+        
+        ## for (var column : table.getColumns()) { 
+        ## if ( column.isPersistent()) { 
+        ## if (column.converter() != null && !column.converter().isEmpty()) {
+            #{column.getJavaType()} #{java.toJavaVariableName(column)} = 
+       	          DatabaseUtil.convert("#{fieldColumn.converter()}", #{column.getJavaType()}.class, map.get("#{java.toDBFieldName(column)}"));
+            bean.set#{java.toJavaName(column)}(#{java.toJavaVariableName(column)});
+            
+        ## } else { 
+            #{column.getJavaType()} #{java.toJavaVariableName(column)} = 
+                  Converters.convert(#{column.getJavaType()}.class, map.get("#{java.toDBFieldName(column)}"));
+            bean.set#{java.toJavaName(column)}(#{java.toJavaVariableName(column)});
+        
+        ## }  
+        ## }
+        ## }
+        
+ 		return bean;
+    }  
+    
+    public Map<String, Object> toMapOfBFields( #{classname} bean) throws Exception {  
+       
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	if (bean == null) {
+    		return map;
+    	}
+    	
+        ## for (var column : table.getColumns()) {
+        ## if ( column.isPersistent()) { 
+        String #{java.toJavaVariableName(column)} = Converters.convert(String.class, bean.get#{java.toJavaName(column)}());
+        map.put("#{java.toDBFieldName(column)}",  #{java.toJavaVariableName(column)});
+        
+  		## }  
+  		## }
+  		
+  		return map; 
+    }  
+}
+## util.write(filename, writer); 
+## }

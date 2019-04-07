@@ -28,46 +28,18 @@
  * -----------------------------------------------------------------------------
  */
 
-package com.viper.database.dao;
+package com.viper.database.interfaces;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
-import javax.xml.bind.annotation.XmlTransient;
+public interface HelperInterface<T> {
 
-import org.apache.johnzon.mapper.JohnzonIgnore;
+    public Map<String, Object> toMapOfStrings(T bean) throws Exception;
 
-public abstract class DynamicEnum {
+    public T toBean(Map<String, Object> map) throws Exception;
 
-    @JohnzonIgnore
-    @XmlTransient
-    private static List<DynamicEnum> values = new ArrayList<DynamicEnum>();
+    public T toBeanFromDBFields(Map<String, Object> map) throws Exception;
 
-    abstract public String value();
-
-    public static List<? extends DynamicEnum> values() {
-        return values;
-    }
-
-    public static void add(DynamicEnum item) {
-        values.add(item);
-    }
-
-    public static <T extends DynamicEnum> T valueOf(String s) {
-        for (DynamicEnum value : values) {
-            if (value.value().equalsIgnoreCase(s)) {
-                return (T) value;
-            }
-        }
-        return null;
-    }
-
-    public static <T extends DynamicEnum> List<String> listOf() {
-        List<String> items = new ArrayList<String>();
-        for (DynamicEnum enumValue : values) {
-            items.add(enumValue.value());
-        }
-        return items;
-    }
+    public Map<String, Object> toMapOfBFields(T bean) throws Exception;
 
 }

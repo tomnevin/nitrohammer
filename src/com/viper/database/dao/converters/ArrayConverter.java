@@ -61,7 +61,7 @@ public final class ArrayConverter {
         Converters.register(short[].class, Short[].class, ArrayConverter::convertToArrayFromArray);
         Converters.register(Short[].class, short[].class, ArrayConverter::convertToArrayFromArray);
 
-        Converters.register(Array.class, Array.class, ArrayConverter::convertToArrayFromArray);
+        Converters.register(Array.class, Array.class, ArrayConverter::convertToArrayFromArray); 
 
     }
 

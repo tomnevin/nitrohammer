@@ -37,7 +37,6 @@ import java.lang.reflect.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -45,12 +44,9 @@ import java.util.Map;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.johnzon.mapper.Mapper;
-import org.apache.johnzon.mapper.MapperBuilder;
+import com.viper.database.utils.JSONUtil;
 
 public class ConverterUtils {
-
-    private final static Mapper mapper = new MapperBuilder().build();
 
     public final static String convertToString(Character[] s) {
         if (s == null) {
@@ -117,42 +113,42 @@ public class ConverterUtils {
         if (fromValue == null) {
             return null;
         }
-        return mapper.writeObjectAsString(fromValue);
+        return JSONUtil.toJSON(fromValue);
     }
 
     public final static Object convertFromString(Class toType, String fromValue) throws Exception {
         if (fromValue == null || toType == null) {
             return null;
         }
-        return mapper.readObject(fromValue, toType);
+        return JSONUtil.fromJSON(toType, fromValue);
     }
 
     public final static Object convertFromString(Class toType, Reader fromValue) throws Exception {
         if (fromValue == null || toType == null) {
             return null;
         }
-        return mapper.readObject(fromValue, toType);
+        return JSONUtil.fromJSON(toType, fromValue);
     }
 
     public final static Object convertFromString(Class toType, InputStream fromValue) throws Exception {
         if (fromValue == null || toType == null) {
             return null;
         }
-        return mapper.readObject(fromValue, toType);
+        return JSONUtil.fromJSON(toType, fromValue);
     }
 
     public final static Object[] convertToArray(Class toType, Reader fromValue) throws Exception {
         if (fromValue == null || toType == null) {
             return null;
         }
-        return mapper.readArray(fromValue, toType);
+        return (Object[]) JSONUtil.fromJSON(toType, fromValue);
     }
 
     public final static Object[] convertToArray(Class<?> toType, InputStream fromValue) throws Exception {
         if (fromValue == null || toType == null) {
             return null;
         }
-        return mapper.readArray(fromValue, toType);
+        return (Object[]) JSONUtil.fromJSON(toType, fromValue);
     }
 
     public final static String toHex(byte[] bytes) {
@@ -196,7 +192,7 @@ public class ConverterUtils {
      */
     public final static <T> String writeJson(T bean) {
         try {
-            return mapper.writeObjectAsString(bean);
+            return JSONUtil.toJSON(bean);
         } catch (Exception ex) {
             System.err.println("ERROR: failed to translte to string " + bean.getClass() + "," + bean);
             ex.printStackTrace();
@@ -214,7 +210,7 @@ public class ConverterUtils {
      */
     public final static <T> String writeJsonFromArray(T[] bean) {
         try {
-            return mapper.writeArrayAsString(bean);
+            return JSONUtil.toJSON(bean);
         } catch (Exception ex) {
             System.err.println("ERROR: failed to translte to string " + bean.getClass() + "," + bean);
             ex.printStackTrace();
@@ -232,7 +228,7 @@ public class ConverterUtils {
      */
     public final static <T> String writeJsonFromList(Collection<T> beans) {
         try {
-            return mapper.writeArrayAsString(beans);
+            return JSONUtil.toJSON(beans);
         } catch (Exception ex) {
             System.err.println("ERROR: failed to translte to string " + beans.getClass() + "," + beans);
         }
@@ -249,7 +245,7 @@ public class ConverterUtils {
      */
     public final static String writeJsonFromMap(Map<String, Object> map) {
         try {
-            return mapper.writeObjectAsString(map);
+            return JSONUtil.toJSON(map);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -269,7 +265,7 @@ public class ConverterUtils {
     public final static <T> T readJson(String json, Class<T> clazz) {
         try {
             if (json != null && clazz != null) {
-                return mapper.readObject(json, clazz);
+                return JSONUtil.fromJSON(clazz, json);
             }
         } catch (Exception ex) {
             System.err.println("readJson: Failed to convert JSON to bean: " + json);
@@ -292,7 +288,7 @@ public class ConverterUtils {
         try {
             if (json != null && json.length() > 0) {
                 StringReader reader = new StringReader(json);
-                return Arrays.asList(mapper.readArray(reader, clazz));
+                return (List<T>) JSONUtil.fromJSON(clazz, reader);
             }
         } catch (Exception ex) {
             System.err.println("readJsonToList: Failed to convert JSON to bean: " + json);
@@ -331,7 +327,7 @@ public class ConverterUtils {
      */
     public final static Map<String, Object> readJsonToMap(String json) {
         try {
-            return mapper.readObject(json, Map.class);
+            return JSONUtil.fromJSON(Map.class, json);
         } catch (Exception ex) {
             System.err.println("readJsonToList: Failed to convert JSON to map: " + json);
             ex.printStackTrace();

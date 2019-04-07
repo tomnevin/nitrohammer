@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="nitrohammer" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:jacoco="antlib:org.jacoco.ant">
-	
+
 	<property environment="env" />
-	 
-	<property name="name" value="nitrohammer" /> 
+
+	<property name="name" value="nitrohammer" />
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="data.source" value="mysql" />
 	<property name="version" value="1.0" />
-	<property name="jvm.deprecation" value="-Xlint:deprecation" /> 
+	<property name="jvm.deprecation" value="-Xlint:deprecation" />
 	<property name="jvm.args" value="-Xmx1024m -Xms256m " />
 	<property name="jvm.debug.args" value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000" />
+	<property name="jvm.test.args" value="-javaagent:${basedir}/lib/drivers/openjpa-all-3.0.0.jar" />
 	<property name="test.name" value="Test*" />
 	<property name="debug" value="on" />
 	<property name="deprecation" value="off" />
@@ -19,10 +20,8 @@
 	<property name="target" value="1.8" />
 	<property name="service.name" value="TomEE" />
 	<property name="database.name" value="test" />
-	<property name="tomcat.dir" value="tomcat" />
-	<property name="tomcat.root" value="/opt" />
-	<property name="tomcat.home" value="/opt/${tomcat.dir}" />
-	<property name="test.url" value="http://localhost/${name}" />
+	<property name="tomcat.home" value="/opt/apache-tomee-plume-8.0.0-M2" />  
+	<property name="test.url" value="http://localhost:8080/${name}" />
 	<property name="authorize.service.url" value="${test.url}/authorize/login" />
 	<property name="rest.service.url" value="${test.url}/classes/" />
 	<property name="web.service.url" value="${test.url}/web/classes/" />
@@ -134,11 +133,11 @@
 	<!-- =================================================================== -->
 	<!-- Compiles the source code -->
 	<!-- =================================================================== -->
-	<target name="schematool" depends="srcgen"> 
+	<target name="schematool" depends="srcgen">
 		<javac destdir="${build.dir}/classes" srcdir="srcgen" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
 			<include name="**/*.java" />
 			<classpath refid="classpath.test" />
-		</javac> 
+		</javac>
 		<javac destdir="${build.dir}/classes" srcdir="src" nowarn="${nowarn}" debug="${debug}" deprecation="${deprecation}" source="${source}" target="${target}" optimize="${optimize}">
 			<include name="**/*.java" />
 			<exclude name="com/viper/rest/**/*.java" />
@@ -180,16 +179,21 @@
 			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/bean/dynamic.enum.txt com.viper.demo.beans.model" />
 			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.beans.model" />
 			<arg line="-pojo etc/model/beans srcgen res:/com/viper/database/translators/hadoop/dbwritable.txt com.viper.demo.beans.model.writable" />
+
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/hibernate.2/dynamic.enum.txt com.viper.demo.hibernate2.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/hibernate.2/bean.txt com.viper.demo.hibernate2.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/persistence.0/dynamic.enum.txt com.viper.demo.persistence0.test.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/persistence.0/bean.txt com.viper.demo.persistence0.test.model" />
+
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/dynamic.enum.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/bean.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/helper.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/restservice.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/daoservice.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testbean.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testhelper.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testdaobean.txt com.viper.demo.unit.model" />
+			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testdaoquerybean.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testrestclient.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testplotlyrestclient.txt com.viper.demo.unit.model" />
 			<arg line="-pojo etc/model/test srcgen res:/com/viper/database/translators/bean/testaggridrestclient.txt com.viper.demo.unit.model" />
@@ -399,8 +403,7 @@
 	<!-- =================================================================== -->
 	<!-- Runs the test -->
 	<!-- =================================================================== -->
-	<target name="deploy.all">
-		<!-- <unzip src="${basedir}/external/${tomcat.dir}.zip" dest="${tomcat.root}" /> -->
+	<target name="deploy.all"> 
 		<mkdir dir="${tomcat.home}/logs" />
 		<!-- Copy rest services war to tomcat directory -->
 		<copy todir="${tomcat.home}/webapps">
@@ -548,7 +551,7 @@
 				<jvmarg value="-DDATABASE_LOCATOR=${database.name}" />
 				<jvmarg value="-Djavax.net.ssl.trustStore=${basedir}/etc/tomcat/conf/viper.keystore" />
 				<jvmarg value="-Djavax.net.ssl.trustStorePassword=${keystore.password}" />
-				<jvmarg line="${jvm.args}" />
+				<jvmarg line="${jvm.args}" /> 
 				<jvmarg value="-XX:-UseSplitVerifier" />
 			</junit>
 		</jacoco:coverage>

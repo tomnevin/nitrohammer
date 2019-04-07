@@ -30,44 +30,24 @@
 
 package com.viper.database.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.xml.bind.annotation.XmlTransient;
+import com.viper.database.interfaces.HelperInterface;
 
-import org.apache.johnzon.mapper.JohnzonIgnore;
+public class HelperFactory {
 
-public abstract class DynamicEnum {
+    private static final Map<Class, HelperInterface> cache = new HashMap<Class, HelperInterface>();
 
-    @JohnzonIgnore
-    @XmlTransient
-    private static List<DynamicEnum> values = new ArrayList<DynamicEnum>();
-
-    abstract public String value();
-
-    public static List<? extends DynamicEnum> values() {
-        return values;
-    }
-
-    public static void add(DynamicEnum item) {
-        values.add(item);
-    }
-
-    public static <T extends DynamicEnum> T valueOf(String s) {
-        for (DynamicEnum value : values) {
-            if (value.value().equalsIgnoreCase(s)) {
-                return (T) value;
-            }
+    public static final <T> HelperInterface getHelper(Class<T> clazz) throws Exception {
+        HelperInterface helper = cache.get(clazz);
+        if (helper != null) {
+            return helper;
         }
-        return null;
-    }
+        helper = (HelperInterface) Class.forName(clazz.getPackage().getName() + ".dao.helper." + clazz.getSimpleName() + "Helper").newInstance();
+        cache.put(clazz, helper);
 
-    public static <T extends DynamicEnum> List<String> listOf() {
-        List<String> items = new ArrayList<String>();
-        for (DynamicEnum enumValue : values) {
-            items.add(enumValue.value());
-        }
-        return items;
+        return helper;
     }
 
 }

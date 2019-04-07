@@ -15,9 +15,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.viper.database.annotations.Index;
-import com.viper.database.annotations.ForeignKey;
+  
 import com.viper.database.annotations.Column;
 import com.viper.database.annotations.Table;
 import com.viper.database.dao.DynamicEnum;
@@ -30,10 +28,10 @@ import #{database.packageName}.enums.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings("serial")
 ## for (index : table.getIndices()) {
-@Index (#{java.toIndexAnnotation(table, index)})
+#{java.toIndexAnnotation(table, index)} 
 ## }
 ## for (foreignKey : table.getForeignKeys()) {
-@ForeignKey (#{java.toForeignKeyAnnotation(foreignKey)})
+#{java.toForeignKeyAnnotation(foreignKey)} 
 ## }
 @Table (#{java.toTableAnnotation(database.name, table)})
 public class #{classname} #{java.toBaseClass(table)} #{java.toInterface(table)}  {
@@ -43,7 +41,8 @@ public class #{classname} #{java.toBaseClass(table)} #{java.toInterface(table)} 
     
     ## for (column : table.getColumns()) {
   
-    #{java.toJohnzonAnnotation(column)}
+    #{java.toJaxbDateAnnotation(column)}
+    #{java.toJohnzonDateAnnotation(column)}
     @XmlElement(name="#{java.toJavaVariableName(column)}")
     @Column (#{java.toColumnAnnotation(table, column)})
     private #{java.toJavaType(column)} #{java.toJavaVariableName(column)}  #{java.toDefaultValue(column)};

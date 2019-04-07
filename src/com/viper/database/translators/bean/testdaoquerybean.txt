@@ -36,15 +36,24 @@ public class TestQuery#{classname} extends AbstractTestCase {
     private static final int PageNo = 2;
     private static final int PageSize = 75;
     private static DatabaseInterface database;
+    
+    @BeforeClass
+    public static void initializeClass() throws Exception {
+    
+		String DatabaseInstanceName = com.viper.database.utils.ResourceUtil.getResource("DATABASE_LOCATOR", "test");
+       
+    }
 
     @Test
     public void testQueryOneFilter() throws Exception {
 
-        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
-        database.insert(expected);
+        List<#{classname}> items = database.queryList(#{classname}.class);
+        assertNotEmpty(getCallerMethodName() + ", Nothing returned: ", items);
+        
+        #{classname}  expected  = items.get(0);
 
         #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
-        assertBeanEquals(getCallerMethodName(), expected, actual);
+        assertNotNull(getCallerMethodName(), actual);
     }
 
     @Test
@@ -60,9 +69,12 @@ public class TestQuery#{classname} extends AbstractTestCase {
 
     @Test
     public void testQuery() throws Exception {
+ueryOneFilter() throws Exception {
 
-       #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
-        database.insert(expected);
+        List<#{classname}> items = database.queryList(#{classname}.class);
+        assertNotEmpty(getCallerMethodName() + ", Nothing returned: ", items);
+        
+        #{classname}  expected  = items.get(0);
 
         #{classname} actual = database.query(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
         assertBeanEquals(getCallerMethodName(), expected, actual);
@@ -81,9 +93,12 @@ public class TestQuery#{classname} extends AbstractTestCase {
 
     @Test
     public void testQueryListFilter() throws Exception {
+ueryOneFilter() throws Exception {
 
-        #{classname} expected = RandomBean.getRandomBean(#{classname}.class, 1); 
-        database.insert(expected);
+        List<#{classname}> items = database.queryList(#{classname}.class);
+        assertNotEmpty(getCallerMethodName() + ", Nothing returned: ", items);
+        
+        #{classname}  expected  = items.get(0);
 
         List<#{classname}> list = database.queryList(#{classname}.class, DatabaseUtil.getPrimaryKeyName(#{classname}.class), expected.get#{java.toPrimaryKeyName(table)}());
         assertBeanEquals(getCallerMethodName(), expected, list.get(0));

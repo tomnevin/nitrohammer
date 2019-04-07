@@ -28,46 +28,25 @@
  * -----------------------------------------------------------------------------
  */
 
-package com.viper.database.dao;
+package com.viper.database.annotations;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.apache.johnzon.mapper.JohnzonIgnore;
+public class DateTimeAdapter extends XmlAdapter<String, Date> {
+    private final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
-public abstract class DynamicEnum {
-
-    @JohnzonIgnore
-    @XmlTransient
-    private static List<DynamicEnum> values = new ArrayList<DynamicEnum>();
-
-    abstract public String value();
-
-    public static List<? extends DynamicEnum> values() {
-        return values;
+    @Override
+    public Date unmarshal(String xml) throws Exception {
+        return dateFormat.parse(xml);
     }
 
-    public static void add(DynamicEnum item) {
-        values.add(item);
-    }
-
-    public static <T extends DynamicEnum> T valueOf(String s) {
-        for (DynamicEnum value : values) {
-            if (value.value().equalsIgnoreCase(s)) {
-                return (T) value;
-            }
-        }
-        return null;
-    }
-
-    public static <T extends DynamicEnum> List<String> listOf() {
-        List<String> items = new ArrayList<String>();
-        for (DynamicEnum enumValue : values) {
-            items.add(enumValue.value());
-        }
-        return items;
+    @Override
+    public String marshal(Date object) throws Exception {
+        return dateFormat.format(object);
     }
 
 }

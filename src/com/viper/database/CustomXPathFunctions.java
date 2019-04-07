@@ -141,17 +141,20 @@ public final class CustomXPathFunctions {
         return classname;
     }
 
-    public final static String toJavaClass(Database database, Table table, Column column) {
+    public final static String toJavaClass(Column column) {
         String classname = column.getJavaType();
         if (isEnumType(column)) {
             classname = getChild(classname);
         }
-        return toClassName(classname);
+        return classname;
     }
 
     public final static boolean isArray(Database database, Table table, Column column) {
-        String name = toJavaClass(database, table, column);
-
+        String classname = column.getJavaType();
+        if (isEnumType(column)) {
+            classname = getChild(classname);
+        }
+        String name = toClassName(classname);
         return (name != null && name.startsWith("["));
     }
 
@@ -236,6 +239,13 @@ public final class CustomXPathFunctions {
             }
         }
         return buf.toString();
+    }
+
+    public final static String toDBFieldName(Column column) {
+        if (column.getField() != null && column.getField().trim().length() == 0) {
+            return column.getField();
+        }
+        return column.getName();
     }
 
     public final static String toDynamicEnumDefinition(Column column) {
@@ -732,14 +742,14 @@ public final class CustomXPathFunctions {
 
         List<String> columnNames = listColumnNames(table, index);
 
-        StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer(); 
         append(buf, "name", index.getName());
         append(buf, "columns", columnNames);
         append(buf, "indexClass", index.getIndexClass().toString());
         append(buf, "indexType", index.getIndexType().toString());
         append(buf, "primary", index.isPrimary());
-        append(buf, "editable", index.isEditable());
-        return buf.toString();
+        append(buf, "editable", index.isEditable()); 
+        return "@com.viper.database.annotations.Index (" + buf.toString() + ")";
     }
 
     public final static List<String> listColumnNames(Table table, Index index) {
@@ -770,7 +780,7 @@ public final class CustomXPathFunctions {
 
     public final static String toForeignKeyAnnotation(ForeignKey foreignKey) {
 
-        StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer(); 
         append(buf, "name", foreignKey.getName());
         append(buf, "constraintName", foreignKey.getConstraintName());
         append(buf, "localDatabase", foreignKey.getLocalDatabase());
@@ -778,8 +788,8 @@ public final class CustomXPathFunctions {
         append(buf, "foreignDatabase", foreignKey.getForeignDatabase());
         append(buf, "foreignTable", foreignKey.getForeignTable());
         append(buf, "foreignColumns", toForeignColumns(foreignKey.getForeignKeyReferences()));
-        append(buf, "unique", foreignKey.isUnique());
-        return buf.toString();
+        append(buf, "unique", foreignKey.isUnique()); 
+        return "@com.viper.database.annotations.ForeignKey (" + buf.toString() + ")";
     }
 
     public final static String toInterface(Table table) {
@@ -793,10 +803,19 @@ public final class CustomXPathFunctions {
         return buf.toString();
     }
 
-    public final static String toJohnzonAnnotation(Column column) {
+    public final static String toJohnzonDateAnnotation(Column column) {
         if (column.getJavaType() != null) {
             if (DateList.contains(column.getJavaType())) {
                 return "@org.apache.johnzon.mapper.JohnzonConverter(org.apache.johnzon.mapper.converter.TimestampAdapter.class)";
+            }
+        }
+        return "";
+    }
+
+    public final static String toJaxbDateAnnotation(Column column) {
+        if (column.getJavaType() != null) {
+            if (DateList.contains(column.getJavaType())) {
+                return "@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(com.viper.database.annotations.DateTimeAdapter.class)";
             }
         }
         return "";

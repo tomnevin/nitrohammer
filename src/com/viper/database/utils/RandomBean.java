@@ -83,11 +83,9 @@ public class RandomBean {
      * @param clazz
      * @param iteration
      * @param nitems
-     * @return the list of random generated beans, list size should be nitems, else
-     *         exception.
+     * @return the list of random generated beans, list size should be nitems, else exception.
      * @throws Exception
-     *             unable to build list of random beans, generally unable to create
-     *             bean objects.
+     *             unable to build list of random beans, generally unable to create bean objects.
      */
     public final static <T> List<T> getRandomBeans(Class<T> clazz, int iteration, int nitems) throws Exception {
         List<T> items = new ArrayList<T>();
@@ -166,6 +164,26 @@ public class RandomBean {
     }
 
     /**
+     * 
+     * @param column
+     * @return
+     */
+    private final static boolean isEnum(Column column) {
+        if ("enum".equalsIgnoreCase(column.dataType())) {
+            return true;
+        }
+        String javaType = column.javaType();
+        try {
+            Class clazz = Class.forName(javaType);
+            return clazz.isEnum();
+
+        } catch (Exception ex) {
+            // Intentional
+        }
+        return false;
+    }
+
+    /**
      * @param database
      * @param table
      * @param beans
@@ -197,8 +215,7 @@ public class RandomBean {
         if (List.class.isAssignableFrom(propertyType)) {
             List<Object> items = (List<Object>) DatabaseUtil.getValue(bean, column.field());
             if (items == null) {
-                System.err
-                        .println("ERROR: list field " + column.field() + " not found in " + bean.getClass().getName());
+                System.err.println("ERROR: list field " + column.field() + " not found in " + bean.getClass().getName());
                 items = new ArrayList();
             }
             int size = randomInt(1, 20); // TODO getsize
@@ -227,7 +244,7 @@ public class RandomBean {
 
             String arguments[] = getLogicalArguments(column.logicalType());
             if (arguments == null || arguments.length == 0) {
-                log.severe("Unhandled randomValue type(" + column.logicalType() + ")");
+                log.severe("Unhandled randomValue type#1(" + column.logicalType() + ")");
                 return null;
             }
 
@@ -252,6 +269,13 @@ public class RandomBean {
                     return sequentialName(arguments, index);
                 }
                 return randomName(arguments);
+            }
+            if ("file".equalsIgnoreCase(logicalType)) {
+                return randomFilename(arguments);
+            }
+
+            if ("url".equalsIgnoreCase(logicalType)) {
+                return randomUrl(arguments);
             }
 
             if ("companion".equalsIgnoreCase(logicalType)) {
@@ -327,8 +351,8 @@ public class RandomBean {
             }
 
             if ("ports".equalsIgnoreCase(logicalType)) {
-                return randomPorts(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2]),
-                        Integer.parseInt(arguments[3]), Integer.parseInt(arguments[4]));
+                return randomPorts(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2]), Integer.parseInt(arguments[3]),
+                        Integer.parseInt(arguments[4]));
             }
 
             if ("list".equalsIgnoreCase(logicalType)) {
@@ -381,8 +405,8 @@ public class RandomBean {
                 return randomBytes(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2]));
             }
             if ("ints".equalsIgnoreCase(logicalType)) {
-                return randomInts(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2]),
-                        Integer.parseInt(arguments[3]), Integer.parseInt(arguments[4]));
+                return randomInts(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2]), Integer.parseInt(arguments[3]),
+                        Integer.parseInt(arguments[4]));
             }
 
             if (bean.getClass().isEnum()) {
@@ -411,7 +435,8 @@ public class RandomBean {
                 return randomInt(minval, maxval);
             }
         }
-        if ("enum".equalsIgnoreCase(column.dataType())) {
+
+        if (isEnum(column)) {
             return randomEnum(propertyType, column.enumValue());
         }
 
@@ -497,6 +522,9 @@ public class RandomBean {
         } else if (int[].class.isAssignableFrom(propertyType)) {
             return randomInts(0, (int) column.size(), 0, 100);
 
+        } else if (short[].class.isAssignableFrom(propertyType)) {
+            return randomShorts(0, 1000, (short) 0, (short) 100);
+
         } else if (long[].class.isAssignableFrom(propertyType)) {
             return randomLongs(0, (int) column.size(), 0L, 100L);
 
@@ -519,8 +547,8 @@ public class RandomBean {
             return randomEnum(propertyType, null);
         }
 
-        log.severe("Unhandled randomValue type(" + propertyType + "," + logicalType + "," + table.name() + ","
-                + column.name() + ")");
+        log.severe("Unhandled randomValue type#2(" + propertyType + "," + logicalType + "," + table.name() + "," + column.name()
+                + ")");
         return null;
     }
 
@@ -544,31 +572,29 @@ public class RandomBean {
         if (str == null) {
             return null;
         }
-        if (str.startsWith("custom:")) {
-            int index1 = str.indexOf(':');
-            int index2 = str.indexOf(',');
-            String args[] = new String[3];
-            args[0] = str.substring(0, index1).trim();
-            args[1] = str.substring(index1 + 1, index2).trim();
-            args[2] = str.substring(index2 + 1).trim();
-            return args;
+
+        int index1 = str.indexOf(':');
+        if (index1 == -1) {
+            return new String[] { str };
         }
-        if (str.startsWith("jexl:")) {
-            int index1 = str.indexOf(':');
-            String args[] = new String[2];
-            args[0] = str.substring(0, index1).trim();
-            args[1] = str.substring(index1 + 1).trim();
-            return args;
+        String name = str.substring(0, index1).trim();
+
+        if (str.charAt(index1) == '[') {
+            index1 = index1 + 1;
         }
-        if (str.indexOf(":[") != -1) {
-            return str.split(":");
+        int index2 = str.length();
+        if (str.charAt(index2 - 1) == ']') {
+            index2 = index2 - 1;
         }
-        String[] tokens = str.split(",|:");
+        String[] tokens = str.substring(index1 + 1).split(",");
+
+        String[] results = new String[tokens.length + 1];
+        results[0] = name;
         for (int i = 0; i < tokens.length; i++) {
-            tokens[i] = tokens[i].trim();
+            results[i + 1] = tokens[i].trim();
         }
 
-        return tokens;
+        return results;
     }
 
     /**
@@ -623,6 +649,43 @@ public class RandomBean {
             name = randomString(5, 25);
         }
         return name.trim();
+    }
+
+    /**
+     * @param arguments
+     * @return a randomly generate string, which is a person's name.
+     */
+    public final static String randomUrl(String[] arguments) {
+        return getFilename(arguments[1], arguments[2], arguments[3]);
+    }
+
+    /**
+     * @param arguments
+     * @return a randomly generate string, which is a person's name.
+     */
+    public final static String randomFilename(String[] arguments) {
+        return getFilename(arguments[1], arguments[2], arguments[3]);
+    }
+
+    private final static String getFilename(String directory, String filename, String prefix) {
+        if (filename == null || directory == null) {
+            return null;
+        }
+        File file = new File(directory + "/" + filename);
+        if (!file.exists()) {
+            System.out.println("RandomBean.getFilename: file does not exist: " + file.getAbsolutePath());
+            return null;
+        }
+        if (!file.isDirectory()) {
+            return (prefix == null) ? filename + "/" + file.getName() : prefix + "/" + filename + "/" + file.getName();
+        }
+        File[] files = file.listFiles();
+        if (files.length == 0) {
+            System.out.println("RandomBean.getFilename: directory is empty: " + file.getAbsolutePath());
+            return null;
+        }
+        String filename1 = filename + "/" + file.getName();
+        return getFilename(directory, filename1, prefix);
     }
 
     /**
@@ -707,8 +770,8 @@ public class RandomBean {
 
     /**
      * @param arguments
-     * @return the randomly generated string which is an email address, although the
-     *         email address will not necessarily exists.
+     * @return the randomly generated string which is an email address, although the email address
+     *         will not necessarily exists.
      */
     public final static String randomEmail(String[] arguments) {
         if (arguments.length == 2) {
@@ -723,8 +786,8 @@ public class RandomBean {
     /**
      * @param arguments
      * @param index
-     * @return the sequentially generated string which is an email address, although
-     *         the email address will not necessarily exists.
+     * @return the sequentially generated string which is an email address, although the email
+     *         address will not necessarily exists.
      */
     public final static String sequentialEmail(String[] arguments, int index) {
         if (arguments.length == 2) {
@@ -747,8 +810,7 @@ public class RandomBean {
     /**
      * @param minlen
      * @param maxlen
-     * @return the randomly generated string, of random length between min and max
-     *         len.
+     * @return the randomly generated string, of random length between min and max len.
      */
     public final static String randomString(int minlen, int maxlen) {
         int length = (minlen == maxlen) ? maxlen : randomInt(minlen, maxlen);
@@ -932,10 +994,8 @@ public class RandomBean {
      */
     public final static Object randomEnum(Class typename, String[] arguments) {
         String value = randomList(arguments);
-        if (value != null) {
-            if (typename != null) {
-                return Enum.valueOf(typename, value);
-            }
+        if (value != null && typename != null) {
+            return Enum.valueOf(typename, value);
         }
         return (typename == null) ? null : randomValues(typename.getEnumConstants());
     }
@@ -1000,6 +1060,22 @@ public class RandomBean {
             throw new IllegalArgumentException("Start cannot exceed End.");
         }
         return (short) ((i2 - i1) * random.nextDouble() + i1);
+    }
+
+    /**
+     * @param minlen
+     * @param maxlen
+     * @param minval
+     * @param maxval
+     * @return
+     */
+    public final static short[] randomShorts(int minlen, int maxlen, short minval, short maxval) {
+        int length = (minlen == maxlen) ? maxlen : randomInt(minlen, maxlen);
+        short[] buf = new short[length];
+        for (int i = 0; i < length; i++) {
+            buf[i] = randomShort(minval, maxval);
+        }
+        return buf;
     }
 
     /**

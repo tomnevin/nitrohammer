@@ -30,7 +30,6 @@
 
 package com.viper.database.dao.converters;
 
-import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,8 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apache.johnzon.mapper.Mapper;
-import org.apache.johnzon.mapper.MapperBuilder;
+import com.viper.database.utils.JSONUtil;
 
 /**
  * The converter class is the central conversion class which will support converting a value of one
@@ -70,8 +68,6 @@ import org.apache.johnzon.mapper.MapperBuilder;
 public class Converters {
 
     private static final Logger log = Logger.getLogger(Converters.class.getName());
-
-    private static final Mapper mapper = new MapperBuilder().build();
 
     static class ConverterKey {
         Class<?> fromClazz;
@@ -194,9 +190,13 @@ public class Converters {
                 return target.cast(value);
             }
 
+            if (target.isAssignableFrom(value.getClass())) {
+                return (T) value;
+            }
+
             converter = lookup(target, value);
             if (converter == null) {
-                throw new Exception("Conversion not found: from " + value.getClass() + " to " + target.getName());
+                throw new Exception("Conversion not found: from " + value.getClass() + " to " + target.getSimpleName());
             }
             return converter.convert(target, value);
 
@@ -214,8 +214,12 @@ public class Converters {
             }
 
             if (value instanceof String) {
-                StringReader reader = new StringReader((String) value);
-                return (List<T>) Arrays.asList(mapper.readArray(reader, target));
+                String str = (String) value;
+                if (str.trim().startsWith("[") || str.indexOf("{") != -1) {
+                    return (List<T>) JSONUtil.fromJSONList(target, str);
+                } else {
+                    return (List<T>) Arrays.asList(str.split("\\s*(,)\\s*"));
+                }
             }
 
             throw new Exception("ERROR : can't implement connversion to " + target + " from " + value.getClass() + ":" + value);
@@ -239,11 +243,11 @@ public class Converters {
             if (beans == null) {
                 return null;
             }
-            return mapper.writeArrayAsString(beans);
+            return JSONUtil.toJSON(beans);
 
         } catch (Exception ex) {
             System.err.println("ERROR: convertFromList: " + ex);
-            throw ex;
         }
+        return null;
     }
 }

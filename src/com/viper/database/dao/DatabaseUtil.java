@@ -180,7 +180,7 @@ public class DatabaseUtil {
                 } else {
                     // System.out.println("IsMatch: " + beanValue + "," +
                     // value);
-                    if (!beanValue.toString().equals(value.toString())) {
+                    if (!beanValue.toString().equalsIgnoreCase(value.toString())) {
                         return false;
                     }
                 }
@@ -1405,33 +1405,7 @@ public class DatabaseUtil {
         }
         return null;
     }
-
-    /**
-     * 
-     * @param database
-     * @param db
-     * @throws Exception
-     */
-    public static void importTable(DatabaseInterface database, com.viper.database.model.Database db) throws Exception {
-
-        for (com.viper.database.model.Table table : db.getTables()) {
-            log.fine("Processing table: " + table.getName());
-
-            Class tableClass = DatabaseUtil.toTableClass(db.getPackageName(), table.getName());
-            if (tableClass == null) {
-                throw new Exception(
-                        "Unable to find class which belongs to table name:" + db.getName() + "." + table.getName());
-            }
-
-            for (Row row : table.getRows()) {
-                Object bean = tableClass.newInstance();
-                for (Cell cell : row.getCells()) {
-                    DatabaseUtil.setValue(bean, cell.getName(), cell.getValue());
-                }
-                database.insert(bean);
-            }
-        }
-    }
+ 
 
     /**
      * Call the beans generator class from the annotation.
@@ -2043,11 +2017,10 @@ public class DatabaseUtil {
         return columns;
     }
 
-    public static Object convert(Column column, Class clazz, Object value) throws Exception {
+    public static Object convert(String converter , Class clazz, Object value) throws Exception {
 
         final String DELIMITERS = "\\s*[\\)\\(,]\\s*";
-
-        String converter = column.converter();
+ 
         String[] args = converter.split(DELIMITERS);
 
         int index = args[0].lastIndexOf('.');
@@ -2059,8 +2032,8 @@ public class DatabaseUtil {
         Method method = c.getDeclaredMethod(methodname, argTypes);
 
         String[] methodArgs = Arrays.copyOfRange(args, 1, args.length);
-        return method.invoke(null, column, value, methodArgs);
-    }
+        return method.invoke(null, clazz, value, methodArgs);
+    } 
 
     public static <T> T invoke(Class<T> clazz, String methodname, Object... args) throws Exception {
 

@@ -12,7 +12,7 @@
 	
     ## for (column : table.getColumns()) {
     ## if (!java.isArray(database, table, column)) {
-	<field name="#{java.toJavaVariableName(column)}" class="#{java.toJavaClass(database, table, column)}">
+	<field name="#{java.toJavaVariableName(column)}" class="#{java.toJavaClass( column)}">
 	<!-- 
 		<fieldDescription><![CDATA[]]>
 		</fieldDescription>

@@ -1417,6 +1417,8 @@ public class SQLDriver {
             Database database = DatabaseUtil.findOneItem(databases.getDatabases(), "name", table.getDatabaseName());
             if (database != null) {
                 database.getTables().add(table);
+            } else {
+                System.out.println("MergeTables: could not find database : " + table.getDatabaseName());
             }
         }
     }
@@ -1549,9 +1551,14 @@ public class SQLDriver {
         for (Row row : rows) {
             Table item = new Table();
             item.setName(getValue(row, "table_name"));
-            item.setDatabaseName(getDatabaseName(row));
-            item.setDatabaseName(databaseName); // TEMPORARY mysql case sensitivity reade
-                                                // table_schema values as lower case alway
+            if (databaseName != null) {
+                // TEMPORARY mysql case sensitivity reade
+                // table_schema values as lower case alway
+                item.setDatabaseName(databaseName);
+
+            } else {
+                item.setDatabaseName(getDatabaseName(row));
+            }
 
             item.setTableType(toTableType(getValue(row, "table_type")));
             item.setDescription(getDescription(row));

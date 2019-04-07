@@ -69,9 +69,6 @@ public final class NumberConverter {
         registerFrom(BigDecimal.class, NumberConverter::convertNumberToBigDecimal);
         registerFrom(BigInteger.class, NumberConverter::convertNumberToBigInteger);
 
-        registerTo(BigDecimal.class, NumberConverter::convertBigDecimalToNumber);
-        registerTo(BigInteger.class, NumberConverter::convertBigIntegerToNumber);
-
         Converters.register(Boolean.class, Byte.class, NumberConverter::convertBooleanToByte);
         Converters.register(boolean.class, Byte.class, NumberConverter::convertBooleanToByte);
         Converters.register(Boolean.class, byte.class, NumberConverter::convertBooleanToByte);
@@ -132,6 +129,9 @@ public final class NumberConverter {
         Converters.register(short.class, Boolean.class, NumberConverter::convertShortToBoolean);
         Converters.register(short.class, boolean.class, NumberConverter::convertShortToBoolean);
 
+        Converters.register(Boolean.class, boolean.class, NumberConverter::convertBooleanToBoolean);
+        Converters.register(boolean.class, Boolean.class, NumberConverter::convertBooleanToBoolean);
+
         registerFrom(Array.class, ArrayConverter::convertToArrayFromArray);
         registerTo(Array.class, ArrayConverter::convertToArrayFromArray);
 
@@ -152,6 +152,9 @@ public final class NumberConverter {
         Converters.register(int.class, toClazz, converter);
         Converters.register(long.class, toClazz, converter);
         Converters.register(short.class, toClazz, converter);
+
+        Converters.register(BigInteger.class, toClazz, converter);
+        Converters.register(BigDecimal.class, toClazz, converter);
     }
 
     private static final <S> void registerTo(Class<S> fromClazz, ConverterInterface converter) {
@@ -174,37 +177,43 @@ public final class NumberConverter {
     // Number / Byte
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertNumberToByte(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Byte(((Number) fromValue).byteValue());
+        return (toType.isPrimitive() && fromValue == null) ? (T) new Byte(((Number) 0).byteValue())
+                : (T) new Byte(((Number) fromValue).byteValue());
     }
 
     // Number / Double
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertNumberToDouble(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Double(((Number) fromValue).doubleValue());
+        return (toType.isPrimitive() && fromValue == null) ? (T) new Double(((Number) 0.0).doubleValue())
+                : (T) new Double(((Number) fromValue).doubleValue());
     }
 
     // Number / Float
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertNumberToFloat(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Float(((Number) fromValue).floatValue());
+        return (toType.isPrimitive() && fromValue == null) ? (T) new Float(((Number) 0.0F).floatValue())
+                : (T) new Float(((Number) fromValue).floatValue());
     }
 
     // Number / Integer
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertNumberToInteger(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Integer(((Number) fromValue).intValue());
+        return (int.class.isAssignableFrom(toType) && fromValue == null) ? (T) new Integer(((Number) 0).intValue())
+                : (T) new Integer(((Number) fromValue).intValue());
     }
 
     // Number / Long
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertNumberToLong(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Long(((Number) fromValue).longValue());
+        return (toType.isPrimitive() && fromValue == null) ? (T) new Long(((Number) 0L).longValue())
+                : (T) new Long(((Number) fromValue).longValue());
     }
 
     // Number / Short
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertNumberToShort(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Short(((Number) fromValue).shortValue());
+        return (toType.isPrimitive() && fromValue == null) ? (T) new Short(((Number) 0).shortValue())
+                : (T) new Short(((Number) fromValue).shortValue());
     }
 
     // Number / BigDecimal
@@ -213,20 +222,10 @@ public final class NumberConverter {
         return (T) new BigDecimal(((Number) fromValue).doubleValue());
     }
 
-    @SuppressWarnings("unchecked")
-    public static final <T, S> T convertBigDecimalToNumber(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Double(((BigDecimal) fromValue).doubleValue());
-    }
-
     // Number / BigInteger
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertNumberToBigInteger(Class<T> toType, S fromValue) throws Exception {
         return (T) BigInteger.valueOf(((Number) fromValue).longValue());
-    }
-
-    @SuppressWarnings("unchecked")
-    public static final <T, S> T convertBigIntegerToNumber(Class<T> toType, S fromValue) throws Exception {
-        return (T) new Long(((BigInteger) fromValue).longValue());
     }
 
     // Byte / Boolean
@@ -293,6 +292,11 @@ public final class NumberConverter {
     @SuppressWarnings("unchecked")
     public static final <T, S> T convertShortToBoolean(Class<T> toType, S fromValue) throws Exception {
         return (T) new Boolean(((Short) fromValue == null || (Short) fromValue == 0) ? false : true);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static final <T, S> T convertBooleanToBoolean(Class<T> toType, S fromValue) throws Exception {
+        return (T) new Boolean(((Boolean) fromValue == null) ? false : (Boolean) fromValue);
     }
 
 }

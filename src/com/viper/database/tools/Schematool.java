@@ -116,20 +116,20 @@ public class Schematool {
     public void process(String args[]) throws Exception {
 
         final Map<String, Object> parameters = new HashMap<String, Object>();
-        final List<Table> cache = new ArrayList<Table>();
+        final Map<String, Table> cache = new HashMap<String, Table>();
         String user = null;
         String pwd = null;
 
         ConsoleHandler ch = new ConsoleHandler();
         ch.setLevel(Level.FINEST);
-        
+
         log.addHandler(ch);
         log.setLevel(Level.FINEST);
 
         for (int i = 0; i < args.length; i++) {
             if ("-verbose".equals(args[i]) || "-v".equals(args[i])) {
                 verbose = true;
-                
+
             } else if ("-username".equals(args[i])) {
                 user = args[++i];
 
@@ -228,7 +228,7 @@ public class Schematool {
                 final String indir = args[++i];
                 final String packageName = args[++i];
 
-                cache.addAll(loadTables(new File(indir), packageName));
+                cache.putAll(loadTables(new File(indir), packageName));
 
                 /**
                  * Create the model as POJO beans from the schema.
@@ -238,6 +238,9 @@ public class Schematool {
                 final String outdir = args[++i];
                 final String template = args[++i];
                 final String packageName = args[++i];
+
+                cache.clear();
+                cache.putAll(loadTables(new File(indir), packageName));
 
                 final Map<String, Object> params = new HashMap<String, Object>();
                 params.putAll(parameters);
@@ -343,11 +346,7 @@ public class Schematool {
 
                 System.out.println("-SIMULATION: url=" + url + ", packageName=>" + packageName);
 
-                DatabaseConnection connection = createConnection(url);
-                connection.getPackageNames().clear();
-                connection.getPackageNames().add(packageName);
-
-                generateBeans(connection);
+                generateBeans(url, packageName);
 
             } else if ("-export".equalsIgnoreCase(args[i])) {
                 final String indir = args[++i];
@@ -596,7 +595,7 @@ public class Schematool {
      * @throws Exception
      */
     public void generatePOJO(File indir, File outdir, String templateFilename, String filter, Map<String, Object> params,
-            List<Table> cache) throws Exception {
+            Map<String, Table> cache) throws Exception {
 
         String template = readFileWithIncludes(templateFilename);
 
@@ -951,12 +950,15 @@ public class Schematool {
         }
     }
 
-    private List<Table> loadTables(File indir, String packagename) throws Exception {
+    private Map<String, Table> loadTables(File indir, String packagename) throws Exception {
 
         System.out.println("Processing model directory: " + indir.getPath());
+
+        Map<String, Table> cache = new HashMap<String, Table>();
         List<Database> items = load(indir.getPath(), ".xml");
         List<Table> tables = flattenTables(items);
         for (Table table : tables) {
+            cache.put(table.getName(), table);
             for (Column column : table.getColumns()) {
                 if (!hasColumn(table, column)) {
                     column.setTableName(table.getName());
@@ -964,19 +966,17 @@ public class Schematool {
                 }
             }
         }
-        return tables;
+        return cache;
     }
 
-    private void processImportTable(String modelpackage, Database database, List<Table> cache, Map<String, Object> params)
+    private void processImportTable(String modelpackage, Database database, Map<String, Table> cache, Map<String, Object> params)
             throws Exception {
 
         for (Table table : database.getTables()) {
             for (String tablename : table.getImportTables()) {
-                for (Table importTable : cache) {
-                    if (importTable.getName().matches("(?i)" + tablename)) {
-                        mergeColumns(table, importTable, params);
-                    }
-                }
+                Table importTable = cache.get(tablename);
+
+                mergeColumns(table, importTable, params);
             }
             sortColumnsByName(table.getColumns());
         }
@@ -1083,18 +1083,19 @@ public class Schematool {
      *            the database connection object, contains database URL, username, password, etc.
      * @throws Exception
      */
-    public void generateBeans(DatabaseConnection connection) throws Exception {
+    public void generateBeans(String url, String packageName) throws Exception {
         int iteration = 1;
 
+        DatabaseConnection connection = createConnection(url);
+        connection.getPackageNames().clear();
+        connection.getPackageNames().add(packageName);
+
         DatabaseInterface database = DatabaseFactory.getInstance(connection);
-        
-        List<Class<?>> clazzes = DatabaseUtil.getClasses(connection.getPackageNames());
+
+        List<Class<?>> clazzes  = DatabaseUtil.getClasses(packageName);
         Class[] classes = new Class[clazzes.size()];
-        int counter = 0;
-        for (Class clazz : clazzes) {
-            classes[counter++] = clazz;
-        }
-        
+        clazzes.toArray(classes);
+
         log("Package Names size: " + connection.getPackageNames().size());
         log("Class Names size: " + clazzes.size());
 
@@ -1140,42 +1141,42 @@ public class Schematool {
             RandomBean.setTableData(table.databaseName(), table.name(), beans);
         }
     }
-
-    public void generateBeans(String indir, DatabaseConnection connection) throws Exception {
-
-        DatabaseInterface database = DatabaseFactory.getInstance(connection);
-
-        List<Database> databases = load(indir, ".xml");
-
-        for (Database item : databases) {
-            String packagename = item.getPackageName();
-            if (packagename == null || packagename.length() == 0) {
-                packagename = connection.getPackageNames().get(0) + "." + item.getName();
-            }
-            List<Class<?>> classes = DatabaseUtil.getDatabaseClasses(packagename);
-
-            for (Class<?> clazz : classes) {
-                com.viper.database.annotations.Table table = (com.viper.database.annotations.Table) clazz
-                        .getAnnotation(com.viper.database.annotations.Table.class);
-
-                if (!"table".equalsIgnoreCase(table.tableType())) {
-                    continue;
-                }
-                int nitems = table.iterations();
-                if (nitems == 0) {
-                    nitems = 100;
-                }
-
-                int iteration = 1;
-
-                if (nitems != -1) {
-                    List beans = RandomBean.getRandomBeans(clazz, iteration, nitems);
-                    database.insertAll(beans);
-                    iteration = iteration + 1;
-                }
-            }
-        }
-    }
+//
+//    public void generateBeans(String indir, DatabaseConnection connection) throws Exception {
+//
+//        DatabaseInterface database = DatabaseFactory.getInstance(connection);
+//
+//        List<Database> databases = load(indir, ".xml");
+//
+//        for (Database item : databases) {
+//            String packagename = item.getPackageName();
+//            if (packagename == null || packagename.length() == 0) {
+//                packagename = connection.getPackageNames().get(0) + "." + item.getName();
+//            }
+//            List<Class<?>> classes = DatabaseUtil.getDatabaseClasses(packagename);
+//
+//            for (Class<?> clazz : classes) {
+//                com.viper.database.annotations.Table table = (com.viper.database.annotations.Table) clazz
+//                        .getAnnotation(com.viper.database.annotations.Table.class);
+//
+//                if (!"table".equalsIgnoreCase(table.tableType())) {
+//                    continue;
+//                }
+//                int nitems = table.iterations();
+//                if (nitems == 0) {
+//                    nitems = 100;
+//                }
+//
+//                int iteration = 1;
+//
+//                if (nitems != -1) {
+//                    List beans = RandomBean.getRandomBeans(clazz, iteration, nitems);
+//                    database.insertAll(beans);
+//                    iteration = iteration + 1;
+//                }
+//            }
+//        }
+//    }
 
     public void generateResources(File infile, Properties properties, String extension) throws Exception {
 
@@ -1774,7 +1775,7 @@ public class Schematool {
                     }
                 }
             }
-            
+
         } else if (node.getTagName().contains("attribute")) {
             if (inTable) {
                 if (node.hasAttribute("name")) {
@@ -1790,7 +1791,7 @@ public class Schematool {
                     }
                 }
             }
-            
+
         } else {
             List<Node> items = getNodeArray(node.getChildNodes());
             Collections.sort(items, new NodeComparator());
@@ -2250,20 +2251,16 @@ public class Schematool {
 
             if (table1 == null && table2 == null) {
                 return 0;
-            }
-
-            if (table1 == null) {
-                log.severe("Table #1 is null: " + c1.getName());
+            } 
+            if (table1 == null) { 
                 return -1;
-            }
-
-            if (table2 == null) {
-                log.severe("Table #2 is null: " + c2.getName());
+            } 
+            if (table2 == null) { 
                 return 1;
             }
 
-            log.info("Compare #1" + table1.name() + "," + names1);
-            log.info("Compare #2" + table2.name() + "," + names2);
+//            log.info("Compare #1" + table1.name() + "," + names1);
+//            log.info("Compare #2" + table2.name() + "," + names2);
 
             if (names2.contains(table1.name())) {
                 return -1;
@@ -2692,7 +2689,7 @@ public class Schematool {
         }
         return name;
     }
-    
+
     private final void log(String msg) {
         if (verbose) {
             System.out.println(msg);

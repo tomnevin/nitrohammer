@@ -106,8 +106,7 @@ public class Test#{classname}RestServer extends AbstractTestCase {
     @Test
     public void testCreate() throws Exception {
 
-        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
- 
+        #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5); 
         
         Response response = new #{classname}Service().createItem(Converters.convert (String.class, bean));
  
@@ -115,16 +114,22 @@ public class Test#{classname}RestServer extends AbstractTestCase {
     }
 
     @Test
-    public void testDelete() throws Exception {
-         
+    public void testDelete() throws Exception { 
         
         #{classname} bean = RandomBean.getRandomBean(#{classname}.class, 5);
         
         Response response1 = new #{classname}Service().createItem(Converters.convert (String.class, bean));
         
         assertNotNull(getCallerMethodName() + ", failed:", response1);
+        assertEquals(getCallerMethodName() + ", status:", 200, response1.getStatus());
+        
+        String json = (String)response1.getEntity( );
+         #{classname} result =   Converters.convert( #{classname}.class, json);
+         
+        String name = DatabaseUtil.getPrimaryKeyName(#{classname}.class);
+        Object value = DatabaseUtil.getPrimaryKeyValue(result);
 
-        Response response = new #{classname}Service().deleteItem(Converters.convert (String.class, bean));
+        Response response = new #{classname}Service().deleteItem( name, (value == null) ? null : value.toString());
  
         assertNotNull(getCallerMethodName() + ", failed:", response);
     }

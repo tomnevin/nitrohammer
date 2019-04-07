@@ -6,27 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/api/javax.ws.rs-api-2.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/aopalliance-repackaged-2.5.0-b05.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/hk2-api-2.5.0-b05.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/hk2-locator-2.5.0-b05.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/hk2-utils-2.5.0-b05.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/javassist-3.20.0-GA.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/javax.annotation-api-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/javax.inject-2.5.0-b05.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/javax.servlet-api-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/jaxb-api-2.2.7.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/jersey-guava-2.24.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/org.osgi.core-4.2.0.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/osgi-resource-locator-1.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/persistence-api-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/ext/validation-api-1.1.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/lib/jersey-client.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/lib/jersey-common.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/lib/jersey-container-servlet-core.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/lib/jersey-container-servlet.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/lib/jersey-media-jaxb.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-2.0.1/lib/jersey-server.jar"/>
 	<classpathentry kind="lib" path="lib/libgen/commons-beanutils-1.9.3.jar"/>
 	<classpathentry kind="lib" path="lib/libgen/commons-codec-1.11.jar"/>
 	<classpathentry kind="lib" path="lib/libgen/commons-configuration2-2.3.jar"/>
@@ -56,11 +35,6 @@
 	<classpathentry kind="lib" path="lib/libgen/snmp4j-2.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/local/jacocoagent.jar"/>
 	<classpathentry kind="lib" path="lib/local/jacocoant.jar"/>
-	<classpathentry kind="lib" path="lib/local/jaxb-api.jar"/>
-	<classpathentry kind="lib" path="lib/local/jaxb-core.jar"/>
-	<classpathentry kind="lib" path="lib/local/jaxb-impl.jar"/>
-	<classpathentry kind="lib" path="lib/local/jaxb-jxc.jar"/>
-	<classpathentry kind="lib" path="lib/local/jaxb-xjc.jar"/>
 	<classpathentry kind="lib" path="lib/local/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/local/servlet-4.1.36.jar"/>
 	<classpathentry kind="lib" path="lib/libgen/xmlunit-core-2.6.1.jar"/>
@@ -79,7 +53,6 @@
 	<classpathentry kind="lib" path="lib/libdev/org.jacoco.core-0.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/libdev/org.jacoco.report-0.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/drivers/guava-19.0.jar"/>
-	<classpathentry kind="lib" path="lib/drivers/h2-1.4.192.jar"/>
 	<classpathentry kind="lib" path="lib/drivers/hadoop-common-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/drivers/hadoop-mapreduce-client-common-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/drivers/hadoop-mapreduce-client-core-2.7.2.jar"/>
@@ -90,5 +63,29 @@
 	<classpathentry kind="lib" path="lib/drivers/mysql-connector-java-5.1.35.jar"/>
 	<classpathentry kind="lib" path="lib/drivers/openjpa-all-3.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/drivers/protobuf-java-3.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jaxb-api-2.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jaxb-core-2.3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/libdev/javax.servlet-api-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jaxb-impl-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jaxb-jxc-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jaxb-xjc-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-common-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jackson-module-jaxb-annotations-2.9.6.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-client-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-container-servlet-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-container-servlet-core-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-media-jaxb-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-media-json-jackson-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-server-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/guava-27.1-jre.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/hk2-api-2.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/hk2-locator-2.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/hk2-utils-2.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jakarta.annotation-api-1.3.4.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/javax.inject-1.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/javax.ws.rs-api-2.1-m03.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-entity-filtering-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/jersey-hk2-2.28.jar"/>
+	<classpathentry kind="lib" path="lib/libgen/validation-api-2.0.1.Final.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
